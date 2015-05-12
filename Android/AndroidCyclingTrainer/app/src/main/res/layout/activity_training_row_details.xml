@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+
+    <tpi.lechaireth.com.androidcyclingtrainer.library.VerticalSeekBar
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/verticalBar_rpm"
+        android:layout_above="@+id/edtTxt_sec"
+        android:layout_marginLeft="15dp"
+        android:indeterminate="false" />
+
+    <tpi.lechaireth.com.androidcyclingtrainer.library.VerticalSeekBar
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/verticalBar_rpm"
+        android:id="@+id/verticalBar_bpm"
+        android:layout_marginRight="15dp"
+        android:indeterminate="false" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Validate Row"
+        android:id="@+id/btn_validate_row"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/verticalBar_bpm"
+        android:layout_alignEnd="@+id/verticalBar_bpm"
+        android:layout_alignLeft="@+id/verticalBar_rpm"
+        android:layout_alignStart="@+id/verticalBar_rpm" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edtTxt_min"
+        android:hint="Minutes"
+        android:inputType="number"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/edtTxt_bpm"
+        android:layout_toStartOf="@+id/edtTxt_bpm" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edtTxt_sec"
+        android:hint="Secondes"
+        android:inputType="number"
+        android:layout_alignTop="@+id/edtTxt_min"
+        android:layout_toRightOf="@+id/edtTxt_bpm"
+        android:layout_toEndOf="@+id/edtTxt_bpm" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edtTxt_bpm"
+        android:hint="Bpm"
+        android:inputType="number"
+        android:layout_below="@+id/edtTxt_tour"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edtTxt_tour"
+        android:hint="Tour par min"
+        android:inputType="number"
+        android:layout_alignTop="@+id/verticalBar_rpm"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp" />
+
+</RelativeLayout>

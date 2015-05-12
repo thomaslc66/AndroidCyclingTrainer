@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">Android Cycling Trainer</string>
+    <string name="app_name">Bike</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_add">Ajouter</string>
+    <string name="ajoute_entrainement">Ajout entraînement</string>
 </resources>
