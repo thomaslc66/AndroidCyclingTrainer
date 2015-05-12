@@ -13,7 +13,7 @@ public class Training extends RealmObject {
     //name of the training
     private String str_name;
     //creation date of the training
-    private String dte_day;
+    private String str_day;
     //list of all row for the training
     private RealmList<TrainingRow> rlst_row;
 
@@ -33,12 +33,12 @@ public class Training extends RealmObject {
         this.str_name = str_name;
     }
 
-    public String getDte_day() {
-        return dte_day;
+    public String getStr_day() {
+        return str_day;
     }
 
-    public void setDte_day(String dte_day) {
-        this.dte_day = dte_day;
+    public void setStr_day(String str_day) {
+        this.str_day = str_day;
     }
 
     public RealmList<TrainingRow> getRlst_row() {

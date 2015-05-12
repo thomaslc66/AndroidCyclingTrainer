@@ -85,7 +85,7 @@ public class RealmDB {
             //set the name
             training.setStr_name(name);
             //set the date
-            training.setDte_day(dayMonth+"/"+month +"/"+year);
+            training.setStr_day(dayMonth + "/" + month + "/" + year);
             //commit the transaction
             realm.commitTransaction();
             //get a Toast for confirmation
@@ -182,7 +182,7 @@ public class RealmDB {
 
             Log.w("BIKE id", ""+t.getInt_id());
             Log.w("BIKE name", ""+t.getStr_name());
-            Log.w("BIKE day", ""+t.getDte_day());
+            Log.w("BIKE day", ""+t.getStr_day());
 
             realm.commitTransaction();
         }catch (Exception e){
@@ -288,8 +288,8 @@ public class RealmDB {
         trainingRow = realm.createObject(TrainingRow.class);
         trainingRow.setInt_min(min); //set min
         trainingRow.setInt_sec(sec); //set sec
-        trainingRow.setInt_tourpm(tour); //set tpm
-        trainingRow.setInt_batpm(bpm); //set heart beat
+        trainingRow.setInt_rpm(tour); //set tpm
+        trainingRow.setInt_bpm(bpm); //set heart beat
         trainingRow.setStr_time(setTimeWithInt(min, sec)); //set time for display
         return trainingRow;
     }//createRow

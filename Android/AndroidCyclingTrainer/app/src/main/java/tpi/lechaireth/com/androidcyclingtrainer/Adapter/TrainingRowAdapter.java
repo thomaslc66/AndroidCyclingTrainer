@@ -85,8 +85,8 @@ public class TrainingRowAdapter extends BaseAdapter {
         }
 
         //set the value to each row
-        txtView_bpm.setText(trainingRowList.get(position).getInt_batpm()+"");
-        txtView_rpm.setText(trainingRowList.get(position).getInt_tourpm()+"");
+        txtView_bpm.setText(trainingRowList.get(position).getInt_bpm()+"");
+        txtView_rpm.setText(trainingRowList.get(position).getInt_rpm()+"");
         txtView_time.setText(trainingRowList.get(position).getStr_time()+"");
         txtView_id.setText(trainingRowList.get(position).getInt_id()+"");
 

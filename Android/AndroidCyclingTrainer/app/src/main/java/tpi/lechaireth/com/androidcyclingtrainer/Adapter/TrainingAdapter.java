@@ -215,7 +215,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
 
         if (trainingList.size() > 0) {
             //fill data
-            viewHolder.txtView_date.setText(trainingList.get(position).getDte_day());
+            viewHolder.txtView_date.setText(trainingList.get(position).getStr_day());
             viewHolder.txtView_name.setText(trainingList.get(position).getStr_name());
         }
     }//filValues

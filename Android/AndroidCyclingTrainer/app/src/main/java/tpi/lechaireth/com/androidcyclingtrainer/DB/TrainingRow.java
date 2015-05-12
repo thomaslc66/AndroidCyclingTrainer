@@ -16,9 +16,9 @@ public class TrainingRow extends RealmObject {
     //seconds for the timer
     private int int_sec;
     //Revolution per minute
-    private int int_tourpm;
+    private int int_rpm;
     //Hear Beat per minute
-    private int int_batpm;
+    private int int_bpm;
     //percent of effort
     private int int_percent;
 
@@ -39,12 +39,12 @@ public class TrainingRow extends RealmObject {
         return int_sec;
     }
 
-    public int getInt_tourpm() {
-        return int_tourpm;
+    public int getInt_rpm() {
+        return int_rpm;
     }
 
-    public int getInt_batpm() {
-        return int_batpm;
+    public int getInt_bpm() {
+        return int_bpm;
     }
 
     public int getInt_percent() {
@@ -68,12 +68,12 @@ public class TrainingRow extends RealmObject {
         this.int_sec = int_sec;
     }
 
-    public void setInt_tourpm(int int_tourpm) {
-        this.int_tourpm = int_tourpm;
+    public void setInt_rpm(int int_rpm) {
+        this.int_rpm = int_rpm;
     }
 
-    public void setInt_batpm(int int_batpm) {
-        this.int_batpm = int_batpm;
+    public void setInt_bpm(int int_bpm) {
+        this.int_bpm = int_bpm;
     }
 
     public void setInt_percent(int int_percent) {
