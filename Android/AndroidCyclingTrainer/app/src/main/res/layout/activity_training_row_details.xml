@@ -9,9 +9,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/verticalBar_rpm"
-        android:layout_above="@+id/edtTxt_sec"
         android:layout_marginLeft="15dp"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:layout_above="@+id/edtTxt_bpm" />
 
     <tpi.lechaireth.com.androidcyclingtrainer.library.VerticalSeekBar
         android:layout_width="wrap_content"
@@ -19,16 +19,16 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/verticalBar_rpm"
         android:id="@+id/verticalBar_bpm"
         android:layout_marginRight="15dp"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:layout_alignBottom="@+id/txtView_recup" />
 
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Validate Row"
+        android:text="VALIDER"
         android:id="@+id/btn_validate_row"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/verticalBar_bpm"
@@ -36,25 +36,16 @@
         android:layout_alignLeft="@+id/verticalBar_rpm"
         android:layout_alignStart="@+id/verticalBar_rpm" />
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/edtTxt_min"
+        android:id="@+id/edtTxt_time"
         android:hint="Minutes"
         android:inputType="number"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/edtTxt_bpm"
-        android:layout_toStartOf="@+id/edtTxt_bpm" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/edtTxt_sec"
-        android:hint="Secondes"
-        android:inputType="number"
-        android:layout_alignTop="@+id/edtTxt_min"
-        android:layout_toRightOf="@+id/edtTxt_bpm"
-        android:layout_toEndOf="@+id/edtTxt_bpm" />
+        android:text="Time"
+        android:layout_marginTop="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -62,18 +53,64 @@
         android:id="@+id/edtTxt_bpm"
         android:hint="Bpm"
         android:inputType="number"
-        android:layout_below="@+id/edtTxt_tour"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp" />
+        android:layout_alignLeft="@+id/verticalBar_bpm"
+        android:layout_alignStart="@+id/verticalBar_rpm"
+        android:layout_below="@+id/verticalBar_bpm" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/edtTxt_tour"
-        android:hint="Tour par min"
+        android:hint="Rpm"
         android:inputType="number"
-        android:layout_alignTop="@+id/verticalBar_rpm"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="41dp" />
+        android:layout_below="@+id/verticalBar_rpm"
+        android:layout_alignLeft="@+id/verticalBar_rpm"
+        android:layout_alignStart="@+id/verticalBar_rpm" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Récupération"
+        android:id="@+id/txtView_recup"
+        android:layout_marginTop="88dp"
+        android:layout_below="@+id/edtTxt_time"
+        android:layout_centerHorizontal="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner"
+        android:layout_below="@+id/edtTxt_bpm"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="54dp"
+        android:layout_toRightOf="@+id/txtView_recup"
+        android:layout_toEndOf="@+id/txtView_recup" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner2"
+        android:layout_alignBottom="@+id/spinner"
+        android:layout_toStartOf="@+id/txtView_recup"
+        android:layout_toLeftOf="@+id/txtView_recup" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TRAVAIL"
+        android:id="@+id/textView5"
+        android:layout_alignStart="@+id/edtTxt_tour"
+        android:layout_above="@+id/spinner2"
+        android:layout_alignLeft="@+id/spinner2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RYTHME"
+        android:id="@+id/txtView_rythme"
+        android:layout_alignStart="@+id/spinner"
+        android:layout_above="@+id/spinner2"
+        android:layout_alignLeft="@+id/spinner" />
 
 </RelativeLayout>

@@ -19,64 +19,134 @@ public class TrainingRow extends RealmObject {
     private int int_rpm;
     //Hear Beat per minute
     private int int_bpm;
-    //percent of effort
-    private int int_percent;
+    //Type of Work
+    private String str_wwork;
+    //intancity of the work
+    private String str_rythm;
+    //number for the front plate of the bike
+    private int int_front_plt;
+    //number for the back plate of the bike
+    private int int_back_plt;
+    //time for the recuperation
+    private String str_time_recup;
+    //minutes fot the recup time
+    private int int_min_recup;
+    //seconds for the recup time
+    private int int_sec_recup;
+    //String for the notes
+    private String str_note;
 
-    //getters
-    public int getInt_id(){
-        return int_id;
+
+    /* Getters and Setters generated automaticaly */
+    public int getInt_back_plt() {
+        return int_back_plt;
     }
 
-    public String getStr_time() {
-        return str_time;
-    }
-
-    public int getInt_min() {
-        return int_min;
-    }
-
-    public int getInt_sec() {
-        return int_sec;
-    }
-
-    public int getInt_rpm() {
-        return int_rpm;
+    public void setInt_back_plt(int int_back_plt) {
+        this.int_back_plt = int_back_plt;
     }
 
     public int getInt_bpm() {
         return int_bpm;
     }
 
-    public int getInt_percent() {
-        return int_percent;
+    public void setInt_bpm(int int_bpm) {
+        this.int_bpm = int_bpm;
     }
 
-    //setters
-    public void setInt_id(int int_id){
+    public int getInt_front_plt() {
+        return int_front_plt;
+    }
+
+    public void setInt_front_plt(int int_front_plt) {
+        this.int_front_plt = int_front_plt;
+    }
+
+    public int getInt_id() {
+        return int_id;
+    }
+
+    public void setInt_id(int int_id) {
         this.int_id = int_id;
     }
 
-    public void setStr_time(String str_time) {
-        this.str_time = str_time;
+    public int getInt_min() {
+        return int_min;
     }
 
     public void setInt_min(int int_min) {
         this.int_min = int_min;
     }
 
-    public void setInt_sec(int int_sec) {
-        this.int_sec = int_sec;
+    public int getInt_min_recup() {
+        return int_min_recup;
+    }
+
+    public void setInt_min_recup(int int_min_recup) {
+        this.int_min_recup = int_min_recup;
+    }
+
+    public int getInt_rpm() {
+        return int_rpm;
     }
 
     public void setInt_rpm(int int_rpm) {
         this.int_rpm = int_rpm;
     }
 
-    public void setInt_bpm(int int_bpm) {
-        this.int_bpm = int_bpm;
+    public int getInt_sec() {
+        return int_sec;
     }
 
-    public void setInt_percent(int int_percent) {
-        this.int_percent = int_percent;
+    public void setInt_sec(int int_sec) {
+        this.int_sec = int_sec;
+    }
+
+    public int getInt_sec_recup() {
+        return int_sec_recup;
+    }
+
+    public void setInt_sec_recup(int int_sec_recup) {
+        this.int_sec_recup = int_sec_recup;
+    }
+
+    public String getStr_note() {
+        return str_note;
+    }
+
+    public void setStr_note(String str_note) {
+        this.str_note = str_note;
+    }
+
+    public String getStr_rythm() {
+        return str_rythm;
+    }
+
+    public void setStr_rythm(String str_rythm) {
+        this.str_rythm = str_rythm;
+    }
+
+    public String getStr_time() {
+        return str_time;
+    }
+
+    public void setStr_time(String str_time) {
+        this.str_time = str_time;
+    }
+
+    public String getStr_time_recup() {
+        return str_time_recup;
+    }
+
+    public void setStr_time_recup(String str_time_recup) {
+        this.str_time_recup = str_time_recup;
+    }
+
+    public String getStr_wwork() {
+        return str_wwork;
+    }
+
+    public void setStr_wwork(String str_wwork) {
+        this.str_wwork = str_wwork;
     }
 }

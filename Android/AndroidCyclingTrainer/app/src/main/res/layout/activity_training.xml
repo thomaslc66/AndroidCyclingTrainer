@@ -4,13 +4,166 @@
     android:layout_height="match_parent">
 
     <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
+        style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
+        android:id="@+id/progressBar_total"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginBottom="32dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:indeterminate="false"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
+
+    <ProgressBar
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar_row"
+        android:layout_above="@+id/progressBar_total"
+        android:layout_alignLeft="@+id/progressBar_total"
+        android:layout_alignStart="@+id/progressBar_total"
+        android:layout_marginBottom="40dp"
+        android:layout_alignRight="@+id/progressBar_total"
+        android:layout_alignEnd="@+id/progressBar_total"
+        android:indeterminate="false"
+        android:background="@color/red"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10:30"
+        android:id="@+id/txtView_rowTime"
+        android:textSize="35sp"
+        android:layout_above="@+id/progressBar_row"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="68dp"
+        android:textIsSelectable="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLAY"
+        android:id="@+id/button"
+        android:layout_above="@+id/progressBar_row"
+        android:layout_alignLeft="@+id/progressBar_row"
+        android:layout_alignStart="@+id/progressBar_row" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="STOP"
+        android:id="@+id/button2"
+        android:layout_alignTop="@+id/button"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PAUSE"
+        android:id="@+id/button3"
+        android:layout_above="@+id/progressBar_row"
+        android:layout_alignRight="@+id/progressBar_row"
+        android:layout_alignEnd="@+id/progressBar_row" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TRAVAIL:"
+        android:id="@+id/txtView_work"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/button"
+        android:layout_alignStart="@+id/button"
+        android:layout_marginTop="43dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RYTHME:"
+        android:id="@+id/txtView_rythm"
+        android:layout_below="@+id/txtView_work"
+        android:layout_alignLeft="@+id/txtView_work"
+        android:layout_alignStart="@+id/txtView_work"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textView"
+        android:layout_alignTop="@+id/txtView_work"
+        android:layout_toRightOf="@+id/txtView_work"
+        android:layout_toEndOf="@+id/txtView_work"
+        android:layout_marginLeft="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textView2"
+        android:layout_alignTop="@+id/txtView_rythm"
+        android:layout_toRightOf="@+id/txtView_rythm"
+        android:layout_toEndOf="@+id/txtView_rythm"
+        android:layout_marginLeft="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BPM:"
+        android:id="@+id/txtView_bpm"
+        android:layout_alignTop="@+id/textView"
+        android:layout_toRightOf="@+id/txtView_rowTime"
+        android:layout_toEndOf="@+id/txtView_rowTime" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RPM:"
+        android:id="@+id/txtview_rpm"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_toRightOf="@+id/txtView_rowTime"
+        android:layout_toEndOf="@+id/txtView_rowTime" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textView3"
+        android:layout_alignTop="@+id/txtView_bpm"
+        android:layout_toRightOf="@+id/txtView_bpm"
+        android:layout_toEndOf="@+id/txtView_bpm"
+        android:layout_marginLeft="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textView4"
+        android:layout_alignTop="@+id/txtview_rpm"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignStart="@+id/textView3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLATEAU:"
+        android:id="@+id/txtView_plate"
+        android:layout_below="@+id/txtView_rythm"
+        android:layout_alignLeft="@+id/txtView_rythm"
+        android:layout_alignStart="@+id/txtView_rythm"
+        android:layout_marginTop="44dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="REMARQUES:"
+        android:id="@+id/txtView_note"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/txtView_plate"
+        android:layout_alignStart="@+id/txtView_plate"
+        android:layout_below="@+id/txtView_plate"
+        android:layout_marginTop="15dp" />
 </RelativeLayout>

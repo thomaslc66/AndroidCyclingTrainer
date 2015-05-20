@@ -52,7 +52,7 @@ public class Timer extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            p = (ProgressBar) findViewById(R.id.progressBar);
+            p = (ProgressBar) findViewById(R.id.progressBar_total);
 
         }
 

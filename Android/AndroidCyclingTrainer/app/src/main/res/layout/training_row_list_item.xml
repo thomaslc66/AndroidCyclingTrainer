@@ -45,9 +45,9 @@
             android:text="New Text"
             android:id="@+id/txtView_id"
             android:textSize="20dp"
-            android:layout_below="@+id/textView"
-            android:layout_alignLeft="@+id/textView"
-            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/txtView_rowTime"
+            android:layout_alignLeft="@+id/txtView_rowTime"
+            android:layout_alignStart="@+id/txtView_rowTime"
             android:layout_weight="1"
             android:gravity="center_vertical" />
     </LinearLayout>

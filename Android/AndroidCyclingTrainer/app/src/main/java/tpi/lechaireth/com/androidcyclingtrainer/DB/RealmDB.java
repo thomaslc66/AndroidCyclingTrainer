@@ -26,9 +26,14 @@ public class RealmDB {
 
     private Realm realm;
     private Context context;
-    /**
-     * Empty constructor
-     */
+
+    /*********************************************************
+     * Name: -> Constructor for the class
+     * @param context
+     * return: empty
+     * Goal: create a new instance of RealmDB to acces all the management method
+     *
+     ********************************************************/
     public RealmDB(Context context) {
         this.context = context;
 
@@ -36,6 +41,13 @@ public class RealmDB {
 
     //############################################################# PART FOR TRAINIG CLASS OPERATION ##############################################################################
 
+    /*********************************************************
+     * Name: isUnique
+     * @param name
+     * @return boolean notUnique
+     * Goal: check if the training already exist in the dataBase
+     *
+     ********************************************************/
     public boolean isUnique(String name){
         boolean notUnique = true;
         realm = Realm.getInstance(context);
@@ -51,13 +63,13 @@ public class RealmDB {
 
         return notUnique;
     }
-    /*********************************************************
-     *
-     * createTrainig
-     * @param name
-     * Goal: Method used to create a new training
-     *
-     ********************************************************/
+        /*********************************************************
+         *
+         * Name: createTrainig
+         * @param name
+         * Goal: Method used to create a new training
+         *
+         ********************************************************/
     public void createTraining(String name){
         int id;
         realm = Realm.getInstance(context);
@@ -139,56 +151,65 @@ public class RealmDB {
 
 
     /***************************************************
-     * getListofTraining
+     * Name: getListofTraining
      * @return List<Training>
      * Goal: this method return all the training in the database
      *
      ***************************************************/
     public List<Training> getListofTraining(){
+        //arrayList for the return
         List<Training> t = new ArrayList<>();
+        //get Realm Instance
         realm = Realm.getInstance(context);
+        //start transaction
         realm.beginTransaction();
         try {
+            //get all the training from the data base
             RealmResults<Training> realmResults = realm.where(Training.class).findAll();
+            //pass all the training from a RealmReasults list to a ArrayList
             for(Training item : realmResults){
+                //add item in the ArrayList t
                 t.add(item);
-            }
+            }//for
+            //commit Transaction
             realm.commitTransaction();
-        }catch (Exception e){
+
+        }catch (Exception e){ //catch Exceptions
             e.printStackTrace();
+            //in case of error cancel the transaction
             realm.cancelTransaction();
         }
+        //return the list
         return t;
     }
 
 
     /***************************************************
      *
-     * getTraining
+     * Name: getTraining
      * @param name
      * @return Training t
      * Goal: this method return a Training with is name
      *
      *************************************************/
     public Training getTraining(String name){
-        Log.w("get Training NAME", name);
+        //Create Variable
         Training t = null;
+        //get instance
         realm = Realm.getInstance(context);
         //All writes must be wrapped in a transaction to facilitate safe multi threading
         realm.beginTransaction();
         try {
             //searching for the training with is name
             t = realm.where(Training.class).equalTo("str_name",name).findAll().first();
-
-            Log.w("BIKE id", ""+t.getInt_id());
-            Log.w("BIKE name", ""+t.getStr_name());
-            Log.w("BIKE day", ""+t.getStr_day());
-
+            //commit the transaction
             realm.commitTransaction();
-        }catch (Exception e){
+        }catch (Exception e){ //catch Exceptions
             e.printStackTrace();
+            //in cas of error cancel the transaction
             realm.cancelTransaction();
         }
+        //return the training
         return t;
     }
 
@@ -201,6 +222,7 @@ public class RealmDB {
      *******************************************************/
     public void removeTrainingWithID(int realm_training_ID){
         realm = Realm.getInstance(context);
+        //All writes must be wrapped in a transaction to facilitate safe multi threading
         realm.beginTransaction();
         try {
             Training training = realm.where(Training.class).equalTo("int_id", realm_training_ID).findAll().first();
@@ -217,19 +239,25 @@ public class RealmDB {
 
     /*********************************************************
      *
-     * removeTrainingWithID
+     * Name: removeTrainingWithID
      * @param t
-     * Goal: Remove the training with it's id
+     * Goal: Remove the training passed in parameter
      *
      *******************************************************/
     public void removeTraining (Training t){
+        //get instance
         realm = Realm.getInstance(context);
+        //start transaction to facilitate multithreading
         realm.beginTransaction();
         try {
+            //remove the training from the DB
             t.removeFromRealm();
+            //commit the transaction
             realm.commitTransaction();
-        }catch (Exception e){
+        }catch (Exception e){ //catch Exceptions
+            //print error message
             e.printStackTrace();
+            //if and Exceptions is catched we need to cancel the transaction
             realm.cancelTransaction();
         }
         finally {
@@ -239,39 +267,43 @@ public class RealmDB {
 
 
     //############################################################# PART FOR TRAINIG ROW CLASS OPERATION ##############################################################################
+
     /*************************************************************
      *
-     * getAllTrainingRows
-     * @param realm_Row_ID
+     * Name: getAllTrainingRows
+     * @param realm_training_id
      * @return a list of training Row
      * Goal: By id we get a training a we get all the row within this training
      *
      * ***********************************************************/
-    public List<TrainingRow> getAllTrainingRows(int realm_Row_ID){
-        Log.w("ID TRAINING", realm_Row_ID+"");
+    public List<TrainingRow> getAllTrainingRows(int realm_training_id){
+        Log.w("ID TRAINING", realm_training_id+"");
         List<TrainingRow> list_of_row;
         realm = Realm.getInstance(context);
         //start transaction
         realm.beginTransaction();
         try{
             //get the training with the id
-            Training t = realm.where(Training.class).equalTo("int_id",realm_Row_ID).findAll().first();
-            //then get the list contained in the training
+            Training t = realm.where(Training.class).equalTo("int_id",realm_training_id).findAll().first();
+            //then get the list of row contained in the training
             list_of_row = t.getRlst_row();
+            //commit the transcation
             realm.commitTransaction();
-
-        }catch (Exception e){
+        }catch (Exception e){ //catch Exceptions
+            //print error message in logcat
             e.printStackTrace();
+            //if Exception is catched cancel the transaction
             realm.cancelTransaction();
+            //and set the list to null
             list_of_row = null;
         }
-
+        //return the list of all rows
         return list_of_row;
     }
 
     /***********************************************************************
      *
-     * createRow
+     * Name: createRow
      * @param min
      * @param sec
      * @param tour
@@ -295,23 +327,29 @@ public class RealmDB {
     }//createRow
 
 
-    /***************
+    /*****************************************************************************
      *
+     * Name: removeRowWithID
      * @param realm_Row_ID
-     */
+     * Goal: method used to remove a row from the training
+     *
+     *****************************************************************************/
     public void removeRowWithID(int realm_Row_ID){
+        //get instance of Realm
         realm = Realm.getInstance(context);
+        //begin a transaction to facilitate safe multi threading
         realm.beginTransaction();
         try {
+            //find the training row equal to the id passed in parameter
             TrainingRow trainingRow = realm.where(TrainingRow.class).equalTo("int_id", realm_Row_ID).findAll().first();
+            //remove the row
             trainingRow.removeFromRealm();
+            //commit the transaction
             realm.commitTransaction();
-        }catch (Exception e){
-            e.printStackTrace();
+        }catch (Exception e){ //catch Exceptions
+            e.printStackTrace();// print error message in logcat
+            //if Exception is catched cancel the transaction
             realm.cancelTransaction();
-        }
-        finally {
-            realm.commitTransaction();
         }
     }
 
