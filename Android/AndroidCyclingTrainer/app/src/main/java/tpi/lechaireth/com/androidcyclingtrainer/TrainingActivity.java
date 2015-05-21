@@ -57,6 +57,7 @@ public class TrainingActivity extends ActionBarActivity {
                 /* initialisation of the edit text for the */
                 final EditText edt_input = new EditText(TrainingActivity.this);
                 edt_input.setMaxLines(1);
+
                 new AlertDialog.Builder(TrainingActivity.this)
                         .setTitle("Ajout d'entraînement")
                         .setView(edt_input)

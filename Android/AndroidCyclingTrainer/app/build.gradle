@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "tpi.lechaireth.com.androidcyclingtrainer"
-        minSdkVersion 8
+        minSdkVersion 11
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -22,8 +22,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.0.0'
+    //android Realm Library
     compile 'io.realm:realm-android:0.80.1'
-    /* android libraary for swipe gesture */
+    /* android library for swipe gesture */
     compile 'com.android.support:recyclerview-v7:21.0.0'
     compile 'com.android.support:support-v4:22.+'
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
@@ -31,4 +32,8 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.easing:library:1.0.1@aar'
     compile 'com.daimajia.androidanimations:library:1.1.3@aar'
+    //android Better Picker Library
+    compile ("com.doomonafireball.betterpickers:library:1.6.0") {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
 }
