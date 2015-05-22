@@ -59,7 +59,7 @@ public class TrainingRowAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        TextView txtView_bpm, txtView_rpm, txtView_time, txtView_id;
+        TextView txtView_bpm, txtView_rpm, txtView_time, txtView_work, txtView_rythm, txtView_gear;
 
         if(convertView == null){
             convertView = mInflater.inflate(R.layout.training_row_list_item,parent,false);
@@ -67,9 +67,11 @@ public class TrainingRowAdapter extends BaseAdapter {
             txtView_bpm = (TextView) convertView.findViewById(R.id.txtView_bpm);
             txtView_rpm = (TextView) convertView.findViewById(R.id.txtView_rpm);
             txtView_time = (TextView) convertView.findViewById(R.id.txtView_time);
-            txtView_id = (TextView) convertView.findViewById(R.id.txtView_id);
+            txtView_work = (TextView) convertView.findViewById(R.id.txtView_work);
+            txtView_rythm = (TextView) convertView.findViewById(R.id.txtView_rythm);
+            txtView_gear = (TextView) convertView.findViewById(R.id.txtView_gear);
             //create new view Holder
-            convertView.setTag(new ViewHolder(txtView_time,txtView_bpm,txtView_rpm, txtView_id));
+            convertView.setTag(new ViewHolder(txtView_time,txtView_bpm,txtView_rpm, txtView_work, txtView_rythm, txtView_gear));
         }
         /* ConvertView will be not null when ListView is asking to recycle the row */
         else{
@@ -81,30 +83,33 @@ public class TrainingRowAdapter extends BaseAdapter {
             txtView_bpm = viewHolder.txtView_bpm;
             txtView_rpm = viewHolder.txtView_rpm;
             txtView_time = viewHolder.txtView_time;
-            txtView_id  = viewHolder.txtView_id;
+            txtView_work  = viewHolder.txtView_name;
+            txtView_rythm = viewHolder.txtView_rythm;
+            txtView_gear = viewHolder.txtView_gear;
         }
 
         //set the value to each row
         txtView_bpm.setText(trainingRowList.get(position).getInt_bpm()+"");
         txtView_rpm.setText(trainingRowList.get(position).getInt_rpm()+"");
         txtView_time.setText(trainingRowList.get(position).getStr_time()+"");
-        txtView_id.setText(trainingRowList.get(position).getInt_id()+"");
-
+        txtView_work.setText(trainingRowList.get(position).getInt_id() + "");
+        txtView_rythm.setText(trainingRowList.get(position).getStr_rythm());
+        txtView_gear.setText(trainingRowList.get(position).getStr_gear());
 
         return convertView;
     }
 
-
-
     private class ViewHolder{
-        TextView txtView_time, txtView_bpm, txtView_rpm,txtView_id;
+        TextView txtView_time, txtView_bpm, txtView_rpm, txtView_name,txtView_rythm,txtView_gear;
 
         //Constructor for the ViewHolder
-        private ViewHolder(TextView txtView_time, TextView txtView_bpm, TextView txtView_rpm, TextView txtView_id) {
+        private ViewHolder(TextView txtView_time, TextView txtView_bpm, TextView txtView_rpm, TextView txtView_work, TextView txtView_rythm, TextView txtView_gear) {
             this.txtView_time = txtView_time;
             this.txtView_bpm = txtView_bpm;
             this.txtView_rpm = txtView_rpm;
-            this.txtView_id = txtView_id;
+            this.txtView_name = txtView_work;
+            this.txtView_rythm = txtView_rythm;
+            this.txtView_gear = txtView_gear;
         }
     }
 }

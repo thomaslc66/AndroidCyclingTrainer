@@ -18,6 +18,8 @@ public class Training extends RealmObject {
     private RealmList<TrainingRow> rlst_row;
     //int for the recup indice
     private int int_recup;
+    //boolean to tell if the training is VTT or not
+    private boolean bln_isVtt;
 
     public int getInt_id() {
         return int_id;
@@ -58,4 +60,8 @@ public class Training extends RealmObject {
     public void setStr_name(String str_name) {
         this.str_name = str_name;
     }
+
+    public boolean isBln_isVtt() {return bln_isVtt;}
+
+    public void setBln_isVtt(boolean bln_isVtt) {this.bln_isVtt = bln_isVtt;}
 }

@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 
@@ -54,7 +55,7 @@ public class RealmDB {
         //All writes must be wrapped in a transaction to facilitate safe multi threading
         realm.beginTransaction();
         //find all training
-        RealmResults results = realm.where(Training.class).equalTo("str_name",name).findAll();//send transaction
+        RealmResults results = realm.where(Training.class).equalTo("str_name", name).findAll();//send transaction
         realm.commitTransaction();
         //Try to add a row
         if(results.size() > 0){
@@ -70,7 +71,7 @@ public class RealmDB {
          * Goal: Method used to create a new training
          *
          ********************************************************/
-    public void createTraining(String name){
+    public void createTraining(String name, boolean isVtt){
         int id;
         realm = Realm.getInstance(context);
         //All writes must be wrapped in a transaction to facilitate safe multi threading
@@ -98,6 +99,8 @@ public class RealmDB {
             training.setStr_name(name);
             //set the date
             training.setStr_day(dayMonth + "/" + month + "/" + year);
+            //training set isVTT
+            training.setBln_isVtt(isVtt);
             //commit the transaction
             realm.commitTransaction();
             //get a Toast for confirmation
@@ -126,11 +129,15 @@ public class RealmDB {
         // no transaction because it has started in createRow Method
         //Try to add a row
         try{
-            //get the training
+            //get the training with realm_training_ID
             Training training = realm.where(Training.class).equalTo("int_id",realm_training_ID).findAll().first();
-
-            int _id = training.getRlst_row().size();
-            Log.w("_ID", _id+"" );
+            //From this training get the List of TrainingRow.
+            RealmList<TrainingRow> trainingRows = training.getRlst_row();
+            // Search for the last row and get is id.
+            int _id = trainingRows.last().getInt_id();
+            //check value of id
+            Log.w("_ID", _id + "");
+            //set row is id = id of the last row of the trainingDay + 1;
             row.setInt_id(_id++);
             //get list and add row to it.
             training.getRlst_row().add(row);
@@ -211,6 +218,35 @@ public class RealmDB {
         }
         //return the training
         return t;
+    }
+
+    /**********************************************
+     *
+     * Name: getATrainingWithID
+     * @param id
+     * @return Training
+     * Goal: find and return a training with is ID
+     *
+     ********************************************/
+    public Training getATrainingWithID(int id){
+        //get realm Instance
+        realm = Realm.getInstance(context);
+        //start transaction
+        realm.beginTransaction();
+        //Create training object
+        Training training = null;
+
+        try{
+            //get all and find into the training with the id
+            training = realm.where(Training.class).findAll().get(id);
+            realm.commitTransaction();
+        }catch (Exception e){
+            Toast.makeText(context,"Can't get training",Toast.LENGTH_SHORT).show();
+            realm.cancelTransaction();
+
+        }
+        //return results
+        return training;
     }
 
     /*********************************************************
@@ -301,28 +337,56 @@ public class RealmDB {
         return list_of_row;
     }
 
-    /***********************************************************************
+    /********************************************************************
      *
      * Name: createRow
-     * @param min
-     * @param sec
+     * @param min_work
+     * @param sec_work
      * @param tour
      * @param bpm
+     * @param min_recup
+     * @param sec_recup
+     * @param str_gear
+     * @param str_work
+     * @param str_rythm
+     * @param str_note
+     * @return TrainingRow
      * Goal: method used to add a training row in the realm db
      *
-     *********************************************************************/
-    public TrainingRow createRow(int min, int sec, int tour, int bpm){
+     ******************************************************************/
+    public TrainingRow createRow(int min_work, int sec_work, int tour, int bpm, int min_recup, int sec_recup, String str_gear, String str_work, String str_rythm, String str_note ){
         TrainingRow trainingRow;
         realm = Realm.getInstance(context);
         //All writes must be wrapped in a transaction to facilitate safe multi threading
         realm.beginTransaction();
         //Add a trainingRow by creating a new realmObject with the class TrainingRow
         trainingRow = realm.createObject(TrainingRow.class);
-        trainingRow.setInt_min(min); //set min
-        trainingRow.setInt_sec(sec); //set sec
-        trainingRow.setInt_rpm(tour); //set tpm
-        trainingRow.setInt_bpm(bpm); //set heart beat
-        trainingRow.setStr_time(setTimeWithInt(min, sec)); //set time for display
+        //set min
+        trainingRow.setInt_min(min_work);
+        //set sec
+        trainingRow.setInt_sec(sec_work);
+        //set tpm
+        trainingRow.setInt_rpm(tour);
+        //set heart beat
+        trainingRow.setInt_bpm(bpm);
+        // set min for rest time
+        trainingRow.setInt_min_recup(min_recup);
+        // set seconds for rest time
+        trainingRow.setInt_sec_recup(sec_recup);
+        // set String for the work
+        trainingRow.setStr_work(str_work);
+        // set String for the rythm
+        trainingRow.setStr_rythm(str_rythm);
+        // set String for the front and black gear
+        trainingRow.setStr_gear(str_gear);
+        // set String for the note
+        trainingRow.setStr_note(str_note);
+        // set String for the work time, used for the display
+        trainingRow.setStr_time(setTimeWithInt(min_work, sec_work));
+        // set String for the rest time, used for the display
+        trainingRow.setStr_time_recup(setTimeWithInt(min_recup,sec_recup));
+
+        //return the traing row freshly created+
         return trainingRow;
     }//createRow
 
@@ -379,31 +443,6 @@ public class RealmDB {
         return trainingRow;
     }
 
-    /*************
-     *
-     * @param id
-     * @return
-     */
-    public Training getATrainingWithID(int id){
-        //get realm Instance
-        realm = Realm.getInstance(context);
-        //start transaction
-        realm.beginTransaction();
-        //Create training object
-        Training training = null;
-
-        try{
-           //get all and find into the training with the id
-            training = realm.where(Training.class).findAll().get(id);
-            realm.commitTransaction();
-        }catch (Exception e){
-            Toast.makeText(context,"Can't get training",Toast.LENGTH_SHORT).show();
-            realm.cancelTransaction();
-
-        }
-        //return results
-        return training;
-    }
 
     /**********
      *

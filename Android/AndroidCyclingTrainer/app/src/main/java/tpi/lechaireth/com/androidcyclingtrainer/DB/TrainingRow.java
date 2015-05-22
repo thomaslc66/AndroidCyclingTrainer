@@ -20,13 +20,11 @@ public class TrainingRow extends RealmObject {
     //Hear Beat per minute
     private int int_bpm;
     //Type of Work
-    private String str_wwork;
+    private String str_work;
     //intancity of the work
     private String str_rythm;
-    //number for the front plate of the bike
-    private int int_front_plt;
-    //number for the back plate of the bike
-    private int int_back_plt;
+    //String for the front and back plates
+    private String str_gear;
     //time for the recuperation
     private String str_time_recup;
     //minutes fot the recup time
@@ -38,29 +36,14 @@ public class TrainingRow extends RealmObject {
 
 
     /* Getters and Setters generated automaticaly */
-    public int getInt_back_plt() {
-        return int_back_plt;
-    }
 
-    public void setInt_back_plt(int int_back_plt) {
-        this.int_back_plt = int_back_plt;
-    }
+    public String getStr_gear() {return str_gear;}
 
-    public int getInt_bpm() {
-        return int_bpm;
-    }
+    public void setStr_gear(String str_gear) {this.str_gear = str_gear;}
 
-    public void setInt_bpm(int int_bpm) {
-        this.int_bpm = int_bpm;
-    }
+    public int getInt_bpm() {return int_bpm;}
 
-    public int getInt_front_plt() {
-        return int_front_plt;
-    }
-
-    public void setInt_front_plt(int int_front_plt) {
-        this.int_front_plt = int_front_plt;
-    }
+    public void setInt_bpm(int int_bpm) {this.int_bpm = int_bpm; }
 
     public int getInt_id() {
         return int_id;
@@ -142,11 +125,11 @@ public class TrainingRow extends RealmObject {
         this.str_time_recup = str_time_recup;
     }
 
-    public String getStr_wwork() {
-        return str_wwork;
+    public String getStr_work() {
+        return str_work;
     }
 
-    public void setStr_wwork(String str_wwork) {
-        this.str_wwork = str_wwork;
+    public void setStr_work(String str_work) {
+        this.str_work = str_work;
     }
 }

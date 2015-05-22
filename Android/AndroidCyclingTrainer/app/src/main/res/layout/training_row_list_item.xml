@@ -4,6 +4,14 @@
     android:layout_height="wrap_content"
     android:padding="5dp">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgView_pict"
+        android:layout_alignParentTop="false"
+        android:src="@drawable/bike_icon"
+        android:layout_centerVertical="true" />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
@@ -11,45 +19,81 @@
         android:layout_toStartOf="@+id/txtView_time"
         android:layout_toLeftOf="@+id/txtView_time"
         android:weightSum="3"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/linearLayout_listRow"
+        android:layout_toRightOf="@+id/imgView_pict">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/txtView_rpm"
-            android:layout_alignParentTop="true"
-            android:textSize="20dp"
-            android:layout_toLeftOf="@+id/txtView_date"
-            android:layout_toRightOf="@+id/imageView"
-            android:layout_alignParentLeft="false"
-            android:gravity="center_vertical"
-            android:layout_weight="1" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/txtView_bpm"
-            android:textSize="20dp"
-            android:layout_below="@+id/txtView_Name"
-            android:layout_alignLeft="@+id/txtView_Name"
-            android:layout_alignStart="@+id/txtView_Name"
-            android:layout_weight="1"
-            android:gravity="center_vertical" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Travail: Sprints"
+                android:id="@+id/txtView_work"
+                android:textSize="15dp"
+                android:layout_below="@+id/txtView_rowTime"
+                android:layout_alignLeft="@+id/txtView_rowTime"
+                android:layout_alignStart="@+id/txtView_rowTime"
+                android:layout_weight="0.78"
+                android:gravity="center_vertical" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/txtView_id"
-            android:textSize="20dp"
-            android:layout_below="@+id/txtView_rowTime"
-            android:layout_alignLeft="@+id/txtView_rowTime"
-            android:layout_alignStart="@+id/txtView_rowTime"
-            android:layout_weight="1"
-            android:gravity="center_vertical" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rythme: à bloc"
+                android:id="@+id/txtView_rythm"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RPM: 230"
+                android:id="@+id/txtView_rpm"
+                android:layout_alignParentTop="true"
+                android:textSize="15dp"
+                android:layout_toLeftOf="@+id/txtView_date"
+                android:layout_toRightOf="@+id/imageView"
+                android:layout_alignParentLeft="false"
+                android:gravity="center_vertical"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtView_bpm"
+                android:textSize="15dp"
+                android:layout_below="@+id/txtView_Name"
+                android:layout_alignLeft="@+id/txtView_Name"
+                android:layout_alignStart="@+id/txtView_Name"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="BPM: 150" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Plateau: 56X12"
+                android:id="@+id/txtView_gear" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <TextView
@@ -59,11 +103,12 @@
         android:id="@+id/txtView_time"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:textSize="19sp"
+        android:textSize="18sp"
         android:gravity="center_vertical|center_horizontal"
-        android:layout_toRightOf="@+id/textView2"
         android:layout_toEndOf="@+id/textView2"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:layout_alignBottom="@+id/linearLayout_listRow"
+        android:textStyle="bold" />
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-<!-- [ Mirror metadata ] generatedAt: 1432215180460 -->
+<!-- [ Mirror metadata ] generatedAt: 1432293238720 -->
 <!-- Generated screen file. Fill the id tags below with content with
 which to populate your previewed layout. For a complete specification
 of sample data, please see http://jimulabs.com/sample-data-specifications/ 
@@ -6,7 +6,7 @@ of sample data, please see http://jimulabs.com/sample-data-specifications/
 Valid attributes on <screen> tag: theme="@style/someTheme" inEditMode="false" overlay="@drawable/mockup" -->
 <screen>
     <_content layout="@layout/activity_training_list">
-        <list>
+        <listView_traing>
             <items layout="@android:layout/simple_list_item_1" >
                 <_item>
                     <text1>Dalmatian</text1>
@@ -30,6 +30,6 @@ Valid attributes on <screen> tag: theme="@style/someTheme" inEditMode="false" ov
                     <text1>Chihuahua</text1>
                 </_item>
             </items>
-                </list>
+                </listView_traing>
     </_content>
 </screen>

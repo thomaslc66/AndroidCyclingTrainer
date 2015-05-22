@@ -7,16 +7,11 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/list"
-        android:choiceMode="singleChoice"
-        android:drawSelectorOnTop="true"
-        android:padding="5dp"
-        android:dividerHeight="3dp"
-        android:layout_alignParentEnd="false"
+        android:id="@+id/listView_traing"
         android:layout_above="@+id/btn_add_training"
         tools:listitem="@layout/training_list_item"
-        android:background="@color/button_material_light"
-        android:layout_alignParentStart="false"
+        android:divider="@drawable/divider_dot"
+        android:dividerHeight="20dp"
         android:layout_alignParentTop="true" />
 
     <Button
@@ -26,7 +21,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/btn_add_training"
-        android:text="@string/ajoute_entrainement"
+        android:text="@string/add_training"
         android:singleLine="false"
         android:clickable="true" />
 

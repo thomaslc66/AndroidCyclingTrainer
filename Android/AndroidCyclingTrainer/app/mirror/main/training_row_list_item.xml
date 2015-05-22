@@ -1,4 +1,4 @@
-<!-- [ Mirror metadata ] generatedAt: 1432215180483 -->
+<!-- [ Mirror metadata ] generatedAt: 1432284648115 -->
 <!-- Generated screen file. Fill the id tags below with content with
 which to populate your previewed layout. For a complete specification
 of sample data, please see http://jimulabs.com/sample-data-specifications/ 
@@ -6,12 +6,18 @@ of sample data, please see http://jimulabs.com/sample-data-specifications/
 Valid attributes on <screen> tag: theme="@style/someTheme" inEditMode="false" overlay="@drawable/mockup" -->
 <screen>
     <_content layout="@layout/training_row_list_item">
+        <!-- ImageView Examples:
+        <imgView_pict src="@drawable/image_resource" />
+        <imgView_pict src="relative_path/image.jpg" /> -->
+        <imgView_pict />
         <!-- TextView Examples:
-        <txtView_rpm text="@string/string_resource" />
-        <txtView_rpm text="Text literal" textSize="14sp" /> -->
+        <txtView_work text="@string/string_resource" />
+        <txtView_work text="Text literal" textSize="14sp" /> -->
+        <txtView_work />
+        <txtView_rythm />
         <txtView_rpm />
         <txtView_bpm />
-        <txtView_id />
+        <txtView_gear />
         <txtView_time />
     </_content>
 </screen>

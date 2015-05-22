@@ -172,6 +172,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
         final SwipeLayout swipeLayout = (SwipeLayout) convertView.findViewById(R.id.swipe);
 
+
         //swipe layout onClickLister - if we Click on the surface
         //Surface is the upper view
         swipeLayout.setOnClickListener(new View.OnClickListener() {
