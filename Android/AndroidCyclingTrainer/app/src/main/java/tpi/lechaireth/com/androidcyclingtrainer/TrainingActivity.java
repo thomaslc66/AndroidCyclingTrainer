@@ -23,14 +23,17 @@ import tpi.lechaireth.com.androidcyclingtrainer.DB.Training;
 
 
 /**
- * Created by Thomas on 04.05.2015.
+ * Created by Thomas on 27.05.2015.
  */
 public class TrainingActivity extends ActionBarActivity {
 
 
     //UI Elements
+    //The list View
     private ListView listView_training;
+    //the list of training
     private List<Training> training_list;
+    //Buton to create Training
     private Button btn_createTraining;
     private TrainingAdapter trainingAdapter;
     private EditText edt_input;

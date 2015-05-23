@@ -217,6 +217,7 @@
             android:inputType="textMultiLine"
             android:ems="8"
             android:id="@+id/edttext_note"
+            android:imeOptions="actionDone"
             android:maxLines="2" />
 
         <LinearLayout

@@ -9,7 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
- * Created by Thomas on 18.05.2015.
+ * Created by Thomas on 23.05.2015.
  */
 public class Timer extends Activity {
     private ProgressBar p;

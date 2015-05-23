@@ -4,11 +4,12 @@
     <string name="action_add">Ajouter</string>
     <string name="add_training">Ajouter entraînement</string>
     <string name="action_validate">OK</string>
-    <string name="error_bpm">Champ BPM vide.\n</string>
-    <string name="error_rpm">Champ RPM vide.\n</string>
-    <string name="error_time">Durée non définie.\n</string>
-    <string name="error_work">Travail non défini.\n</string>
-    <string name="error_rythm">Rythme non défini.\n</string>
+    <string name="error_bpm">Champ BPM vide.</string>
+    <string name="error_rpm">Champ RPM vide.</string>
+    <string name="error_time">Durée non définie.</string>
+    <string name="error_work">Travail non défini.</string>
+    <string name="error_rythm">Rythme non défini.</string>
     <string name="choice_braquets">Choix des braquets</string>
     <string name="error_training">Nom vide ou trop long</string>
+    <string name="add_error">Erreur lors de l\'ajout</string>
 </resources>

@@ -21,7 +21,7 @@ import tpi.lechaireth.com.androidcyclingtrainer.DB.TrainingRow;
 
 
 /**
- * Created by Thomas on 05.05.2015.
+ * Created by Thomas on 22.05.2015.
  */
 public class TrainingRowActivity extends ActionBarActivity {
 

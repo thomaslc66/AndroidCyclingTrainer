@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -135,7 +136,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
 
         ViewHolder viewHolder = new ViewHolder();
         viewHolder.txtView_date = (TextView) v.findViewById(R.id.txtView_date);
-
+        viewHolder.img_bike = (ImageView) v.findViewById(R.id.imageView);
         viewHolder.txtView_name = (TextView) v.findViewById(R.id.txtView_Name);
 
         viewHolder.btn_delete = (Button) v.findViewById(R.id.delete);
@@ -199,13 +200,13 @@ public class TrainingAdapter extends BaseSwipeAdapter {
                 //get the training we want to delete
                 Training t = realmDB.getTraining(trainingList.get(position).getStr_name());
 
-                Toast.makeText(mContext, "Id: " + t.getInt_id() + " NAME: " + t.getStr_name() + " POS: " + position, Toast.LENGTH_LONG).show();
-
-                //delete the training
+                //delete the training from the list first
                 trainingList.remove(t);
+                //from the DB after
                 realmDB.removeTraining(t);
                 swipeLayout.close();
 
+                //we notify that the Data list has changed
                 notifyDataSetChanged();
             }
         });
@@ -215,9 +216,19 @@ public class TrainingAdapter extends BaseSwipeAdapter {
         //date = (TextView) convertView.findViewById(R.id.txtView_date);
 
         if (trainingList.size() > 0) {
-            //fill data
+            //fill data of the date and the training name.
             viewHolder.txtView_date.setText(trainingList.get(position).getStr_day());
             viewHolder.txtView_name.setText(trainingList.get(position).getStr_name());
+
+            //check if it is a VTT or ROAD training and set the img.
+            if(trainingList.get(position).isBln_isVtt() == true){
+                //we set the color of the bike. Blue for VTT
+                viewHolder.img_bike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.vtt_icon));
+            }else{
+                //Road Bike. Red
+                viewHolder.img_bike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.bike_icon));
+            }
+
         }
     }//filValues
 
@@ -227,6 +238,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
     private class ViewHolder{
         public TextView txtView_date, txtView_name;
         private Button btn_delete;
+        private ImageView img_bike;
 
     }//private class ViewHolder
 
