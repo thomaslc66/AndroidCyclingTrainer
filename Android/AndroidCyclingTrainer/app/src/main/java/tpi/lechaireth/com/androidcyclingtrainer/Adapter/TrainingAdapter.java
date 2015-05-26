@@ -133,26 +133,24 @@ public class TrainingAdapter extends BaseSwipeAdapter {
     public View generateView(int position, ViewGroup viewGroup) {
         //inflate the view
         View v = mInflater.inflate(R.layout.training_list_item,null);
-
+        //new ViewHolder.
         ViewHolder viewHolder = new ViewHolder();
         viewHolder.txtView_date = (TextView) v.findViewById(R.id.txtView_date);
         viewHolder.img_bike = (ImageView) v.findViewById(R.id.imageView);
         viewHolder.txtView_name = (TextView) v.findViewById(R.id.txtView_Name);
-
         viewHolder.btn_delete = (Button) v.findViewById(R.id.delete);
 
         v.setTag(viewHolder);
-
+        //set swipeLayout to proper linearLayout
         SwipeLayout swipeLayout = (SwipeLayout) v.findViewById(R.id.swipe);
-        //set show mode.
-        swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
+        //close the layout at the begining
         swipeLayout.close();
 
         //swipelayout Listener
         swipeLayout.addSwipeListener(new SimpleSwipeListener(){
-            SwipeLayout.Status status;
             @Override
             public void onOpen(SwipeLayout layout) {
+                //make a small animation on the trash
                 YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.trash));
             }
         });

@@ -12,4 +12,5 @@
     <string name="choice_braquets">Choix des braquets</string>
     <string name="error_training">Nom vide ou trop long</string>
     <string name="add_error">Erreur lors de l\'ajout</string>
+    <string name="recup">Récupération</string>
 </resources>

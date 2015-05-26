@@ -45,7 +45,7 @@ public class TrainingRowActivity extends ActionBarActivity {
         /* UI ELements */
         listView_row = (ListView) findViewById(R.id.listView_row);
         trainingRowList = new ArrayList<TrainingRow>();
-        btn_start_training = (Button) findViewById(R.id.btn_validate_row);
+        btn_start_training = (Button) findViewById(R.id.btn_start_training);
         txtView_row_total = (TextView) findViewById(R.id.txtView_Row_Total);
         txtView_rpm_bpm = (TextView) findViewById(R.id.txtView_Bpm_Rpm);
         txtView_time_total = (TextView) findViewById(R.id.txtView_Total_Time);
@@ -78,7 +78,12 @@ public class TrainingRowActivity extends ActionBarActivity {
         btn_start_training.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TrainingRowActivity.this, "Start Training", Toast.LENGTH_SHORT).show();
+                //start the new activity Timer
+                Intent start_timer = new Intent(TrainingRowActivity.this, Timer.class);
+                start_timer.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                start_timer.putExtra("_id", _id);
+                startActivity(start_timer);
+                finish();
             }
         });
 

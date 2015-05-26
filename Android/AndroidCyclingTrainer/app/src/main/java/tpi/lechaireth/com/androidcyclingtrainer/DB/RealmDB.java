@@ -125,6 +125,7 @@ public class RealmDB {
      *
      * *****************************************************************************/
     public void addAtrainingRowToTraining(int realm_training_ID, TrainingRow row){
+        int _id = 0;
         realm = Realm.getInstance(context);
         // no transaction because it has started in createRow Method
         //Try to add a row
@@ -133,8 +134,11 @@ public class RealmDB {
             Training training = realm.where(Training.class).equalTo("int_id",realm_training_ID).findAll().first();
             //From this training get the List of TrainingRow.
             RealmList<TrainingRow> trainingRows = training.getRlst_row();
+
             // Search for the last row and get is id.
-            int _id = trainingRows.last().getInt_id();
+            if(trainingRows.size() > 0) {
+                _id = trainingRows.last().getInt_id();
+            }
             //check value of id
             Log.w("_ID", _id + "");
             //set row is id = id of the last row of the trainingDay + 1;
@@ -158,12 +162,12 @@ public class RealmDB {
 
 
     /***************************************************
-     * Name: getListofTraining
+     * Name: getListOfTraining
      * @return List<Training>
      * Goal: this method return all the training in the database
      *
      ***************************************************/
-    public List<Training> getListofTraining(){
+    public List<Training> getListOfTraining(){
         //arrayList for the return
         List<Training> t = new ArrayList<>();
         //get Realm Instance
@@ -526,4 +530,29 @@ public class RealmDB {
 
        return time;
    }
+
+    public List<Integer> calculateTotalMinAndSec(int id){
+        List<Integer> lst_time = new ArrayList<>();
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+        //get Training with the id
+        Training t = getATrainingWithID(id);
+        //we get the List of Rows
+        int totalSec = 0;
+        int totalMin = 0;
+
+        for(TrainingRow row : t.getRlst_row()){
+            int min = row.getInt_min();
+            int sec = row.getInt_sec();
+            //total of minutes and seconds
+            totalSec += sec;
+            totalMin += min;
+        }
+        //adding the two int in the ArrayList
+        lst_time.add(totalMin);
+        lst_time.add(totalSec);
+
+        //return the arrayList
+        return lst_time;
+    }
 }

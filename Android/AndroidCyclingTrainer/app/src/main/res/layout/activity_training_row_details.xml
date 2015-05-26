@@ -221,24 +221,28 @@
             android:maxLines="2" />
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="bottom">
+            android:gravity="bottom|center">
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Répétition(s): "
+            android:id="@+id/txtView_rep" />
 
             <Button
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="VALIDER"
-                android:id="@+id/btn_validate_row"
+                android:text="1x"
+                android:id="@+id/btn_rep"
                 android:layout_alignParentBottom="true"
                 android:layout_alignRight="@+id/verticalBar_bpm"
                 android:layout_alignEnd="@+id/verticalBar_bpm"
                 android:layout_alignLeft="@+id/verticalBar_rpm"
-                android:layout_alignStart="@+id/verticalBar_rpm"
-                android:layout_weight="1"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_alignStart="@+id/verticalBar_rpm" />
+
+
         </LinearLayout>
 
     </LinearLayout>

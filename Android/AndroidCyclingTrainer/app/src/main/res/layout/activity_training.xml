@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <ProgressBar
-        style="?android:attr/progressBarStyleSmall"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar_total"
@@ -29,8 +29,7 @@
         android:layout_marginBottom="40dp"
         android:layout_alignRight="@+id/progressBar_total"
         android:layout_alignEnd="@+id/progressBar_total"
-        android:indeterminate="false"
-        android:background="@color/red"/>
+        android:indeterminate="false" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="PLAY"
-        android:id="@+id/button"
+        android:id="@+id/btn_start"
         android:layout_above="@+id/progressBar_row"
         android:layout_alignLeft="@+id/progressBar_row"
         android:layout_alignStart="@+id/progressBar_row" />
@@ -56,15 +55,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="STOP"
-        android:id="@+id/button2"
-        android:layout_alignTop="@+id/button"
+        android:id="@+id/btn_stop"
+        android:layout_alignTop="@+id/btn_start"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="PAUSE"
-        android:id="@+id/button3"
+        android:id="@+id/btn_pause"
         android:layout_above="@+id/progressBar_row"
         android:layout_alignRight="@+id/progressBar_row"
         android:layout_alignEnd="@+id/progressBar_row" />
@@ -75,9 +74,10 @@
         android:text="TRAVAIL:"
         android:id="@+id/txtView_work"
         android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/button"
-        android:layout_alignStart="@+id/button"
-        android:layout_marginTop="43dp" />
+        android:layout_alignLeft="@+id/btn_start"
+        android:layout_alignStart="@+id/btn_start"
+        android:layout_marginTop="43dp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -87,13 +87,14 @@
         android:layout_below="@+id/txtView_work"
         android:layout_alignLeft="@+id/txtView_work"
         android:layout_alignStart="@+id/txtView_work"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:id="@+id/textView"
+        android:id="@+id/txtView_work_value"
         android:layout_alignTop="@+id/txtView_work"
         android:layout_toRightOf="@+id/txtView_work"
         android:layout_toEndOf="@+id/txtView_work"
@@ -103,7 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:id="@+id/textView2"
+        android:id="@+id/txtView_rythm_value"
         android:layout_alignTop="@+id/txtView_rythm"
         android:layout_toRightOf="@+id/txtView_rythm"
         android:layout_toEndOf="@+id/txtView_rythm"
@@ -114,24 +115,26 @@
         android:layout_height="wrap_content"
         android:text="BPM:"
         android:id="@+id/txtView_bpm"
-        android:layout_alignTop="@+id/textView"
+        android:layout_alignTop="@+id/txtView_work_value"
         android:layout_toRightOf="@+id/txtView_rowTime"
-        android:layout_toEndOf="@+id/txtView_rowTime" />
+        android:layout_toEndOf="@+id/txtView_rowTime"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="RPM:"
         android:id="@+id/txtview_rpm"
-        android:layout_alignTop="@+id/textView2"
+        android:layout_alignTop="@+id/txtView_rythm_value"
         android:layout_toRightOf="@+id/txtView_rowTime"
-        android:layout_toEndOf="@+id/txtView_rowTime" />
+        android:layout_toEndOf="@+id/txtView_rowTime"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:id="@+id/textView3"
+        android:id="@+id/txtView_bpm_value"
         android:layout_alignTop="@+id/txtView_bpm"
         android:layout_toRightOf="@+id/txtView_bpm"
         android:layout_toEndOf="@+id/txtView_bpm"
@@ -141,10 +144,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:id="@+id/textView4"
+        android:id="@+id/txtView_rpm_value"
         android:layout_alignTop="@+id/txtview_rpm"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignStart="@+id/textView3" />
+        android:layout_alignLeft="@+id/txtView_bpm_value"
+        android:layout_alignStart="@+id/txtView_bpm_value" />
 
     <TextView
         android:layout_width="wrap_content"

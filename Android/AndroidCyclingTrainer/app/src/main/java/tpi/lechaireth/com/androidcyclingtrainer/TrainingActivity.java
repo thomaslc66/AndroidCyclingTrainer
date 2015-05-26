@@ -54,7 +54,7 @@ public class TrainingActivity extends ActionBarActivity {
         training_list = new ArrayList<>();
 
         try {
-            training_list = realmDB.getListofTraining();
+            training_list = realmDB.getListOfTraining();
         }catch (Exception e ){
             e.printStackTrace();
         }
@@ -82,13 +82,16 @@ public class TrainingActivity extends ActionBarActivity {
                 radio_group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        RadioButton radio_button = (RadioButton) findViewById(group.getCheckedRadioButtonId());
+
                         if (rdbtn_vtt.isChecked()){
                             isVtt = true;
+                            Toast.makeText(TrainingActivity.this, "VTT (true)", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             isVtt = false;
+                            Toast.makeText(TrainingActivity.this, "Road (false)", Toast.LENGTH_SHORT).show();
                         }
+
                     }
                 });
 
@@ -108,9 +111,10 @@ public class TrainingActivity extends ActionBarActivity {
                                 }else{
                                     //if name is correct
                                     if (realmDB.isUnique(value)) {
+                                        //add new training to DataBase with the boolean of the checkBox
                                         realmDB.createTraining(value, isVtt);
                                         //update the adapter with the new list
-                                        training_list = realmDB.getListofTraining();
+                                        training_list = realmDB.getListOfTraining();
 
                                         //notifiyDataSetChanged
                                         trainingAdapter.updateLevel(training_list);
@@ -120,7 +124,7 @@ public class TrainingActivity extends ActionBarActivity {
                                 }
 
                             }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //do nothing

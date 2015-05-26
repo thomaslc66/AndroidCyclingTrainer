@@ -43,6 +43,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".Timer"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="my.activity.Timer" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
