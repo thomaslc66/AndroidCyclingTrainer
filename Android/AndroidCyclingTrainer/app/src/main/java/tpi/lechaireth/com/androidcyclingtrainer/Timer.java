@@ -95,15 +95,6 @@ public class Timer extends Activity {
         });
     }
 
-    Thread getListOfRow = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            //new RealmDb instance to get the list of Row for the training
-
-
-
-        }
-    });
 
     private void startTimer(int min, int sec, int int_max_row){
         //if the timer is not null or if the status is different from FINISHED
@@ -159,7 +150,7 @@ public class Timer extends Activity {
                 row_time = int_max_row + 1000;
                 //set i to 0
                 i = 0;
-                //get time in seconds
+                //get time in miliseconds
                 int millis = ((min * 60) + sec) * INT_MILLIS;
 
                 prBar_total.setMax(millis);
@@ -225,6 +216,7 @@ public class Timer extends Activity {
                     //progress of the row bar
                     prBar_row.setProgress(time_row += INTERVALS);
 
+                    //update the time in the screen
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -249,7 +241,9 @@ public class Timer extends Activity {
             super.onPostExecute(s);
             txtView_timRow.setText("0:0");
 
+
             //entrer l'indice de récupération
+
         }
     }
 

@@ -370,9 +370,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         }
 
         return bln_error;
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -396,20 +394,5 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private String checkTime(int hours, int min, int sec){
-        String time = "";
-        if (min > 60){
-            min = min % 60;
-            //if min is bigger than 60 we can a one hour to time.
-            hours ++;
-        }
-        if (sec > 60){
-            sec = sec % 60;
-            min++;
-        }
-        time = hours+"h"+min+"m"+sec+"s";
-        return time;
     }
 }

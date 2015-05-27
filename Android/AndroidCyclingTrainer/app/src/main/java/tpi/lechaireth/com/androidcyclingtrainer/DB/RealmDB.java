@@ -147,8 +147,6 @@ public class RealmDB {
             training.getRlst_row().add(row);
             //commit the transaction
             realm.commitTransaction();
-            //get a Toast for confirmation
-            Toast.makeText(context,"Row added to training " + training.getStr_name(),Toast.LENGTH_SHORT).show();
             //catch Exceptions
         }catch (Exception e){
             //get error message
