@@ -1,5 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:compat="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_add" android:orderInCategory="100" compat:showAsAction="always"
+    <item android:id="@+id/action_add_fc" compat:showAsAction="always"
         android:title="Fréquences Cardiaques" />
 </menu>

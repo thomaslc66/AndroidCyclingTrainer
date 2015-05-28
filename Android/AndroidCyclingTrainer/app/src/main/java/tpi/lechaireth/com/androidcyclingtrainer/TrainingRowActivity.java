@@ -59,12 +59,10 @@ public class TrainingRowActivity extends ActionBarActivity {
         /* we try to get all the training row from the db */
         try{
             trainingRowList = realmDB.getAllTrainingRows(_id);
+            /* check if the trainingRow list is empty */
             if (trainingRowList.size() == 0){
-                Toast.makeText(this,"Pas de session dans cet entraînement",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Pas de séquence dans cet entraînement",Toast.LENGTH_SHORT).show();
             }
-
-            Log.w("SIZE TRAINING LIST " , trainingRowList.size()+"" );
-
         }catch (Exception e){
             e.printStackTrace();
             Toast.makeText(this,"Erreur de récupération",Toast.LENGTH_SHORT).show();
@@ -88,7 +86,8 @@ public class TrainingRowActivity extends ActionBarActivity {
         });
 
         getCombinedData.start();
-    }
+
+    }//onCreate
 
 
     /**
@@ -140,4 +139,12 @@ public class TrainingRowActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-}
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //close Realm Instance
+        realmDB.close();
+    }
+
+}//TrainingRowActivity

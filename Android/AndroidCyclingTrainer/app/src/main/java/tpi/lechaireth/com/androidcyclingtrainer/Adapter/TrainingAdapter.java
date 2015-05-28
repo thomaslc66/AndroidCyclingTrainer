@@ -70,13 +70,6 @@ public class TrainingAdapter extends BaseSwipeAdapter {
         return position;
     }
 
-
-    public int getItemIdWithName(String name) {
-        RealmDB realmDB = new RealmDB(mContext);
-        int id = realmDB.getTraining(name).getInt_id();
-        return id;
-    }
-
     /**************************************************************************
      *
      * getItem() - Overrided method from the AdapterClass
@@ -196,7 +189,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
             public void onClick(View view) {
                 RealmDB realmDB = new RealmDB(mContext);
                 //get the training we want to delete
-                Training t = realmDB.getTraining(trainingList.get(position).getStr_name());
+                Training t = realmDB.getATrainingWithID(trainingList.get(position).getInt_id());
 
                 //delete the training from the list first
                 trainingList.remove(t);

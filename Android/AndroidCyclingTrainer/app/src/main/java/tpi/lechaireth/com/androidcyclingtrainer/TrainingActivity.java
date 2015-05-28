@@ -3,9 +3,12 @@ package tpi.lechaireth.com.androidcyclingtrainer;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,8 +34,10 @@ public class TrainingActivity extends ActionBarActivity {
     //UI Elements
     //The list View
     private ListView listView_training;
+
     //the list of training
     private List<Training> training_list;
+
     //Buton to create Training
     private Button btn_createTraining;
     private TrainingAdapter trainingAdapter;
@@ -44,13 +49,14 @@ public class TrainingActivity extends ActionBarActivity {
 
     //VARIABLES
     private boolean isVtt = false;
+    private RealmDB realmDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_list);
 
-        final RealmDB realmDB = new RealmDB(TrainingActivity.this);
+        realmDB = new RealmDB(TrainingActivity.this);
         training_list = new ArrayList<>();
 
         try {
@@ -66,7 +72,7 @@ public class TrainingActivity extends ActionBarActivity {
         trainingAdapter = new TrainingAdapter(this,training_list);
         listView_training.setAdapter(trainingAdapter);
 
-
+        /* onClickListener on btn_createTraining */
         btn_createTraining.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,11 +89,10 @@ public class TrainingActivity extends ActionBarActivity {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                        if (rdbtn_vtt.isChecked()){
+                        if (rdbtn_vtt.isChecked()) {
                             isVtt = true;
                             Toast.makeText(TrainingActivity.this, "VTT (true)", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
+                        } else {
                             isVtt = false;
                             Toast.makeText(TrainingActivity.this, "Road (false)", Toast.LENGTH_SHORT).show();
                         }
@@ -105,10 +110,10 @@ public class TrainingActivity extends ActionBarActivity {
                                 String value = edt_input.getText().toString();
 
                                 //check if name is empty or to long
-                                if (value == "" || value.length() > 25){
+                                if (value == "" || value.length() > 25) {
                                     Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_training), Toast.LENGTH_SHORT).show();
 
-                                }else{
+                                } else {
                                     //if name is correct
                                     if (realmDB.isUnique(value)) {
                                         //add new training to DataBase with the boolean of the checkBox
@@ -139,6 +144,37 @@ public class TrainingActivity extends ActionBarActivity {
             }
         });
 
+    }//onCreate
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_fc, menu);
+        return true;
     }
-}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_add_fc) {
+            Toast.makeText(this,"Fréquences Cardiaques", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //close Realm Instance
+        realmDB.close();
+    }
+
+}//TrainingActivity

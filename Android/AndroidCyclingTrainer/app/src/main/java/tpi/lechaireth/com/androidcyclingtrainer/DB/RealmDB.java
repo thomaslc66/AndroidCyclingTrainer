@@ -1,6 +1,15 @@
-/**
- * Created by Thomas on 01.05.2015.
- */
+/***************************************************************
+ * Programm  : Android Cycling Trainer
+ * Society   : ETML
+ * Author    : Thomas Léchaire
+ * Date      : 26.05.2015
+ * Goal      : This class regroups all method to manage the data base
+ ******************************************************************** //
+ * Modifications:
+ * Date       : XX.XX.XXXX
+ * Author     :
+ * Purpose    :
+ *********************************************************************/
 package tpi.lechaireth.com.androidcyclingtrainer.DB;
 
 import android.content.Context;
@@ -17,11 +26,7 @@ import io.realm.RealmResults;
 
 
 /***********************************
- *
- * class RealmDB
- * This class regroups all method to manage the data base and display the
- * training and row data
- *
+ * begining of the class RealmDB
  ************************************/
 public class RealmDB {
 
@@ -36,43 +41,52 @@ public class RealmDB {
      *
      ********************************************************/
     public RealmDB(Context context) {
+        //get the context of the Activity and set it to the RealmDB object
         this.context = context;
-
     }
 
-    //############################################################# PART FOR TRAINIG CLASS OPERATION ##############################################################################
+    public void close(){
+        //close realm instance
+        realm.close();
+    }
+
+    //############################################################# PART FOR TRAINING CLASS OPERATION ##############################################################################
 
     /*********************************************************
+     *
      * Name: isUnique
      * @param name
      * @return boolean notUnique
-     * Goal: check if the training already exist in the dataBase
+     * Goal: check if the name is already taken
      *
      ********************************************************/
     public boolean isUnique(String name){
-        boolean notUnique = true;
+        boolean isNotUnique = true;
+        //get a realm Instance
         realm = Realm.getInstance(context);
         //All writes must be wrapped in a transaction to facilitate safe multi threading
         realm.beginTransaction();
-        //find all training
+        //find all training equal to the name we passed in parameters (str_name)
         RealmResults results = realm.where(Training.class).equalTo("str_name", name).findAll();//send transaction
+        //end of transaction
         realm.commitTransaction();
         //Try to add a row
         if(results.size() > 0){
-            notUnique = false;
+            isNotUnique = false;
         }
 
-        return notUnique;
+        return isNotUnique;
     }
-        /*********************************************************
-         *
-         * Name: createTrainig
-         * @param name
-         * Goal: Method used to create a new training
-         *
-         ********************************************************/
+    /*********************************************************
+     *
+     * Name: createTrainig
+     * @param name
+     * Goal: Method used to create a new training
+     *
+     ********************************************************/
     public void createTraining(String name, boolean isVtt){
         int id;
+        //get a realm Instance
         realm = Realm.getInstance(context);
         //All writes must be wrapped in a transaction to facilitate safe multi threading
         realm.beginTransaction();
@@ -103,8 +117,6 @@ public class RealmDB {
             training.setBln_isVtt(isVtt);
             //commit the transaction
             realm.commitTransaction();
-            //get a Toast for confirmation
-            Toast.makeText(context,"New Training Created",Toast.LENGTH_SHORT).show();
             //catch Exceptions
         }catch (Exception e){
             //get error message
@@ -114,6 +126,7 @@ public class RealmDB {
             //get status
             Toast.makeText(context,"Error.. Training not created",Toast.LENGTH_SHORT).show();
         }//catch
+
     }//createTraining
 
     /*****************************************************************************
@@ -126,6 +139,7 @@ public class RealmDB {
      * *****************************************************************************/
     public void addAtrainingRowToTraining(int realm_training_ID, TrainingRow row){
         int _id = 0;
+        //get a realm Instance
         realm = Realm.getInstance(context);
         // no transaction because it has started in createRow Method
         //Try to add a row
@@ -156,6 +170,7 @@ public class RealmDB {
             //get status
             Toast.makeText(context,"Row not added to training ",Toast.LENGTH_SHORT).show();
         }//catch
+
     }//createRow
 
 
@@ -168,7 +183,7 @@ public class RealmDB {
     public List<Training> getListOfTraining(){
         //arrayList for the return
         List<Training> t = new ArrayList<>();
-        //get Realm Instance
+        //get a realm Instance
         realm = Realm.getInstance(context);
         //start transaction
         realm.beginTransaction();
@@ -188,6 +203,7 @@ public class RealmDB {
             //in case of error cancel the transaction
             realm.cancelTransaction();
         }
+
         //return the list
         return t;
     }
@@ -204,13 +220,13 @@ public class RealmDB {
     public Training getTraining(String name){
         //Create Variable
         Training t = null;
-        //get instance
+        //get a realm Instance
         realm = Realm.getInstance(context);
         //All writes must be wrapped in a transaction to facilitate safe multi threading
         realm.beginTransaction();
         try {
             //searching for the training with is name
-            t = realm.where(Training.class).equalTo("str_name",name).findAll().first();
+            t = realm.where(Training.class).equalTo("str_name", name).findAll().first();
             //commit the transaction
             realm.commitTransaction();
         }catch (Exception e){ //catch Exceptions
@@ -218,8 +234,38 @@ public class RealmDB {
             //in cas of error cancel the transaction
             realm.cancelTransaction();
         }
+
         //return the training
         return t;
+    }
+
+    /*********************************************************
+     *
+     * removeTrainingWithID
+     * @param realm_training_ID
+     * Goal: Remove the training with his id
+     * NOT USED - NEEDED TIME TO ADD IT IN THE CODE
+     *
+     *******************************************************/
+    public void removeTrainingWithID(int realm_training_ID){
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+        //All writes must be wrapped in a transaction to facilitate safe multi threading
+        realm.beginTransaction();
+        try {
+            //find the training with his id
+            Training training = realm.where(Training.class).equalTo("int_id", realm_training_ID).findAll().first();
+            //remove the training from the DB
+            training.removeFromRealm();
+            //commit
+            realm.commitTransaction();
+        //catch Exceptions
+        }catch (Exception e){
+            e.printStackTrace();
+            //cancel transaction
+            realm.cancelTransaction();
+        }
+
     }
 
     /**********************************************
@@ -227,11 +273,11 @@ public class RealmDB {
      * Name: getATrainingWithID
      * @param id
      * @return Training
-     * Goal: find and return a training with is ID
+     * Goal: find and return a training using his ID
      *
      ********************************************/
     public Training getATrainingWithID(int id){
-        //get realm Instance
+        //get a realm Instance
         realm = Realm.getInstance(context);
         //start transaction
         realm.beginTransaction();
@@ -241,38 +287,16 @@ public class RealmDB {
         try{
             //get all and find into the training with the id
             training = realm.where(Training.class).findAll().get(id);
+            //commit
             realm.commitTransaction();
         }catch (Exception e){
-            Toast.makeText(context,"Can't get training",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"Erreur de récupération de l'entraînement",Toast.LENGTH_SHORT).show();
             realm.cancelTransaction();
 
         }
+
         //return results
         return training;
-    }
-
-    /*********************************************************
-     *
-     * removeTrainingWithID
-     * @param realm_training_ID
-     * Goal: Remove the training with it's id
-     *
-     *******************************************************/
-    public void removeTrainingWithID(int realm_training_ID){
-        realm = Realm.getInstance(context);
-        //All writes must be wrapped in a transaction to facilitate safe multi threading
-        realm.beginTransaction();
-        try {
-            Training training = realm.where(Training.class).equalTo("int_id", realm_training_ID).findAll().first();
-            training.removeFromRealm();
-            realm.commitTransaction();
-        }catch (Exception e){
-            e.printStackTrace();
-            realm.cancelTransaction();
-        }
-        finally {
-            realm.commitTransaction();
-        }
     }
 
     /*********************************************************
@@ -283,7 +307,7 @@ public class RealmDB {
      *
      *******************************************************/
     public void removeTraining (Training t){
-        //get instance
+        //get a realm Instance
         realm = Realm.getInstance(context);
         //start transaction to facilitate multithreading
         realm.beginTransaction();
@@ -298,9 +322,7 @@ public class RealmDB {
             //if and Exceptions is catched we need to cancel the transaction
             realm.cancelTransaction();
         }
-        finally {
-            realm.commitTransaction();
-        }
+
     }
 
 
@@ -317,6 +339,7 @@ public class RealmDB {
     public List<TrainingRow> getAllTrainingRows(int realm_training_id){
         Log.w("ID TRAINING", realm_training_id+"");
         List<TrainingRow> list_of_row;
+        //get a realm Instance
         realm = Realm.getInstance(context);
         //start transaction
         realm.beginTransaction();
@@ -335,6 +358,7 @@ public class RealmDB {
             //and set the list to null
             list_of_row = null;
         }
+
         //return the list of all rows
         return list_of_row;
     }
@@ -358,6 +382,7 @@ public class RealmDB {
      ******************************************************************/
     public TrainingRow createRow(int min_work, int sec_work, int tour, int bpm, int min_recup, int sec_recup, String str_gear, String str_work, String str_rythm, String str_note ){
         TrainingRow trainingRow;
+        //get a realm Instance
         realm = Realm.getInstance(context);
         //All writes must be wrapped in a transaction to facilitate safe multi threading
         realm.beginTransaction();
@@ -372,9 +397,9 @@ public class RealmDB {
         //set heart beat
         trainingRow.setInt_bpm(bpm);
         // set min for rest time
-        trainingRow.setInt_min_recup(min_recup);
+        trainingRow.setInt_min_rest(min_recup);
         // set seconds for rest time
-        trainingRow.setInt_sec_recup(sec_recup);
+        trainingRow.setInt_sec_rest(sec_recup);
         // set String for the work
         trainingRow.setStr_work(str_work);
         // set String for the rythm
@@ -386,7 +411,7 @@ public class RealmDB {
         // set String for the work time, used for the display
         trainingRow.setStr_time(setTimeWithInt(min_work, sec_work));
         // set String for the rest time, used for the display
-        trainingRow.setStr_time_recup(setTimeWithInt(min_recup,sec_recup));
+        trainingRow.setStr_time_rest(setTimeWithInt(min_recup, sec_recup));
 
         //return the traing row freshly created+
         return trainingRow;
@@ -417,14 +442,18 @@ public class RealmDB {
             //if Exception is catched cancel the transaction
             realm.cancelTransaction();
         }
+
     }
 
-    /******
+    /***************************************************
      *
+     * Name: getArowWithID
      * @param id
      * @return
-     */
+     *
+     **************************************************/
     public TrainingRow getArowWithID(int id){
+        //get a realm Instance
         realm = Realm.getInstance(context);
         realm.beginTransaction();
         TrainingRow trainingRow = null;
@@ -434,7 +463,8 @@ public class RealmDB {
                 trainingRow = realmResults.get(id);
                 realm.commitTransaction();
             }else{
-                Toast.makeText(context,"Can't get Row",Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(context,"Erreur d'affichage",Toast.LENGTH_SHORT).show();
                 realm.cancelTransaction();
             }
         }catch (Exception e){
@@ -445,34 +475,6 @@ public class RealmDB {
         return trainingRow;
     }
 
-
-    /**********
-     *
-     * @return
-     */
-    public int getSizeofTrainingRowTable(){
-        realm = Realm.getInstance(context);
-        int size;
-        realm.beginTransaction();
-        RealmResults results = realm.where(TrainingRow.class).findAll();
-        size = results.size();
-        realm.commitTransaction();
-        return size;
-    }
-
-    /********
-     *
-     * @return
-     */
-    public int getSizeofTrainingTable(){
-        realm = Realm.getInstance(context);
-        int size;
-        realm.beginTransaction();
-        RealmResults results = realm.where(Training.class).findAll();
-        size = results.size();
-        realm.commitTransaction();
-        return size;
-    }
 
     /*****************************************************
      *
@@ -529,6 +531,12 @@ public class RealmDB {
        return time;
    }
 
+    /***
+     *
+     * @param id
+     * @return
+     *
+     */
     public List<Integer> calculateTotalMinAndSec(int id){
         List<Integer> lst_time = new ArrayList<>();
         //get a realm Instance

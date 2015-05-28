@@ -1,0 +1,127 @@
+<html>
+<head>
+<title>TrainingRow.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(98,151,85); font-style: italic; }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(204,120,50); }
+.s3 { color: rgb(128,128,128); }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+TrainingRow.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">/*************************************************************** 
+ * Programm  : Android Cycling Trainer 
+ * Society   : ETML 
+ * Author    : Thomas Léchaire 
+ * Date      : 26.05.2015 
+ * Goal      : Class used to backup in the realm data base all TrainingRow created 
+ *             by the user for one and only one Training. 
+ ******************************************************************** // 
+ * Modifications: 
+ * Date       : XX.XX.XXXX 
+ * Author     : 
+ * Purpose     : 
+ *********************************************************************/</span><span class="s1"> 
+</span><span class="s2">package </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer.DB</span><span class="s2">;</span><span class="s1"> 
+ 
+</span><span class="s3">/* Import for the class */</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">io.realm.RealmObject</span><span class="s2">;</span><span class="s1"> 
+ 
+</span><span class="s0">/************************************************ 
+ *  Begining of the TrainingRow class 
+ **********************************************/</span><span class="s1"> 
+</span><span class="s2">public class </span><span class="s1">TrainingRow </span><span class="s2">extends </span><span class="s1">RealmObject { 
+ 
+    </span><span class="s3">//id for the row</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_id</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">// Time for the display</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">String str_time</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//minutes for the timer</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_min</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//seconds for the timer</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_sec</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//Revolution per minute</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_rpm</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//Hear Beat per minute</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_bpm</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//Type of Work</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">String str_work</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//Intansity of the work</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">String str_rythm</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//String for the front and back plates</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">String str_gear</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//time for the recuperation</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">String str_time_rest</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//minutes fot the rest time</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_min_rest</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//seconds for the test time</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_sec_rest</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//String for the notes</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">String str_note</span><span class="s2">;</span><span class="s1"> 
+ 
+    </span><span class="s3">/* Getters and Setters for all attributs of the class */</span><span class="s1"> 
+ 
+    </span><span class="s2">public </span><span class="s1">String getStr_gear() {</span><span class="s2">return </span><span class="s1">str_gear</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setStr_gear(String str_gear) {</span><span class="s2">this</span><span class="s1">.str_gear = str_gear</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public int </span><span class="s1">getInt_bpm() {</span><span class="s2">return </span><span class="s1">int_bpm</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setInt_bpm(</span><span class="s2">int </span><span class="s1">int_bpm) {</span><span class="s2">this</span><span class="s1">.int_bpm = int_bpm</span><span class="s2">; </span><span class="s1">} 
+ 
+    </span><span class="s2">public int </span><span class="s1">getInt_id() {</span><span class="s2">return </span><span class="s1">int_id</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setInt_id(</span><span class="s2">int </span><span class="s1">int_id) {</span><span class="s2">this</span><span class="s1">.int_id = int_id</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public int </span><span class="s1">getInt_min() {</span><span class="s2">return </span><span class="s1">int_min</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setInt_min(</span><span class="s2">int </span><span class="s1">int_min) {</span><span class="s2">this</span><span class="s1">.int_min = int_min</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public int </span><span class="s1">getInt_min_rest() {</span><span class="s2">return </span><span class="s1">int_min_rest</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setInt_min_rest(</span><span class="s2">int </span><span class="s1">int_min_rest) {</span><span class="s2">this</span><span class="s1">.int_min_rest = int_min_rest</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public int </span><span class="s1">getInt_rpm() {</span><span class="s2">return </span><span class="s1">int_rpm</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setInt_rpm(</span><span class="s2">int </span><span class="s1">int_rpm) {</span><span class="s2">this</span><span class="s1">.int_rpm = int_rpm</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public int </span><span class="s1">getInt_sec() {</span><span class="s2">return </span><span class="s1">int_sec</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setInt_sec(</span><span class="s2">int </span><span class="s1">int_sec) {</span><span class="s2">this</span><span class="s1">.int_sec = int_sec</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public int </span><span class="s1">getInt_sec_rest() {</span><span class="s2">return </span><span class="s1">int_sec_rest</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setInt_sec_rest(</span><span class="s2">int </span><span class="s1">int_sec_rest) {</span><span class="s2">this</span><span class="s1">.int_sec_rest = int_sec_rest</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public </span><span class="s1">String getStr_note() {</span><span class="s2">return </span><span class="s1">str_note</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setStr_note(String str_note) {</span><span class="s2">this</span><span class="s1">.str_note = str_note</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public </span><span class="s1">String getStr_rythm() {</span><span class="s2">return </span><span class="s1">str_rythm</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setStr_rythm(String str_rythm) {</span><span class="s2">this</span><span class="s1">.str_rythm = str_rythm</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public </span><span class="s1">String getStr_time() {</span><span class="s2">return </span><span class="s1">str_time</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setStr_time(String str_time) {</span><span class="s2">this</span><span class="s1">.str_time = str_time</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public </span><span class="s1">String getStr_time_rest() {</span><span class="s2">return </span><span class="s1">str_time_rest</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setStr_time_rest(String str_time_rest) {</span><span class="s2">this</span><span class="s1">.str_time_rest = str_time_rest</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public </span><span class="s1">String getStr_work() {</span><span class="s2">return </span><span class="s1">str_work</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setStr_work(String str_work) {</span><span class="s2">this</span><span class="s1">.str_work = str_work</span><span class="s2">;</span><span class="s1">} 
+} 
+</span></pre>
+</body>
+</html>
