@@ -45,7 +45,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PLAY"
+        android:text="Départ"
         android:id="@+id/btn_start"
         android:layout_above="@+id/progressBar_row"
         android:layout_alignLeft="@+id/progressBar_row"
@@ -169,4 +169,12 @@
         android:layout_alignStart="@+id/txtView_plate"
         android:layout_below="@+id/txtView_plate"
         android:layout_marginTop="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0:0"
+        android:id="@+id/txtView_milis"
+        android:layout_above="@+id/txtView_rowTime"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

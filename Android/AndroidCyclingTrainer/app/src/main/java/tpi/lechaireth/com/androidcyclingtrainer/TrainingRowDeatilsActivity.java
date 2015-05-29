@@ -333,7 +333,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
             int_sec_work = nbrPicker_sec.getValue();
         }
         //check if bpm is set
-        if(txtView_bpm.getText().length() > 2 || txtView_bpm.getText().length() < 2){
+        if(txtView_bpm.getText().length() > 3 || txtView_bpm.getText().length() < 2){
             str_error = str_error + "\n"+getResources().getString(R.string.error_bpm);
             bln_error = true;
         }else{
@@ -341,7 +341,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
             int_bpm = verticalBar_bpm.getProgress();
         }
         //check if rpm is set
-        if(txtView_rpm.getText().length() > 2 || txtView_rpm.getText().length() < 2){
+        if(txtView_rpm.getText().length() > 3 || txtView_rpm.getText().length() < 2){
             str_error += "\n"+getResources().getString(R.string.error_rpm);
             bln_error = true;
         }else{
