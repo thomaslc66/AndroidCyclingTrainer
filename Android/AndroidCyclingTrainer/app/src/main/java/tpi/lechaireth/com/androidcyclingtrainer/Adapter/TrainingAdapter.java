@@ -29,7 +29,7 @@ import tpi.lechaireth.com.androidcyclingtrainer.TrainingRowActivity;
  */
 public class TrainingAdapter extends BaseSwipeAdapter {
 
-    /* Attributs of the object */
+    /* List of all Training object */
     private List<Training> trainingList;
     //inflater for the layout
     private LayoutInflater mInflater;

@@ -1,7 +1,7 @@
 /***************************************************************
  * Programm  : Android Cycling Trainer
  * Society   : ETML
- * Author    : Thomas Léchaire
+ * Author    : Thomas LÃ©chaire
  * Date      : 26.05.2015
  * Goal      : This class regroups all method to manage the data base
  ******************************************************************** //
@@ -23,6 +23,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import tpi.lechaireth.com.androidcyclingtrainer.R;
 
 
 /***********************************
@@ -70,7 +71,8 @@ public class RealmDB {
         RealmResults results = realm.where(Training.class).equalTo("str_name", name).findAll();//send transaction
         //end of transaction
         realm.commitTransaction();
-        //Try to add a row
+        //check if the size of the result table is bigger than 0
+        //if it is that means there is already and training named the same
         if(results.size() > 0){
             isNotUnique = false;
         }
@@ -290,7 +292,7 @@ public class RealmDB {
             //commit
             realm.commitTransaction();
         }catch (Exception e){
-            Toast.makeText(context,"Erreur de récupération de l'entraînement",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,context.getResources().getString(R.string.error_recup_training),Toast.LENGTH_SHORT).show();
             realm.cancelTransaction();
 
         }

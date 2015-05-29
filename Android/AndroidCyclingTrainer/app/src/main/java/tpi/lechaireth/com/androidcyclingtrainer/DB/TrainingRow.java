@@ -1,7 +1,7 @@
 /***************************************************************
  * Programm  : Android Cycling Trainer
  * Society   : ETML
- * Author    : Thomas Léchaire
+ * Author    : Thomas LÃ©chaire
  * Date      : 26.05.2015
  * Goal      : Class used to backup in the realm data base all TrainingRow created
  *             by the user for one and only one Training.

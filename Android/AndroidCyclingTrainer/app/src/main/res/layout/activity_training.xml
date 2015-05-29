@@ -177,4 +177,25 @@
         android:id="@+id/txtView_milis"
         android:layout_above="@+id/txtView_rowTime"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pas de remarques..."
+        android:id="@+id/txtView_notes_value"
+        android:layout_alignLeft="@+id/txtView_note"
+        android:layout_alignStart="@+id/txtView_note"
+        android:layout_below="@+id/txtView_note"
+        android:layout_alignRight="@+id/btn_pause"
+        android:layout_alignEnd="@+id/btn_pause"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0x0"
+        android:id="@+id/txtView_gear_value"
+        android:layout_alignTop="@+id/txtView_plate"
+        android:layout_alignLeft="@+id/txtView_rythm_value"
+        android:layout_alignStart="@+id/txtView_rythm_value" />
 </RelativeLayout>

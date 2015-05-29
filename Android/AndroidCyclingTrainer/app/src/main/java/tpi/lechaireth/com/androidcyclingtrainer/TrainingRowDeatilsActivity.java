@@ -298,11 +298,12 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
                 Log.w("ERROR_ADD",e.getMessage().toString());
             }
 
+
             Intent backtoRows = new Intent(TrainingRowDeatilsActivity.this, TrainingRowActivity.class);
             //return to the same Training
             backtoRows.putExtra("_id",int_id);
             //reorder the activity to front
-            backtoRows.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            backtoRows.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
             startActivity(backtoRows);
             finish();
         }else{
@@ -364,7 +365,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
             str_rythm = spinner_rythm.getSelectedItem().toString();
         }
         //check for rest time if it's empty
-        if(txtView_restTime.getText().toString() == "Récupération") {
+        if(txtView_restTime.getText().toString() == getResources().getString(R.string.recup)) {
             int_min_rest = 0;
             int_sec_rest = 0;
         }

@@ -13,4 +13,9 @@
     <string name="error_training">Nom vide ou trop long</string>
     <string name="add_error">Erreur lors de l\'ajout</string>
     <string name="recup">Récupération</string>
+    <string name="start">Départ</string>
+    <string name="resume">Reprise</string>
+    <string name="error_recup_training">"Erreur de récupération de l\'entraînement"</string>
+    <string name="stop_timer">Arrêt de l\'entraînement</string>
+    <string name="stop_message">Êtes-vous sur de vouloir stopper l\'entraînement</string>
 </resources>

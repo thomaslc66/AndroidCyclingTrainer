@@ -1,9 +1,22 @@
+/***************************************************************
+ * Programm  : Android Cycling Trainer
+ * Society   : ETML
+ * Author    : Thomas Léchaire
+ * Date      : 26.05.2015
+ * Goal      : Class used to backup in the realm data base all Max and Min
+ *              user HeartRate.
+ ******************************************************************** //
+ * Modifications:
+ * Date       : XX.XX.XXXX
+ * Author     :
+ * Purpose    :
+ *********************************************************************/
 package tpi.lechaireth.com.androidcyclingtrainer.DB;
 
 import io.realm.RealmObject;
 
 /**
- * Created by Thomas on 28.05.2015.
+ * Begining of HeartRate class
  */
 public class HeartRate extends RealmObject {
 
@@ -13,6 +26,8 @@ public class HeartRate extends RealmObject {
     private int int_fc_max;
     //int heartRate Min
     private int int_fc_min;
+
+    /* Getters and Setters for all atributs */
 
     public int getInt_fc_max() {
         return int_fc_max;
