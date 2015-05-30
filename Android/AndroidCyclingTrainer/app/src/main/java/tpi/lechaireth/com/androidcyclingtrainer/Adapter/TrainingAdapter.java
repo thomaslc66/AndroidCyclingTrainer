@@ -131,6 +131,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
         viewHolder.txtView_date = (TextView) v.findViewById(R.id.txtView_date);
         viewHolder.img_bike = (ImageView) v.findViewById(R.id.imageView);
         viewHolder.txtView_name = (TextView) v.findViewById(R.id.txtView_Name);
+        viewHolder.txtView_recupIndice = (TextView) v.findViewById(R.id.txtView_recupIndice);
         viewHolder.btn_delete = (Button) v.findViewById(R.id.delete);
 
         v.setTag(viewHolder);
@@ -194,7 +195,8 @@ public class TrainingAdapter extends BaseSwipeAdapter {
                 //get the training we want to delete
                 Training t = realmDB.getATrainingWithID(trainingList.get(position).getInt_id());
 
-                Log.w("trainingList.size",trainingList.size()+"" );
+                Log.w("trainingList.size", trainingList.size() + "");
+
                 //delete the training from the list first
                 trainingList.remove(t);
 
@@ -216,6 +218,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
             //fill data of the date and the training name.
             viewHolder.txtView_date.setText(trainingList.get(position).getStr_day());
             viewHolder.txtView_name.setText(trainingList.get(position).getStr_name());
+            viewHolder.txtView_recupIndice.setText(""+trainingList.get(position).getInt_id() +" - position: " + position);
 
             //check if it is a VTT or ROAD training and set the img.
             if(trainingList.get(position).isBln_isVtt() == true){
@@ -233,7 +236,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
      * View Holder Class to manage the view and the UI Elements
      */
     private class ViewHolder{
-        public TextView txtView_date, txtView_name;
+        public TextView txtView_date, txtView_name, txtView_recupIndice;
         private Button btn_delete;
         private ImageView img_bike;
 

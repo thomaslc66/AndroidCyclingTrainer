@@ -168,7 +168,7 @@ RealmDB.java</FONT>
         </span><span class="s4">//Try to add a row</span><span class="s1"> 
         </span><span class="s2">try</span><span class="s1">{ 
             </span><span class="s4">//get the training with realm_training_ID</span><span class="s1"> 
-            Training training = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">,</span><span class="s1">realm_training_ID).findAll().first()</span><span class="s2">;</span><span class="s1"> 
+            Training training = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;id&quot;</span><span class="s2">,</span><span class="s1">realm_training_ID).findAll().first()</span><span class="s2">;</span><span class="s1">
             </span><span class="s4">//From this training get the List of TrainingRow.</span><span class="s1"> 
             RealmList&lt;TrainingRow&gt; trainingRows = training.getRlst_row()</span><span class="s2">;</span><span class="s1"> 
  
@@ -277,7 +277,7 @@ RealmDB.java</FONT>
         realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s2">try </span><span class="s1">{ 
             </span><span class="s4">//find the training with his id</span><span class="s1"> 
-            Training training = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">, </span><span class="s1">realm_training_ID).findAll().first()</span><span class="s2">;</span><span class="s1"> 
+            Training training = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;id&quot;</span><span class="s2">, </span><span class="s1">realm_training_ID).findAll().first()</span><span class="s2">;</span><span class="s1">
             </span><span class="s4">//remove the training from the DB</span><span class="s1"> 
             training.removeFromRealm()</span><span class="s2">;</span><span class="s1"> 
             </span><span class="s4">//commit</span><span class="s1"> 
@@ -368,7 +368,7 @@ RealmDB.java</FONT>
         realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s2">try</span><span class="s1">{ 
             </span><span class="s4">//get the training with the id</span><span class="s1"> 
-            Training t = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">,</span><span class="s1">realm_training_id).findAll().first()</span><span class="s2">;</span><span class="s1"> 
+            Training t = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;id&quot;</span><span class="s2">,</span><span class="s1">realm_training_id).findAll().first()</span><span class="s2">;</span><span class="s1">
             </span><span class="s4">//then get the list of row contained in the training</span><span class="s1"> 
             list_of_row = t.getRlst_row()</span><span class="s2">;</span><span class="s1"> 
             </span><span class="s4">//commit the transcation</span><span class="s1"> 
@@ -455,7 +455,7 @@ RealmDB.java</FONT>
         realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s2">try </span><span class="s1">{ 
             </span><span class="s4">//find the training row equal to the id passed in parameter</span><span class="s1"> 
-            TrainingRow trainingRow = realm.where(TrainingRow.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">, </span><span class="s1">realm_Row_ID).findAll().first()</span><span class="s2">;</span><span class="s1"> 
+            TrainingRow trainingRow = realm.where(TrainingRow.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;id&quot;</span><span class="s2">, </span><span class="s1">realm_Row_ID).findAll().first()</span><span class="s2">;</span><span class="s1">
             </span><span class="s4">//remove the row</span><span class="s1"> 
             trainingRow.removeFromRealm()</span><span class="s2">;</span><span class="s1"> 
             </span><span class="s4">//commit the transaction</span><span class="s1"> 

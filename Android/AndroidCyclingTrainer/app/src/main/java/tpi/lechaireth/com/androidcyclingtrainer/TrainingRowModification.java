@@ -1,15 +1,11 @@
 package tpi.lechaireth.com.androidcyclingtrainer;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,17 +13,15 @@ import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB;
 import tpi.lechaireth.com.androidcyclingtrainer.DB.TrainingRow;
 import tpi.lechaireth.com.androidcyclingtrainer.library.VerticalSeekBar;
 
-
 /**
- * Created by Thomas on 05.05.2015.
+ * Created by Thomas on 30.05.15.
  */
-public class TrainingRowDeatilsActivity extends ActionBarActivity {
+public class TrainingRowModification extends Activity{
 
     //UI Elements
     private TextView txtView_gear, txtView_rpm, txtView_bpm, txtView_restTime;
@@ -56,13 +50,19 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
     private String str_error;
     private boolean bln_recup = false;
 
+    //OBJECT
+    private RealmDB realmdb;
+    private TrainingRow tRow = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_row_details);
 
-        //get data from last intent
-        int_id = getIntent().getIntExtra("_id",0);
+        //create realm Db object
+        realmdb = new RealmDB(this);
+
+        int_rowId = getIntent().getIntExtra("row_id",0);
 
         //UI Elements Initialisation
         txtView_bpm = (TextView) findViewById(R.id.txtView_bpm);
@@ -112,7 +112,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
                 View v1 = mInflater.inflate(R.layout.gear_dialog, null);
 
                 //Build an Alert Dialod
-                AlertDialog.Builder alrt_builder = new AlertDialog.Builder(TrainingRowDeatilsActivity.this);
+                AlertDialog.Builder alrt_builder = new AlertDialog.Builder(TrainingRowModification.this);
                 //set the view of the Dialog
                 alrt_builder.setView(v1);
                 alrt_builder.setTitle(getResources().getString(R.string.choice_braquets));
@@ -126,7 +126,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
                         txtView_gear.setText(int_front_value + "X" + int_back_value);
                     }
 
-                    });
+                });
                 alrt_builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -176,7 +176,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
                 View v1 = mInflater.inflate(R.layout.timepicker_dialog, null);
 
                 //Build an Alert Dialod
-                AlertDialog.Builder alrt_builder = new AlertDialog.Builder(TrainingRowDeatilsActivity.this);
+                AlertDialog.Builder alrt_builder = new AlertDialog.Builder(TrainingRowModification.this);
                 //set the view of the Dialog
                 alrt_builder.setView(v1);
                 alrt_builder.setTitle(getResources().getString(R.string.choice_braquets));
@@ -245,155 +245,53 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+
+
+        tRow = realmdb.getArowWithID(int_rowId);
+
+        if(tRow != null){
+
+            //Create a triningRow
+            int bpm = tRow.getInt_bpm();
+            int rpm = tRow.getInt_rpm();
+            int min = tRow.getInt_min();
+            int sec = tRow.getInt_sec();
+            int min_rest = tRow.getInt_min_rest();
+            int sec_rest = tRow.getInt_sec_rest();
+            String gear = tRow.getStr_gear();
+            String note = tRow.getStr_note();
+            String work = tRow.getStr_work();
+            String rythm = tRow.getStr_rythm();
+            String time = tRow.getStr_time();
+
+            //disable the rep button because it's only a modification of one Row
+            btn_rep.setEnabled(false);
+
+            //assign all value to TextView
+            //Rpm and BPM
+            verticalBar_bpm.setProgress(bpm);
+            verticlalBar_rpm.setProgress(rpm);
+            txtView_bpm.setText(""+bpm);
+            txtView_rpm.setText(""+rpm);
+
+            //Time
+            nbrPicker_min.setValue(min);
+            nbrPicker_sec.setValue(sec);
+
+            //Rest
+
+            //gear
+            txtView_gear.setText(gear);
+
+            //work and rythm
+            int pos_rythm = adapter_rythm.getPosition(rythm);
+            int pos_work = adapter_work.getPosition(work);
+            spinner_rythm.setSelection(pos_rythm);
+            spinner_work.setSelection(pos_work);
+
+        }
+
     }//onCreate
 
-    /*****************************************************************************
-     *
-     * Name: validateRow()
-     * Goal: method to validate the row, check the details, and add it to realm
-     *
-     ****************************************************************************/
-    private void validateRow(int nbr_repeat) {
-        //checkValue return true if there is an error
-        if(!checkValue()){
-            RealmDB realmDB = new RealmDB(TrainingRowDeatilsActivity.this);
 
-            try{
-                //this loop check how many times the user wants to repeat a row
-                for (int i = 0; i < nbr_repeat; i++){
-                    //add a row to the training we have selected
-                    realmDB.addAtrainingRowToTraining(int_id,realmDB.createRow(
-                            int_min_work,
-                            int_sec_work,
-                            int_rpm,
-                            int_bpm,
-                            int_min_rest,
-                            int_sec_rest,
-                            str_gear,
-                            str_work,
-                            str_rythm,
-                            str_note));
-
-                    //here we check if bln_recup is true
-                    if(bln_recup){
-                        //if it's true we add a new training row for recuperation
-                        //add a row to the training we have selected
-                        realmDB.addAtrainingRowToTraining(int_id,realmDB.createRow(
-                                int_recupMin_value,
-                                int_recupSec_value,
-                                0,
-                                0,
-                                0,
-                                0,
-                                str_gear,
-                                getResources().getString(R.string.recup),
-                                "",
-                                str_note));
-                    }//if(bln_recup)
-                }//for
-
-
-            }catch (Exception e){
-                Toast.makeText(TrainingRowDeatilsActivity.this, getResources().getString(R.string.add_error), Toast.LENGTH_SHORT).show();
-                Log.w("ERROR_ADD",e.getMessage().toString());
-            }
-
-
-            Intent backtoRows = new Intent(TrainingRowDeatilsActivity.this, TrainingRowActivity.class);
-            //return to the same Training
-            backtoRows.putExtra("_id",int_id);
-            //reorder the activity to front
-            backtoRows.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-            startActivity(backtoRows);
-            finish();
-        }else{
-            Toast.makeText(TrainingRowDeatilsActivity.this,str_error,Toast.LENGTH_LONG).show();
-        }
-
-    }//validateRow
-
-
-    /***********************************************************************
-     *
-     * Name: chackValue()
-     * @return bln_error
-     * Goal: check if all the value are set /time, bpm, rpm, work and rythm
-     *
-     ************************************************************************/
-    private Boolean checkValue() {
-        boolean bln_error = false;
-        //error string back to empty
-        str_error = "";
-        //check if time is bigger than 10 sec;
-        if((nbrPicker_min.getValue() * 10) + nbrPicker_sec.getValue() < 10){
-            str_error += getResources().getString(R.string.error_time);
-            bln_error = true;
-        }else{
-            //if value is bigger than 10 secondes qe can set the time
-            int_min_work = nbrPicker_min.getValue();
-            int_sec_work = nbrPicker_sec.getValue();
-        }
-        //check if bpm is set
-        if(txtView_bpm.getText().length() > 3 || txtView_bpm.getText().length() < 2){
-            str_error = str_error + "\n"+getResources().getString(R.string.error_bpm);
-            bln_error = true;
-        }else{
-            //set int_bpm to the value of the progressBar
-            int_bpm = verticalBar_bpm.getProgress();
-        }
-        //check if rpm is set
-        if(txtView_rpm.getText().length() > 3 || txtView_rpm.getText().length() < 2){
-            str_error += "\n"+getResources().getString(R.string.error_rpm);
-            bln_error = true;
-        }else{
-            //set int_rpm to the value of the progressBar
-            int_rpm = verticlalBar_rpm.getProgress();
-        }
-        //check if spinner work is selected
-        if (spinner_work.getSelectedItem().toString() == "" || spinner_work.getSelectedItem().toString().equals(null)){
-            str_error += "\n"+getResources().getString(R.string.error_work);
-        }else{
-            //if value is not empty set str_work to the value of th spinner
-            str_work = spinner_work.getSelectedItem().toString();
-        }
-        //check if spinner rythm is selected
-        if (spinner_rythm.getSelectedItem().toString() == "" || spinner_rythm.getSelectedItem().toString().equals(null)){
-            str_error += "\n"+getResources().getString(R.string.error_rythm);
-            bln_error = true;
-        }else{
-            //if value is not empty set str_rythm to the value of th spinner
-            str_rythm = spinner_rythm.getSelectedItem().toString();
-        }
-        //check for rest time if it's empty
-        if(txtView_restTime.getText().toString() == getResources().getString(R.string.recup)) {
-            int_min_rest = 0;
-            int_sec_rest = 0;
-        }
-
-        return bln_error;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_validate_row, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_validate) {
-            //validate row with the number of repetitions
-            validateRow(int_count);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

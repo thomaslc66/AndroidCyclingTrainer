@@ -128,6 +128,7 @@ public class TrainingRowActivity extends ActionBarActivity {
         if (id == R.id.action_add) {
             /* Launching the intent to add a row and the details */
             Intent addRowIntent = new Intent(TrainingRowActivity.this, TrainingRowDeatilsActivity.class);
+            //add id of the training
             addRowIntent.putExtra("_id", _id);
             /* add a flag to update to reorder the activity to front if it already exists */
             addRowIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

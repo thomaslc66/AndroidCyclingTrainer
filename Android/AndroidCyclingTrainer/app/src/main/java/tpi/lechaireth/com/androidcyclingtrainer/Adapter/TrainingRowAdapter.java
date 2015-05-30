@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -19,11 +17,10 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import java.util.List;
 
 import tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB;
-import tpi.lechaireth.com.androidcyclingtrainer.DB.Training;
 import tpi.lechaireth.com.androidcyclingtrainer.DB.TrainingRow;
 import tpi.lechaireth.com.androidcyclingtrainer.R;
-import tpi.lechaireth.com.androidcyclingtrainer.TrainingRowActivity;
 import tpi.lechaireth.com.androidcyclingtrainer.TrainingRowDeatilsActivity;
+import tpi.lechaireth.com.androidcyclingtrainer.TrainingRowModification;
 
 
 /**
@@ -37,6 +34,7 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
     //context of the Activity
     private Context mContext;
     private LayoutInflater mInflater;
+    private int row_id;
 
     //constructor
     public TrainingRowAdapter(Context context, List<TrainingRow> trainingRowList, int int_training_id ){
@@ -44,6 +42,7 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
         this.trainingRowList = trainingRowList;
         this.int_training_id = int_training_id;
         this.mInflater = LayoutInflater.from(context);
+        this.row_id = 0;
     }
 
     /***************************************************************************
@@ -177,10 +176,11 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
                 //we test if the swipe is closed
                 if(swipeLayout.getOpenStatus() == SwipeLayout.Status.Close){
                     //we start a new TrainingRowDetailsActivity
-                    int id = trainingRowList.get(position).getInt_id();
 
-                    Intent training_row = new Intent(mContext, TrainingRowDeatilsActivity.class);
-                    training_row.putExtra("_id", id);
+                    Intent training_row = new Intent(mContext, TrainingRowModification.class);
+                    //add the id of the trainingRow to the Intent
+                    training_row.putExtra("row_id", trainingRowList.get(position).getId());
+
                     training_row.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     mContext.startActivity(training_row);
                 }//if
@@ -193,12 +193,14 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
             public void onClick(View view) {
                 RealmDB realmDB = new RealmDB(mContext);
                 //get the trainingRow we want to delete
-                TrainingRow t_row = realmDB.getArowWithID(trainingRowList.get(position).getInt_id());
+                TrainingRow t_row = realmDB.getArowWithID(trainingRowList.get(position).getId());
 
                 //delete the training Row from the list first
                 trainingRowList.remove(t_row);
+
                 //from the DB after
-                realmDB.removeRowWithID(trainingRowList.get(position).getInt_id());
+                realmDB.removeTrainingRow(t_row);
+
                 swipeLayout.close();
 
                 //we notify that the Data list has changed
@@ -217,7 +219,7 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
             viewHolder.txtView_time.setText(trainingRowList.get(position).getStr_time()+"");
             viewHolder.txtView_work.setText(trainingRowList.get(position).getStr_work() + "");
             viewHolder.txtView_rythm.setText(trainingRowList.get(position).getStr_rythm());
-            viewHolder.txtView_gear.setText(trainingRowList.get(position).getStr_gear());
+            viewHolder.txtView_gear.setText(trainingRowList.get(position).getStr_gear() + "Id " + trainingRowList.get(position).getId());
 
         }
     }//filValues

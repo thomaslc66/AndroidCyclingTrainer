@@ -120,7 +120,7 @@ public class Timer extends Activity {
         int_total_timeInMillis = ((lst_time.get(0) * INT_SEC) + lst_time.get(1)) * INT_MILLIS;
 
         //get time of the first row of training
-        int_time_first_row = ((lst_trainingRow.get(int_i).getInt_min()*INT_SEC) + lst_trainingRow.get(int_i).getInt_sec()* INT_MILLIS);
+        int_time_first_row = (((lst_trainingRow.get(int_i).getInt_min()*INT_SEC) + lst_trainingRow.get(int_i).getInt_sec())* INT_MILLIS);
 
         //set the time for the first display
         int_rowTime_display = int_time_first_row + 1000;

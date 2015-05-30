@@ -22,7 +22,7 @@ import io.realm.RealmObject;
 public class TrainingRow extends RealmObject {
 
     //id for the row
-    private int int_id;
+    private int id;
     // Time for the display
     private String str_time;
     //minutes for the timer
@@ -58,9 +58,9 @@ public class TrainingRow extends RealmObject {
 
     public void setInt_bpm(int int_bpm) {this.int_bpm = int_bpm; }
 
-    public int getInt_id() {return int_id;}
+    public int getId() {return id;}
 
-    public void setInt_id(int int_id) {this.int_id = int_id;}
+    public void setId(int id) {this.id = id;}
 
     public int getInt_min() {return int_min;}
 

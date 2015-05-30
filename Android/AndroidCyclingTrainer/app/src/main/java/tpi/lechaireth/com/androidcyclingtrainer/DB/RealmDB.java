@@ -151,14 +151,6 @@ public class RealmDB {
             //From this training get the List of TrainingRow.
             RealmList<TrainingRow> trainingRows = training.getRlst_row();
 
-            // Search for the last row and get is id.
-            if(trainingRows.size() > 0) {
-                _id = trainingRows.last().getInt_id();
-            }
-            //check value of id
-            Log.w("_ID", _id + "");
-            //set row is id = id of the last row of the trainingDay + 1;
-            row.setInt_id(_id++);
             //get list and add row to it.
             training.getRlst_row().add(row);
             //commit the transaction
@@ -288,7 +280,7 @@ public class RealmDB {
 
         try{
             //get all and find into the training with the id
-            training = realm.where(Training.class).findAll().get(id);
+            training = realm.where(Training.class).equalTo("int_id",id).findAll().first();
             //commit
             realm.commitTransaction();
         }catch (Exception e){
@@ -383,13 +375,18 @@ public class RealmDB {
      *
      ******************************************************************/
     public TrainingRow createRow(int min_work, int sec_work, int tour, int bpm, int min_recup, int sec_recup, String str_gear, String str_work, String str_rythm, String str_note ){
-        TrainingRow trainingRow;
         //get a realm Instance
         realm = Realm.getInstance(context);
         //All writes must be wrapped in a transaction to facilitate safe multi threading
         realm.beginTransaction();
+        //Try to add a row
         //Add a trainingRow by creating a new realmObject with the class TrainingRow
-        trainingRow = realm.createObject(TrainingRow.class);
+        TrainingRow trainingRow = realm.createObject(TrainingRow.class);
+        // increatement index
+        int nextID = (int) (realm.where(TrainingRow.class).maximumInt("id") + 1);
+
+        //set id
+        trainingRow.setId(nextID);
         //set min
         trainingRow.setInt_min(min_work);
         //set sec
@@ -434,7 +431,7 @@ public class RealmDB {
         realm.beginTransaction();
         try {
             //find the training row equal to the id passed in parameter
-            TrainingRow trainingRow = realm.where(TrainingRow.class).equalTo("int_id", realm_Row_ID).findAll().first();
+            TrainingRow trainingRow = realm.where(TrainingRow.class).equalTo("id", realm_Row_ID).findAll().first();
             //remove the row
             trainingRow.removeFromRealm();
             //commit the transaction
@@ -442,6 +439,32 @@ public class RealmDB {
         }catch (Exception e){ //catch Exceptions
             e.printStackTrace();// print error message in logcat
             //if Exception is catched cancel the transaction
+            realm.cancelTransaction();
+        }
+
+    }
+
+    /*********************************************************
+     *
+     * Name: removeTrainingRow
+     * @param t
+     * Goal: Remove the trainingRow passed in parameter
+     *
+     *******************************************************/
+    public void removeTrainingRow (TrainingRow t){
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+        //start transaction to facilitate multithreading
+        realm.beginTransaction();
+        try {
+            //remove the training from the DB
+            t.removeFromRealm();
+            //commit the transaction
+            realm.commitTransaction();
+        }catch (Exception e){ //catch Exceptions
+            //print error message
+            e.printStackTrace();
+            //if and Exceptions is catched we need to cancel the transaction
             realm.cancelTransaction();
         }
 
@@ -455,23 +478,17 @@ public class RealmDB {
      *
      **************************************************/
     public TrainingRow getArowWithID(int id){
+        TrainingRow trainingRow;
         //get a realm Instance
         realm = Realm.getInstance(context);
         realm.beginTransaction();
-        TrainingRow trainingRow = null;
-        RealmResults<TrainingRow> realmResults = realm.where(TrainingRow.class).findAll();
         try{
-            if (realmResults.size() > 0){
-                trainingRow = realmResults.get(id);
-                realm.commitTransaction();
-            }else{
-
-                Toast.makeText(context,"Erreur d'affichage",Toast.LENGTH_SHORT).show();
-                realm.cancelTransaction();
-            }
-        }catch (Exception e){
+            trainingRow = realm.where(TrainingRow.class).equalTo("id", id).findAll().first();
             realm.commitTransaction();
-
+        }catch (Exception e){
+            e.printStackTrace();
+            realm.cancelTransaction();
+            trainingRow = null;
         }
 
         return trainingRow;

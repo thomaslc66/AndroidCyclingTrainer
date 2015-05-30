@@ -16,7 +16,7 @@
         android:weightSum="10" >
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/trash"
             android:layout_width="27dp"
             android:layout_height="30dp"
             android:layout_weight="1"
