@@ -2,13 +2,13 @@ package tpi.lechaireth.com.androidcyclingtrainer.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -188,13 +188,19 @@ public class TrainingAdapter extends BaseSwipeAdapter {
             @Override
             public void onClick(View view) {
                 RealmDB realmDB = new RealmDB(mContext);
+
+                Log.w("INT_ID",trainingList.get(position).getInt_id()+"" );
+
                 //get the training we want to delete
                 Training t = realmDB.getATrainingWithID(trainingList.get(position).getInt_id());
 
+                Log.w("trainingList.size",trainingList.size()+"" );
                 //delete the training from the list first
                 trainingList.remove(t);
+
                 //from the DB after
                 realmDB.removeTraining(t);
+
                 swipeLayout.close();
 
                 //we notify that the Data list has changed

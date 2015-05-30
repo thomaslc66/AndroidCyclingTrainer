@@ -10,7 +10,9 @@
     <string name="error_work">Travail non défini.</string>
     <string name="error_rythm">Rythme non défini.</string>
     <string name="choice_braquets">Choix des braquets</string>
-    <string name="error_training">Nom vide ou trop long</string>
+    <string name="error_training_empty">Nom vide</string>
+    <string name="error_training_length">Nom trop long</string>
+    <string name="error_training_isUnique">Nom déjà utilisé</string>
     <string name="add_error">Erreur lors de l\'ajout</string>
     <string name="recup">Récupération</string>
     <string name="start">Départ</string>
@@ -18,4 +20,7 @@
     <string name="error_recup_training">"Erreur de récupération de l\'entraînement"</string>
     <string name="stop_timer">Arrêt de l\'entraînement</string>
     <string name="stop_message">Êtes-vous sur de vouloir stopper l\'entraînement</string>
+    <string name="fc_max">Fréquence cardiaque maximale</string>
+    <string name="fc_min">Fréquence cardiaque minimale</string>
+    <string name="error_insert_fc">Fréquences cardiaques non valides</string>
 </resources>

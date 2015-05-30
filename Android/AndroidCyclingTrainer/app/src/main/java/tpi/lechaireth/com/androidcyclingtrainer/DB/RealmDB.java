@@ -563,4 +563,73 @@ public class RealmDB {
         //return the arrayList
         return lst_time;
     }
+
+
+    //####################################### PART FOR THE HEARTRATE CLASS ###################################################
+
+    public void saveHeartRate(int fc_max,int fc_min){
+
+        HeartRate fc_return;
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+
+        //begin a transaction
+        realm.beginTransaction();
+
+        //try to create a Realm Object HeartRate
+        try {
+            RealmResults<HeartRate> results = realm.where(HeartRate.class).equalTo("int_id", 0).findAll();
+
+            //if results.size < 1 that means that there is not HeartRate Backuped
+            if (results.size() < 1){
+                //Create a new HeartRate object to backup Data
+                HeartRate fc = realm.createObject(HeartRate.class);
+                //set id = 0
+                fc.setInt_id(0);
+                //set fc_max and fC_min
+                fc.setInt_fc_max(fc_max);
+
+                fc.setInt_fc_min(fc_min);
+                //don't need to get the fc back because it's the first time we
+                fc_return = null;
+            }else{ /* Here update the current row */
+                //get the id 0 for modification;
+                fc_return = realm.where(HeartRate.class).equalTo("int_id", 0).findAll().first();
+                fc_return.setInt_fc_min(fc_min);
+                fc_return.setInt_fc_max(fc_max);
+                fc_return.setInt_id(0);
+               }
+
+            //commit one of the both transaction
+            realm.commitTransaction();
+        }catch (Exception e){
+            e.printStackTrace();
+            //cancel transaction if try not succeded
+            realm.cancelTransaction();
+            //fc_return is empty because an Exception is raised
+        }
+    }//saveHeartRate
+
+    public HeartRate getHeartRate(){
+        HeartRate fc_return;
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+        //begin a transaction
+        realm.beginTransaction();
+
+        try{
+            //get the id 0;
+            fc_return = realm.where(HeartRate.class).equalTo("int_id", 0).findAll().first();
+            //commit transaction
+            realm.commitTransaction();
+        }catch (Exception e){
+            //raise Exception and print message
+            e.printStackTrace();
+            //cancel realm transaction
+            realm.cancelTransaction();
+            //fc_return is empty
+            fc_return = null;
+           }
+        return fc_return;
+    }
 }
