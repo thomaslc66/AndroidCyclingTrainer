@@ -30,7 +30,7 @@ public class TrainingRowActivity extends ActionBarActivity {
     private List<TrainingRow> trainingRowList;
     private RealmDB realmDB;
     private Button btn_start_training;
-    private TextView txtView_row_total, txtView_rpm_bpm, txtView_time_total;
+    private TextView txtView_row_total, txtView_time_total;
 
     /* variables */
     private int _id;
@@ -46,7 +46,6 @@ public class TrainingRowActivity extends ActionBarActivity {
         trainingRowList = new ArrayList<TrainingRow>();
         btn_start_training = (Button) findViewById(R.id.btn_start_training);
         txtView_row_total = (TextView) findViewById(R.id.txtView_Row_Total);
-        txtView_rpm_bpm = (TextView) findViewById(R.id.txtView_Bpm_Rpm);
         txtView_time_total = (TextView) findViewById(R.id.txtView_Total_Time);
 
         realmDB = new RealmDB(this);

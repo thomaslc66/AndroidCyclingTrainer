@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -36,13 +37,7 @@ public class TrainingRowModification extends ActionBarActivity {
     private NumberPicker nbrPicker_front, nbrPicker_back, nbrPicker_recup_min, nbrPicker_recup_sec;
     private AlertDialog alertDialog;
     private NumberPicker nbrPicker_min,nbrPicker_sec;
-
-    //CONSTANTS
-    private static final int INT_MIN_FRONT_GEAR = 36;
-    private static final int INT_MAX_FRONT_GEAR = 56;
-    private static final int INT_MIN_BACK_GEAR = 11;
-    private static final int INT_MAX_BACK_GEAR = 27;
-    private static final int INT_MAX_TIME = 59;
+    private EditText edtTxt_notes;
 
     //VARIABLES
     private int int_min_work, int_sec_work, int_min_rest, int_sec_rest, int_bpm, int_rpm;
@@ -54,6 +49,20 @@ public class TrainingRowModification extends ActionBarActivity {
     private String str_gear = "";
     private String str_error;
     private boolean bln_recup = false;
+    //int value for both progression of the vertical bar
+    private int int_progress_bpm;
+    private int int_progress_rpm;
+
+    //CONSTANT
+    private static int INT_MIN_BPM_VALUE = 30;
+    private static int INT_MIN_RPM_VALUE = 40;
+    private static int INT_MAX_BPM_VALUE = 200;
+    private static int INT_MAX_RPM_VALUE = 300;
+    private static final int INT_MIN_FRONT_GEAR = 36;
+    private static final int INT_MAX_FRONT_GEAR = 56;
+    private static final int INT_MIN_BACK_GEAR = 11;
+    private static final int INT_MAX_BACK_GEAR = 27;
+    private static final int INT_MAX_TIME = 59;
 
     //OBJECT
     private RealmDB realmdb;
@@ -103,6 +112,9 @@ public class TrainingRowModification extends ActionBarActivity {
 
         //chose the gear for bike
         txtView_gear = (TextView) findViewById(R.id.txtView_plate);
+
+        //editText for the notes
+        edtTxt_notes = (EditText) findViewById(R.id.edttext_note);
 
         /**********************************************************************
          *
@@ -173,12 +185,16 @@ public class TrainingRowModification extends ActionBarActivity {
             }
         });
 
-
+        //max bpm value
+        verticalBar_bpm.setMax(INT_MAX_BPM_VALUE);
         /* Method for the seek bar change listener for bpm bar*/
         verticalBar_bpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                txtView_bpm.setText((progress + 40) + "");
+                //maximum = 200 and min = 30;
+                int_progress_bpm = progress + INT_MIN_BPM_VALUE;
+                //set progression to textView
+                txtView_bpm.setText(int_progress_bpm+"");
             }
 
             @Override
@@ -190,11 +206,16 @@ public class TrainingRowModification extends ActionBarActivity {
             }
         });
 
+        //max rpm value
+        verticlalBar_rpm.setMax(INT_MAX_RPM_VALUE);
         /* Method for the seek bar change listener for rpm bar */
         verticlalBar_rpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                txtView_rpm.setText((progress + 30) + "");
+                //maximum = 300 and min = 40;
+                int_progress_rpm = progress + INT_MIN_RPM_VALUE;
+                //set progression to textView
+                txtView_rpm.setText(int_progress_rpm + "");
             }
 
             @Override
@@ -229,10 +250,9 @@ public class TrainingRowModification extends ActionBarActivity {
 
             //assign all value to TextView
             //Rpm and BPM
-            verticalBar_bpm.setMax(200);
-            verticlalBar_rpm.setMax(310);
             verticalBar_bpm.setProgress(bpm);
             verticlalBar_rpm.setProgress(rpm);
+
             txtView_bpm.setText(""+bpm);
             txtView_rpm.setText(""+rpm);
 
@@ -243,14 +263,29 @@ public class TrainingRowModification extends ActionBarActivity {
             //Rest
             txtView_restTime.setText("-");
 
-            //gear
-            txtView_gear.setText(gear);
+            //set notes
 
-            //work and rythm
-            int pos_rythm = adapter_rythm.getPosition(rythm);
-            int pos_work = adapter_work.getPosition(work);
-            spinner_rythm.setSelection(pos_rythm);
-            spinner_work.setSelection(pos_work);
+
+            //gear
+            if(gear.length() > 0) {
+                txtView_gear.setText(gear);
+            }else{
+                txtView_gear.setText(getResources().getString(R.string.gear));
+            }
+
+            //check if the row is a rest row. if it is disable spinners
+            if (work.toString() == getResources().getString(R.string.recup)){
+                //disable spinners
+                spinner_rythm.setEnabled(false);
+                spinner_work.setEnabled(false);
+            }else{
+                //work and rythm
+                int pos_rythm = adapter_rythm.getPosition(rythm);
+                int pos_work = adapter_work.getPosition(work);
+                spinner_rythm.setSelection(pos_rythm);
+                spinner_work.setSelection(pos_work);
+            }
+
 
         }
 
@@ -269,13 +304,13 @@ public class TrainingRowModification extends ActionBarActivity {
 
             try{
                 //add a row to the training we have selected
-                realmDB.updateTrainingRow(int_id,
+                Log.w("Check value", ""+int_min_work +"-"+int_sec_work+"-"+int_rpm+"-"+int_bpm);
+
+                realmDB.updateTrainingRow(int_rowId,
                         int_min_work,
                         int_sec_work,
                         int_rpm,
                         int_bpm,
-                        int_min_rest,
-                        int_sec_rest,
                         str_gear,
                         str_work,
                         str_rythm,
@@ -284,7 +319,8 @@ public class TrainingRowModification extends ActionBarActivity {
                 Toast.makeText(TrainingRowModification.this, getResources().getString(R.string.modif_error), Toast.LENGTH_SHORT).show();
                 Log.w("ERROR_ADD",e.getMessage().toString());
             }
-
+            //close Realm
+            realmDB.close();
 
             Intent backtoRows = new Intent(TrainingRowModification.this, TrainingRowActivity.class);
             //return to the same Training
@@ -319,7 +355,7 @@ public class TrainingRowModification extends ActionBarActivity {
             str_error += getResources().getString(R.string.error_time);
             bln_error = true;
         }else{
-            //if value is bigger than 10 secondes qe can set the time
+            //if value is bigger than 10 secondes we can set the time
             int_min_work = nbrPicker_min.getValue();
             int_sec_work = nbrPicker_sec.getValue();
         }
@@ -329,7 +365,7 @@ public class TrainingRowModification extends ActionBarActivity {
             bln_error = true;
         }else{
             //set int_bpm to the value of the progressBar
-            int_bpm = verticalBar_bpm.getProgress();
+            int_bpm = int_progress_bpm;
         }
         //check if rpm is set
         if(txtView_rpm.getText().length() > 3 || txtView_rpm.getText().length() < 2){
@@ -337,7 +373,7 @@ public class TrainingRowModification extends ActionBarActivity {
             bln_error = true;
         }else{
             //set int_rpm to the value of the progressBar
-            int_rpm = verticlalBar_rpm.getProgress();
+            int_rpm = int_progress_rpm;
         }
         //check if spinner work is selected
         if (spinner_work.getSelectedItem().toString() == "" || spinner_work.getSelectedItem().toString().equals(null)){
@@ -358,6 +394,14 @@ public class TrainingRowModification extends ActionBarActivity {
         if(txtView_restTime.getText().toString() == getResources().getString(R.string.recup)) {
             int_min_rest = 0;
             int_sec_rest = 0;
+        }
+        //check for the gear if it is selected or not
+        if (txtView_gear.getText().toString() != getResources().getString(R.string.gear)){
+            str_gear = txtView_gear.getText().toString();
+        }
+        //check for notes
+        if(edtTxt_notes.getText().length() > 0){
+            str_note = edtTxt_notes.getText().toString();
         }
 
         return bln_error;

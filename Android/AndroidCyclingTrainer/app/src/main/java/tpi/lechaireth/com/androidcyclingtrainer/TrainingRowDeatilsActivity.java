@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -36,6 +37,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
     private NumberPicker nbrPicker_front, nbrPicker_back, nbrPicker_recup_min, nbrPicker_recup_sec;
     private AlertDialog alertDialog;
     private NumberPicker nbrPicker_min,nbrPicker_sec;
+    private EditText edtTxt_notes;
 
     //CONSTANTS
     private static final int INT_MIN_FRONT_GEAR = 36;
@@ -104,6 +106,9 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
 
         //chose the gear for bike
         txtView_gear = (TextView) findViewById(R.id.txtView_plate);
+
+        //editText for the notes
+        edtTxt_notes = (EditText) findViewById(R.id.edttext_note);
 
         /**********************************************************************
          *
@@ -319,6 +324,8 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
                 Log.w("ERROR_ADD",e.getMessage().toString());
             }
 
+            //close Realm
+            realmDB.close();
 
             Intent backtoRows = new Intent(TrainingRowDeatilsActivity.this, TrainingRowActivity.class);
             //return to the same Training
@@ -390,6 +397,14 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
             int_min_rest = 0;
             int_sec_rest = 0;
         }
+        //check for the gear if it is selected or not
+        if (txtView_gear.getText().toString() != getResources().getString(R.string.gear)){
+            str_gear = txtView_gear.getText().toString();
+        }
+        //check for notes
+        if(edtTxt_notes.getText().length() > 0){
+            str_note = edtTxt_notes.getText().toString();
+        }
 
         return bln_error;
     }
@@ -416,6 +431,29 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * OnActivity Stop this will just kill acces to the realm Database to avoid memory leak
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //close Realm Instance
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        freeMemory();
+    }
+
+    public void freeMemory(){
+        System.runFinalization();
+        Runtime.getRuntime().gc();
+        System.gc();
     }
 
 

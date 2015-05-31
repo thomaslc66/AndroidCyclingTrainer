@@ -25,4 +25,5 @@
     <string name="fc_max">Fréquence cardiaque maximale</string>
     <string name="fc_min">Fréquence cardiaque minimale</string>
     <string name="error_insert_fc">Fréquences cardiaques non valides</string>
+    <string name="gear">Plateaux</string>
 </resources>

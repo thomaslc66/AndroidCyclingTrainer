@@ -323,7 +323,7 @@ public class RealmDB {
      * Goal: Update value of a trainingRow
      *
      *************************************************************/
-    public void updateTrainingRow(int int_rowId, int min_work, int sec_work, int tour, int bpm, int min_recup, int sec_recup, String str_gear, String str_work, String str_rythm, String str_note ){
+    public void updateTrainingRow(int int_rowId, int min_work, int sec_work, int tour, int bpm, String str_gear, String str_work, String str_rythm, String str_note ){
         TrainingRow t;
         //get a realm Instance
         realm = Realm.getInstance(context);
@@ -335,12 +335,30 @@ public class RealmDB {
 
             //update the TrainingRow t
             //set the time
+            Log.w("t before", ""+t.getStr_time() + "-"+ t.getInt_bpm() + "-" + t.getInt_rpm());
+
+            //modification of the min and sec
             t.setInt_min(min_work);
             t.setInt_sec(sec_work);
+            //modification of str_time for the display
+            t.setStr_time(setTimeWithInt(min_work,sec_work));
 
             //set BPM and RPM
             t.setInt_rpm(tour);
             t.setInt_bpm(bpm);
+
+            //set spinners value
+            t.setStr_work(str_work);
+            t.setStr_rythm(str_rythm);
+
+            //set notes
+            t.setStr_note(str_note);
+
+            //set gear
+            t.setStr_gear(str_gear);
+
+
+            Log.w("t after", ""+t.getStr_time() + "-"+ t.getInt_bpm() + "-" + t.getInt_rpm());
 
             //commit the transaction
             realm.commitTransaction();
@@ -529,7 +547,6 @@ public class RealmDB {
      *******************************************************/
     private String setTimeWithInt(int min, int sec) {
         String time = "";
-        Log.w("TAG SEC ", sec + "");
         if(min < 10){
             time = "0"+min;
         }else{

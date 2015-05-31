@@ -376,4 +376,21 @@ public class Timer extends Activity {
 
     }//Class TimerRunnable
 
+
+    /**
+     * Return Method
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        //get Back to TrainingRow Activit
+        Intent back_to_trainingRow = new Intent(Timer.this, TrainingRowActivity.class);
+        //put id of training as extra, needed to charge the training Row
+        back_to_trainingRow.putExtra("_id",_id);
+        back_to_trainingRow.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(back_to_trainingRow);
+        finish();
+    }
+
 }//Class Timer
