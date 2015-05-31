@@ -1,11 +1,11 @@
 package tpi.lechaireth.com.androidcyclingtrainer;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,7 +26,7 @@ import tpi.lechaireth.com.androidcyclingtrainer.library.VerticalSeekBar;
 /**
  * Created by Thomas on 30.05.15.
  */
-public class TrainingRowModification extends Activity{
+public class TrainingRowModification extends ActionBarActivity {
 
     //UI Elements
     private TextView txtView_gear, txtView_rpm, txtView_bpm, txtView_restTime;
@@ -46,7 +46,7 @@ public class TrainingRowModification extends Activity{
 
     //VARIABLES
     private int int_min_work, int_sec_work, int_min_rest, int_sec_rest, int_bpm, int_rpm;
-    private int int_id,int_recupMin_value,int_recupSec_value, int_rowId;
+    private int int_id,int_recupMin_value,int_recupSec_value, int_rowId, int_training_id;
     private int int_count = 1;
     private String str_work = "";
     private String str_rythm = "";
@@ -68,6 +68,7 @@ public class TrainingRowModification extends Activity{
         realmdb = new RealmDB(this);
 
         int_rowId = getIntent().getIntExtra("row_id",0);
+        int_training_id = getIntent().getIntExtra("training_id",0);
         Log.w("Row ID", ""+int_rowId);
 
         //UI Elements Initialisation
@@ -172,53 +173,6 @@ public class TrainingRowModification extends Activity{
             }
         });
 
-        txtView_restTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //Creation of an inflater for the layout
-                LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                //Create a view that inflate the layout timePicker_dialog
-                View v1 = mInflater.inflate(R.layout.timepicker_dialog, null);
-
-                //Build an Alert Dialod
-                AlertDialog.Builder alrt_builder = new AlertDialog.Builder(TrainingRowModification.this);
-                //set the view of the Dialog
-                alrt_builder.setView(v1);
-                alrt_builder.setTitle(getResources().getString(R.string.choice_braquets));
-                alrt_builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //do nothing
-                        dialog.dismiss();
-                    }
-                });
-                alrt_builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //numberPickers
-                        int_recupMin_value = nbrPicker_recup_min.getValue();
-                        int_recupSec_value = nbrPicker_recup_sec.getValue();
-                        txtView_restTime.setText(int_recupMin_value + ":" + int_recupSec_value);
-                        bln_recup = true;
-                    }
-                });
-
-                //build the alertDialog
-                alertDialog = alrt_builder.create();
-
-                //initialisation of the two number pickers for the gears
-                nbrPicker_recup_min = (NumberPicker) v1.findViewById(R.id.nbPicker_recup_min);
-                nbrPicker_recup_sec = (NumberPicker) v1.findViewById(R.id.nbPicker_recup_sec);
-
-                //set max value to the number picker
-                nbrPicker_recup_min.setMaxValue(INT_MAX_TIME);
-                nbrPicker_recup_sec.setMaxValue(INT_MAX_TIME);
-                //show the alert dialog
-                alertDialog.show();
-            }
-        });
-
 
         /* Method for the seek bar change listener for bpm bar*/
         verticalBar_bpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -275,6 +229,8 @@ public class TrainingRowModification extends Activity{
 
             //assign all value to TextView
             //Rpm and BPM
+            verticalBar_bpm.setMax(200);
+            verticlalBar_rpm.setMax(310);
             verticalBar_bpm.setProgress(bpm);
             verticlalBar_rpm.setProgress(rpm);
             txtView_bpm.setText(""+bpm);
@@ -285,6 +241,7 @@ public class TrainingRowModification extends Activity{
             nbrPicker_sec.setValue(sec);
 
             //Rest
+            txtView_restTime.setText("-");
 
             //gear
             txtView_gear.setText(gear);
@@ -312,7 +269,7 @@ public class TrainingRowModification extends Activity{
 
             try{
                 //add a row to the training we have selected
-                realmDB.addAtrainingRowToTraining(int_id,realmDB.createRow(
+                realmDB.updateTrainingRow(int_id,
                         int_min_work,
                         int_sec_work,
                         int_rpm,
@@ -322,9 +279,9 @@ public class TrainingRowModification extends Activity{
                         str_gear,
                         str_work,
                         str_rythm,
-                        str_note));
+                        str_note);
             }catch (Exception e){
-                Toast.makeText(TrainingRowModification.this, getResources().getString(R.string.add_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(TrainingRowModification.this, getResources().getString(R.string.modif_error), Toast.LENGTH_SHORT).show();
                 Log.w("ERROR_ADD",e.getMessage().toString());
             }
 
@@ -333,7 +290,7 @@ public class TrainingRowModification extends Activity{
             //return to the same Training
             backtoRows.putExtra("_id",int_id);
             //reorder the activity to front
-            backtoRows.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            backtoRows.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             //startActivity
             startActivity(backtoRows);
             //fininsh the activity and get back to trainingRow listView
@@ -428,6 +385,45 @@ public class TrainingRowModification extends Activity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * OnActivity Stop this will just kill acces to the realm Database to avoid memory leak
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //close Realm Instance
+        realmdb.close();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        freeMemory();
+    }
+
+    public void freeMemory(){
+        System.runFinalization();
+        Runtime.getRuntime().gc();
+        System.gc();
+    }
+
+    /**
+     * Return Method
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        //get Back to TrainingRow Activit
+        Intent back_to_trainingRow = new Intent(TrainingRowModification.this, TrainingRowActivity.class);
+        //put id of training as extra, needed to charge the training Row
+        back_to_trainingRow.putExtra("_id",int_training_id);
+        back_to_trainingRow.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(back_to_trainingRow);
+        finish();
     }
 
 

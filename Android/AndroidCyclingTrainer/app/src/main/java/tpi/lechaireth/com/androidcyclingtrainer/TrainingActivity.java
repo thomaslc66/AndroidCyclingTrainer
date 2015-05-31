@@ -48,7 +48,6 @@ public class TrainingActivity extends ActionBarActivity {
     private EditText edt_input;
     private RadioGroup radio_group;
     private AlertDialog alertDialog;
-    private RadioButton rdbtn_race;
     private RadioButton rdbtn_vtt;
     private TextView txtView_textWatcher;
 
@@ -56,6 +55,10 @@ public class TrainingActivity extends ActionBarActivity {
     private boolean isVtt = false;
     private RealmDB realmDB;
 
+    //CONSTANTS
+    private  static int INT_MAX_LENGTH = 20;
+    private static int INT_MAX_LENGTH_BPM_RPM = 3;
+    private static int INT_ZERO = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,14 +87,16 @@ public class TrainingActivity extends ActionBarActivity {
                 LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View training_Dialog = mInflater.inflate(R.layout.training_dialog, null);
 
+                //set is Vtt to false because by default Road is choosen
+                isVtt = false;
+
                 //set the element of the view
                 edt_input = (EditText) training_Dialog.findViewById(R.id.edt_input);
                 radio_group = (RadioGroup) training_Dialog.findViewById(R.id.radio_Group);
-                rdbtn_race = (RadioButton) training_Dialog.findViewById(R.id.rdbtn_race);
                 rdbtn_vtt = (RadioButton) training_Dialog.findViewById(R.id.rdbtn_vtt);
                 txtView_textWatcher = (TextView) training_Dialog.findViewById(R.id.txtView_textWatcher);
 
-                txtView_textWatcher.setText(String.valueOf(20));
+                txtView_textWatcher.setText(String.valueOf(INT_MAX_LENGTH));
 
                 //Create a TextWatcher for the editText input
                 TextWatcher mTextWatcher_forEdt_input = new TextWatcher() {
@@ -102,14 +107,14 @@ public class TrainingActivity extends ActionBarActivity {
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                        int int_nbr_letter = 20-charSequence.length();
+                        int int_nbr_letter = INT_MAX_LENGTH-charSequence.length();
                         //value is ok
-                        if(int_nbr_letter >= 0) {
+                        if(int_nbr_letter >= INT_ZERO) {
                             txtView_textWatcher.setTextColor(getResources().getColor(R.color.numbers_text_color));
                             txtView_textWatcher.setText(String.valueOf(int_nbr_letter));
                         }
                         //text length is to big
-                        else if(int_nbr_letter < 0){
+                        else if(int_nbr_letter < INT_ZERO){
                             //set color to red
                             txtView_textWatcher.setTextColor(getResources().getColor(R.color.red));
                             txtView_textWatcher.setText(String.valueOf(int_nbr_letter));
@@ -220,7 +225,7 @@ public class TrainingActivity extends ActionBarActivity {
                             String value_min = edtTxt_fc_min.getText().toString();
 
                             //check if both value ar valide not max than 3 numbers and not empty
-                            if (value_max.matches("") || value_min.matches("") || value_max.length() > 3 || value_min.length() > 3) {
+                            if (value_max.matches("") || value_min.matches("") || value_max.length() > INT_MAX_LENGTH_BPM_RPM || value_min.length() > INT_MAX_LENGTH_BPM_RPM) {
                                 Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_insert_fc), Toast.LENGTH_SHORT).show();
                             } else {
                                 //if the values are correct save the new value in the same
@@ -253,12 +258,27 @@ public class TrainingActivity extends ActionBarActivity {
         realmDB.close();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        training_list = null;
+        listView_training = null;
+        txtView_textWatcher = null;
+        freeMemory();
+    }
 
-    /**
+    public void freeMemory(){
+        System.runFinalization();
+        Runtime.getRuntime().gc();
+        System.gc();
+    }
+
+
+    /*******************************************************************************
      *
      * private class Custom Listener to check data control on the check Box
      *
-     * */
+     **********************************************************************************/
     class CheckValueTrainingListener implements View.OnClickListener{
         private final Dialog dialog;
         public CheckValueTrainingListener (Dialog dialog){
@@ -270,7 +290,7 @@ public class TrainingActivity extends ActionBarActivity {
             //get the name of the trining from editText
             String mValue = edt_input.getText().toString();
             //if value length is ok
-            if(mValue.length() <= 20){
+            if(mValue.length() <= INT_MAX_LENGTH){
                 //if name is correct
                 if (realmDB.isUnique(mValue)) {
                     //add new training to DataBase with the boolean of the checkBox
@@ -286,10 +306,10 @@ public class TrainingActivity extends ActionBarActivity {
                     Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_training_isUnique), Toast.LENGTH_SHORT).show();
                 }
             }//if
-            else if(mValue.length() == 0){ //if value is empty
+            else if(mValue.length() == INT_ZERO){ //if value is empty
                 Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_training_empty), Toast.LENGTH_SHORT).show();
             }
-            else if(mValue.length() > 20){ //if value is too big
+            else if(mValue.length() > INT_MAX_LENGTH){ //if value is too big
                 Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_training_length), Toast.LENGTH_SHORT).show();
             }
         }

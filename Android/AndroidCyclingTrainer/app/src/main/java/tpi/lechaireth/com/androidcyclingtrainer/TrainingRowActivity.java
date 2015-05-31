@@ -3,7 +3,6 @@ package tpi.lechaireth.com.androidcyclingtrainer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -144,11 +143,48 @@ public class TrainingRowActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * OnActivity Stop this will just kill acces to the realm Database to avoid memory leak
+     */
     @Override
     protected void onStop() {
         super.onStop();
         //close Realm Instance
         realmDB.close();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        freeMemory();
+        trainingRowList = null;
+        trainingRowAdapter = null;
+        getCombinedData.interrupt();
+
+    }
+
+    public void freeMemory(){
+        System.runFinalization();
+        Runtime.getRuntime().gc();
+        System.gc();
+    }
+
+
+    /**
+     * Return Method
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        //get Back to TrainingRow Activit
+        Intent back_to_training = new Intent(TrainingRowActivity.this, TrainingActivity.class);
+        /* this flag is here because if we don't create a new Activity from begining there will be a problem
+         accesing the realm instance created in the first launch of TrainingActivity. both are noth from the same thread and
+         there will be an error */
+        back_to_training.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(back_to_training);
+        finish();
     }
 
 }//TrainingRowActivity

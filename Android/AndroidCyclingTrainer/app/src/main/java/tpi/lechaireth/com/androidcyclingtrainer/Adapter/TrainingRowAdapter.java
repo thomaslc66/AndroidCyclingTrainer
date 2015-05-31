@@ -19,7 +19,6 @@ import java.util.List;
 import tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB;
 import tpi.lechaireth.com.androidcyclingtrainer.DB.TrainingRow;
 import tpi.lechaireth.com.androidcyclingtrainer.R;
-import tpi.lechaireth.com.androidcyclingtrainer.TrainingRowDeatilsActivity;
 import tpi.lechaireth.com.androidcyclingtrainer.TrainingRowModification;
 
 
@@ -180,7 +179,8 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
                     Intent training_row = new Intent(mContext, TrainingRowModification.class);
                     //add the id of the trainingRow to the Intent
                     training_row.putExtra("row_id", trainingRowList.get(position).getId());
-
+                    //add the training id specialy for the return method
+                    training_row.putExtra("training_id",int_training_id);
                     training_row.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     mContext.startActivity(training_row);
                 }//if
@@ -219,7 +219,7 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
             viewHolder.txtView_time.setText(trainingRowList.get(position).getStr_time()+"");
             viewHolder.txtView_work.setText(trainingRowList.get(position).getStr_work() + "");
             viewHolder.txtView_rythm.setText(trainingRowList.get(position).getStr_rythm());
-            viewHolder.txtView_gear.setText(trainingRowList.get(position).getStr_gear() + "Id " + trainingRowList.get(position).getId());
+            viewHolder.txtView_gear.setText(trainingRowList.get(position).getStr_gear());
 
         }
     }//filValues

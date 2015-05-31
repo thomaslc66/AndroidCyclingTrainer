@@ -10,10 +10,12 @@
     <string name="error_work">Travail non défini.</string>
     <string name="error_rythm">Rythme non défini.</string>
     <string name="choice_braquets">Choix des braquets</string>
+    <string name="define_row_time">Définir le temps de la séquence</string>
     <string name="error_training_empty">Nom vide</string>
     <string name="error_training_length">Nom trop long</string>
     <string name="error_training_isUnique">Nom déjà utilisé</string>
     <string name="add_error">Erreur lors de l\'ajout</string>
+    <string name="modif_error">Erreur lors de la mise a jour</string>
     <string name="recup">Récupération</string>
     <string name="start">Départ</string>
     <string name="resume">Reprise</string>

@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB;
-import tpi.lechaireth.com.androidcyclingtrainer.DB.TrainingRow;
 import tpi.lechaireth.com.androidcyclingtrainer.library.VerticalSeekBar;
 
 
@@ -55,6 +54,15 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
     private String str_gear = "";
     private String str_error;
     private boolean bln_recup = false;
+    //int value for both progression of the vertical bar
+    private int int_progress_bpm;
+    private int int_progress_rpm;
+
+    //CONSTANT
+    private static int INT_MIN_BPM_VALUE = 30;
+    private static int INT_MIN_RPM_VALUE = 40;
+    private static int INT_MAX_BPM_VALUE = 200;
+    private static int INT_MAX_RPM_VALUE = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +167,10 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         btn_rep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //get max 10 rep.
+                if(int_count > 10){
+                    int_count = 0;
+                }
                 //add one to count
                 int_count++;
                 //set text of button
@@ -179,7 +191,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
                 AlertDialog.Builder alrt_builder = new AlertDialog.Builder(TrainingRowDeatilsActivity.this);
                 //set the view of the Dialog
                 alrt_builder.setView(v1);
-                alrt_builder.setTitle(getResources().getString(R.string.choice_braquets));
+                alrt_builder.setTitle(getResources().getString(R.string.define_row_time));
                 alrt_builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -213,12 +225,16 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
             }
         });
 
-
+        //max bpm value
+        verticalBar_bpm.setMax(INT_MAX_BPM_VALUE);
         /* Method for the seek bar change listener for bpm bar*/
         verticalBar_bpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                txtView_bpm.setText((progress + 40) + "");
+                //maximum = 200 and min = 30;
+                int_progress_bpm = progress + INT_MIN_BPM_VALUE;
+                //set progression to textView
+                txtView_bpm.setText(int_progress_bpm+"");
             }
 
             @Override
@@ -230,11 +246,16 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
             }
         });
 
+        //max rpm value
+        verticlalBar_rpm.setMax(INT_MAX_RPM_VALUE);
         /* Method for the seek bar change listener for rpm bar */
         verticlalBar_rpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                txtView_rpm.setText((progress + 30) + "");
+                //maximum = 300 and min = 40;
+                int_progress_rpm = progress + INT_MIN_RPM_VALUE;
+                //set progression to textView
+                txtView_rpm.setText(int_progress_rpm + "");
             }
 
             @Override
@@ -339,7 +360,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
             bln_error = true;
         }else{
             //set int_bpm to the value of the progressBar
-            int_bpm = verticalBar_bpm.getProgress();
+            int_bpm = int_progress_bpm;
         }
         //check if rpm is set
         if(txtView_rpm.getText().length() > 3 || txtView_rpm.getText().length() < 2){
@@ -347,7 +368,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
             bln_error = true;
         }else{
             //set int_rpm to the value of the progressBar
-            int_rpm = verticlalBar_rpm.getProgress();
+            int_rpm = int_progress_rpm;
         }
         //check if spinner work is selected
         if (spinner_work.getSelectedItem().toString() == "" || spinner_work.getSelectedItem().toString().equals(null)){
@@ -395,5 +416,22 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    /**
+     * Return Method
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        //get Back to TrainingRow Activit
+        Intent back_to_trainingRow = new Intent(TrainingRowDeatilsActivity.this, TrainingRowActivity.class);
+        //put id of training as extra, needed to charge the training Row
+        back_to_trainingRow.putExtra("_id",int_id);
+        back_to_trainingRow.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(back_to_trainingRow);
+        finish();
     }
 }

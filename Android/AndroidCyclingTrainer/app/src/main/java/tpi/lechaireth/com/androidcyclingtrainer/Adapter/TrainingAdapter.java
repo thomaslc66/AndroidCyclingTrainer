@@ -173,9 +173,9 @@ public class TrainingAdapter extends BaseSwipeAdapter {
             public void onClick(View v) {
                 //we test if the swipe is closed
                 if(swipeLayout.getOpenStatus() == SwipeLayout.Status.Close){
-                    //we start a new TrainingRowActivity
-                    int id = trainingList.get(position).getInt_id();
 
+                    int id = trainingList.get(position).getInt_id();
+                    //we start a new TrainingRowActivity
                     Intent rowInTraining = new Intent(mContext, TrainingRowActivity.class);
                     rowInTraining.putExtra("_id", id);
                     rowInTraining.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -218,7 +218,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
             //fill data of the date and the training name.
             viewHolder.txtView_date.setText(trainingList.get(position).getStr_day());
             viewHolder.txtView_name.setText(trainingList.get(position).getStr_name());
-            viewHolder.txtView_recupIndice.setText(""+trainingList.get(position).getInt_id() +" - position: " + position);
+            viewHolder.txtView_recupIndice.setText("Indice de récupération: ");
 
             //check if it is a VTT or ROAD training and set the img.
             if(trainingList.get(position).isBln_isVtt() == true){

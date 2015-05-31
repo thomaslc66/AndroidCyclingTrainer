@@ -103,8 +103,11 @@ public class RealmDB {
             Calendar calendar = Calendar.getInstance();
             calendar.getTime();
 
+            //get year
             int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
+            //add one tho calendar month because January is = month 0
+            int month = calendar.get(Calendar.MONTH)+1;
+            //get day of month
             int dayMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
             //Add a trainingRow by creating a new realmObject with the class TrainingRow
@@ -117,6 +120,8 @@ public class RealmDB {
             training.setStr_day(dayMonth + "/" + month + "/" + year);
             //training set isVTT
             training.setBln_isVtt(isVtt);
+            //set rest indice
+            training.setInt_recup(0);
             //commit the transaction
             realm.commitTransaction();
             //catch Exceptions
@@ -319,20 +324,27 @@ public class RealmDB {
      *
      *************************************************************/
     public void updateTrainingRow(int int_rowId, int min_work, int sec_work, int tour, int bpm, int min_recup, int sec_recup, String str_gear, String str_work, String str_rythm, String str_note ){
+        TrainingRow t;
         //get a realm Instance
         realm = Realm.getInstance(context);
         //start transaction to facilitate multithreading
         realm.beginTransaction();
         try {
             //remove the training from the DB
-            TrainingRow t = realm.where(TrainingRow.class).equalTo("id", int_rowId).findFirst();
+            t = realm.where(TrainingRow.class).equalTo("id", int_rowId).findFirst();
 
             //update the TrainingRow t
             //set the time
             t.setInt_min(min_work);
+            t.setInt_sec(sec_work);
+
+            //set BPM and RPM
+            t.setInt_rpm(tour);
+            t.setInt_bpm(bpm);
 
             //commit the transaction
             realm.commitTransaction();
+
         }catch (Exception e){ //catch Exceptions
             //print error message
             e.printStackTrace();
