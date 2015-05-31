@@ -76,12 +76,15 @@ public class TrainingRowActivity extends ActionBarActivity {
         btn_start_training.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //control that there is at least one trainingRow in the training before starting
+                if(trainingRowList.size() > 0){
                 //start the new activity Timer
                 Intent start_timer = new Intent(TrainingRowActivity.this, Timer.class);
                 start_timer.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 start_timer.putExtra("_id", _id);
                 startActivity(start_timer);
                 finish();
+                }
             }
         });
 

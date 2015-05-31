@@ -131,47 +131,36 @@ public class RealmDB {
 
     }//createTraining
 
-    /*****************************************************************************
+    /*********************************************************
      *
-     * addAtrainingRowToTraining
-     * @param realm_training_ID
-     * @param row
-     * Goal: Method that add a row to a training session
+     * Name: removeTraining
+     * @param t
+     * Goal: Remove the training passed in parameter
      *
-     * *****************************************************************************/
-    public void addAtrainingRowToTraining(int realm_training_ID, TrainingRow row){
-        int _id = 0;
+     *******************************************************/
+    public void removeTraining (Training t){
         //get a realm Instance
         realm = Realm.getInstance(context);
-        // no transaction because it has started in createRow Method
-        //Try to add a row
-        try{
-            //get the training with realm_training_ID
-            Training training = realm.where(Training.class).equalTo("int_id",realm_training_ID).findAll().first();
-            //From this training get the List of TrainingRow.
-            RealmList<TrainingRow> trainingRows = training.getRlst_row();
-
-            //get list and add row to it.
-            training.getRlst_row().add(row);
+        //start transaction to facilitate multithreading
+        realm.beginTransaction();
+        try {
+            //remove the training from the DB
+            t.removeFromRealm();
             //commit the transaction
             realm.commitTransaction();
-            //catch Exceptions
-        }catch (Exception e){
-            //get error message
+        }catch (Exception e){ //catch Exceptions
+            //print error message
             e.printStackTrace();
-            //clear transaction - we don't want to add an empty or partial row
+            //if and Exceptions is catched we need to cancel the transaction
             realm.cancelTransaction();
-            //get status
-            Toast.makeText(context,"Row not added to training ",Toast.LENGTH_SHORT).show();
-        }//catch
+        }
 
-    }//createRow
-
+    }
 
     /***************************************************
      * Name: getListOfTraining
      * @return List<Training>
-     * Goal: this method return all the training in the database
+     * Goal: this method returns all the training in the database
      *
      ***************************************************/
     public List<Training> getListOfTraining(){
@@ -202,66 +191,6 @@ public class RealmDB {
         return t;
     }
 
-
-    /***************************************************
-     *
-     * Name: getTraining
-     * @param name
-     * @return Training t
-     * Goal: this method return a Training with is name
-     *
-     *************************************************/
-    public Training getTraining(String name){
-        //Create Variable
-        Training t = null;
-        //get a realm Instance
-        realm = Realm.getInstance(context);
-        //All writes must be wrapped in a transaction to facilitate safe multi threading
-        realm.beginTransaction();
-        try {
-            //searching for the training with is name
-            t = realm.where(Training.class).equalTo("str_name", name).findAll().first();
-            //commit the transaction
-            realm.commitTransaction();
-        }catch (Exception e){ //catch Exceptions
-            e.printStackTrace();
-            //in cas of error cancel the transaction
-            realm.cancelTransaction();
-        }
-
-        //return the training
-        return t;
-    }
-
-    /*********************************************************
-     *
-     * removeTrainingWithID
-     * @param realm_training_ID
-     * Goal: Remove the training with his id
-     * NOT USED - NEEDED TIME TO ADD IT IN THE CODE
-     *
-     *******************************************************/
-    public void removeTrainingWithID(int realm_training_ID){
-        //get a realm Instance
-        realm = Realm.getInstance(context);
-        //All writes must be wrapped in a transaction to facilitate safe multi threading
-        realm.beginTransaction();
-        try {
-            //find the training with his id
-            Training training = realm.where(Training.class).equalTo("int_id", realm_training_ID).findAll().first();
-            //remove the training from the DB
-            training.removeFromRealm();
-            //commit
-            realm.commitTransaction();
-        //catch Exceptions
-        }catch (Exception e){
-            e.printStackTrace();
-            //cancel transaction
-            realm.cancelTransaction();
-        }
-
-    }
-
     /**********************************************
      *
      * Name: getATrainingWithID
@@ -280,7 +209,7 @@ public class RealmDB {
 
         try{
             //get all and find into the training with the id
-            training = realm.where(Training.class).equalTo("int_id",id).findAll().first();
+            training = realm.where(Training.class).equalTo("int_id",id).findFirst();
             //commit
             realm.commitTransaction();
         }catch (Exception e){
@@ -293,69 +222,8 @@ public class RealmDB {
         return training;
     }
 
-    /*********************************************************
-     *
-     * Name: removeTrainingWithID
-     * @param t
-     * Goal: Remove the training passed in parameter
-     *
-     *******************************************************/
-    public void removeTraining (Training t){
-        //get a realm Instance
-        realm = Realm.getInstance(context);
-        //start transaction to facilitate multithreading
-        realm.beginTransaction();
-        try {
-            //remove the training from the DB
-            t.removeFromRealm();
-            //commit the transaction
-            realm.commitTransaction();
-        }catch (Exception e){ //catch Exceptions
-            //print error message
-            e.printStackTrace();
-            //if and Exceptions is catched we need to cancel the transaction
-            realm.cancelTransaction();
-        }
-
-    }
-
 
     //############################################################# PART FOR TRAINIG ROW CLASS OPERATION ##############################################################################
-
-    /*************************************************************
-     *
-     * Name: getAllTrainingRows
-     * @param realm_training_id
-     * @return a list of training Row
-     * Goal: By id we get a training a we get all the row within this training
-     *
-     * ***********************************************************/
-    public List<TrainingRow> getAllTrainingRows(int realm_training_id){
-        Log.w("ID TRAINING", realm_training_id+"");
-        List<TrainingRow> list_of_row;
-        //get a realm Instance
-        realm = Realm.getInstance(context);
-        //start transaction
-        realm.beginTransaction();
-        try{
-            //get the training with the id
-            Training t = realm.where(Training.class).equalTo("int_id",realm_training_id).findAll().first();
-            //then get the list of row contained in the training
-            list_of_row = t.getRlst_row();
-            //commit the transcation
-            realm.commitTransaction();
-        }catch (Exception e){ //catch Exceptions
-            //print error message in logcat
-            e.printStackTrace();
-            //if Exception is catched cancel the transaction
-            realm.cancelTransaction();
-            //and set the list to null
-            list_of_row = null;
-        }
-
-        //return the list of all rows
-        return list_of_row;
-    }
 
     /********************************************************************
      *
@@ -416,34 +284,6 @@ public class RealmDB {
         return trainingRow;
     }//createRow
 
-
-    /*****************************************************************************
-     *
-     * Name: removeRowWithID
-     * @param realm_Row_ID
-     * Goal: method used to remove a row from the training
-     *
-     *****************************************************************************/
-    public void removeRowWithID(int realm_Row_ID){
-        //get instance of Realm
-        realm = Realm.getInstance(context);
-        //begin a transaction to facilitate safe multi threading
-        realm.beginTransaction();
-        try {
-            //find the training row equal to the id passed in parameter
-            TrainingRow trainingRow = realm.where(TrainingRow.class).equalTo("id", realm_Row_ID).findAll().first();
-            //remove the row
-            trainingRow.removeFromRealm();
-            //commit the transaction
-            realm.commitTransaction();
-        }catch (Exception e){ //catch Exceptions
-            e.printStackTrace();// print error message in logcat
-            //if Exception is catched cancel the transaction
-            realm.cancelTransaction();
-        }
-
-    }
-
     /*********************************************************
      *
      * Name: removeTrainingRow
@@ -470,6 +310,108 @@ public class RealmDB {
 
     }
 
+
+    /**********************************************************
+     *
+     * Name: updateTrainingRow
+     * @param int_rowId
+     * Goal: Update value of a trainingRow
+     *
+     *************************************************************/
+    public void updateTrainingRow(int int_rowId, int min_work, int sec_work, int tour, int bpm, int min_recup, int sec_recup, String str_gear, String str_work, String str_rythm, String str_note ){
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+        //start transaction to facilitate multithreading
+        realm.beginTransaction();
+        try {
+            //remove the training from the DB
+            TrainingRow t = realm.where(TrainingRow.class).equalTo("id", int_rowId).findFirst();
+
+            //update the TrainingRow t
+            //set the time
+            t.setInt_min(min_work);
+
+            //commit the transaction
+            realm.commitTransaction();
+        }catch (Exception e){ //catch Exceptions
+            //print error message
+            e.printStackTrace();
+            //if and Exceptions is catched we need to cancel the transaction
+            realm.cancelTransaction();
+        }
+    }
+
+    /*****************************************************************************
+     *
+     * addAtrainingRowToTraining
+     * @param realm_training_ID
+     * @param row
+     * Goal: Method that add a row to a training session
+     *
+     * *****************************************************************************/
+    public void addAtrainingRowToTraining(int realm_training_ID, TrainingRow row){
+        int _id = 0;
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+        // no transaction because it has started in createRow Method
+        //Try to add a row
+        try{
+            //get the training with realm_training_ID
+            Training training = realm.where(Training.class).equalTo("int_id",realm_training_ID).findAll().first();
+            //From this training get the List of TrainingRow.
+            RealmList<TrainingRow> trainingRows = training.getRlst_row();
+
+            //get list and add row to it.
+            training.getRlst_row().add(row);
+            //commit the transaction
+            realm.commitTransaction();
+            //catch Exceptions
+        }catch (Exception e){
+            //get error message
+            e.printStackTrace();
+            //clear transaction - we don't want to add an empty or partial row
+            realm.cancelTransaction();
+            //get status
+            Toast.makeText(context,"Row not added to training ",Toast.LENGTH_SHORT).show();
+        }//catch
+    }//createRow
+
+
+    /*************************************************************
+     *
+     * Name: getAllTrainingRows
+     * @param realm_training_id
+     * @return a list of training Row
+     * Goal: By id we get a training a we get all the row within this training
+     *
+     * ***********************************************************/
+    public List<TrainingRow> getAllTrainingRows(int realm_training_id){
+        Log.w("ID TRAINING", realm_training_id+"");
+        List<TrainingRow> list_of_row;
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+        //start transaction
+        realm.beginTransaction();
+        try{
+            //get the training with the id
+            Training t = realm.where(Training.class).equalTo("int_id", realm_training_id).findFirst();;
+            //then get the list of row contained in the training
+            list_of_row = t.getRlst_row();
+            //commit the transcation
+            realm.commitTransaction();
+        }catch (Exception e){ //catch Exceptions
+            //print error message in logcat
+            e.printStackTrace();
+            //if Exception is catched cancel the transaction
+            realm.cancelTransaction();
+            //and set the list to null
+            list_of_row = null;
+        }
+
+        //return the list of all rows
+        return list_of_row;
+    }
+
     /***************************************************
      *
      * Name: getArowWithID
@@ -483,7 +425,7 @@ public class RealmDB {
         realm = Realm.getInstance(context);
         realm.beginTransaction();
         try{
-            trainingRow = realm.where(TrainingRow.class).equalTo("id", id).findAll().first();
+            trainingRow = realm.where(TrainingRow.class).equalTo("id", id).findFirst();;
             realm.commitTransaction();
         }catch (Exception e){
             e.printStackTrace();
@@ -493,6 +435,76 @@ public class RealmDB {
 
         return trainingRow;
     }
+
+    //####################################### PART FOR THE HEARTRATE CLASS ###################################################
+
+    public void saveHeartRate(int fc_max,int fc_min){
+
+        HeartRate fc_return;
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+
+        //begin a transaction
+        realm.beginTransaction();
+
+        //try to create a Realm Object HeartRate
+        try {
+            RealmResults<HeartRate> results = realm.where(HeartRate.class).equalTo("int_id", 0).findAll();
+
+            //if results.size < 1 that means that there is not HeartRate Backuped
+            if (results.size() < 1){
+                //Create a new HeartRate object to backup Data
+                HeartRate fc = realm.createObject(HeartRate.class);
+                //set id = 0
+                fc.setInt_id(0);
+                //set fc_max and fC_min
+                fc.setInt_fc_max(fc_max);
+
+                fc.setInt_fc_min(fc_min);
+                //don't need to get the fc back because it's the first time we
+                fc_return = null;
+            }else{ /* Here update the current row */
+                //get the id 0 for modification;
+                fc_return = realm.where(HeartRate.class).equalTo("int_id", 0).findFirst();
+                fc_return.setInt_fc_min(fc_min);
+                fc_return.setInt_fc_max(fc_max);
+                fc_return.setInt_id(0);
+            }
+
+            //commit one of the both transaction
+            realm.commitTransaction();
+        }catch (Exception e){
+            e.printStackTrace();
+            //cancel transaction if try not succeded
+            realm.cancelTransaction();
+            //fc_return is empty because an Exception is raised
+        }
+    }//saveHeartRate
+
+    public HeartRate getHeartRate(){
+        HeartRate fc_return;
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+        //begin a transaction
+        realm.beginTransaction();
+
+        try{
+            //get the id 0;
+            fc_return = realm.where(HeartRate.class).equalTo("int_id", 0).findFirst();;
+            //commit transaction
+            realm.commitTransaction();
+        }catch (Exception e){
+            //raise Exception and print message
+            e.printStackTrace();
+            //cancel realm transaction
+            realm.cancelTransaction();
+            //fc_return is empty
+            fc_return = null;
+        }
+        return fc_return;
+    }
+
+//############################################# PART FOR THE TIME METHODS ########################################
 
 
     /*****************************************************
@@ -505,7 +517,7 @@ public class RealmDB {
      *******************************************************/
     private String setTimeWithInt(int min, int sec) {
         String time = "";
-        Log.w("TAG SEC ", sec+"");
+        Log.w("TAG SEC ", sec + "");
         if(min < 10){
             time = "0"+min;
         }else{
@@ -580,73 +592,4 @@ public class RealmDB {
         //return the arrayList
         return lst_time;
     }
-
-
-    //####################################### PART FOR THE HEARTRATE CLASS ###################################################
-
-    public void saveHeartRate(int fc_max,int fc_min){
-
-        HeartRate fc_return;
-        //get a realm Instance
-        realm = Realm.getInstance(context);
-
-        //begin a transaction
-        realm.beginTransaction();
-
-        //try to create a Realm Object HeartRate
-        try {
-            RealmResults<HeartRate> results = realm.where(HeartRate.class).equalTo("int_id", 0).findAll();
-
-            //if results.size < 1 that means that there is not HeartRate Backuped
-            if (results.size() < 1){
-                //Create a new HeartRate object to backup Data
-                HeartRate fc = realm.createObject(HeartRate.class);
-                //set id = 0
-                fc.setInt_id(0);
-                //set fc_max and fC_min
-                fc.setInt_fc_max(fc_max);
-
-                fc.setInt_fc_min(fc_min);
-                //don't need to get the fc back because it's the first time we
-                fc_return = null;
-            }else{ /* Here update the current row */
-                //get the id 0 for modification;
-                fc_return = realm.where(HeartRate.class).equalTo("int_id", 0).findAll().first();
-                fc_return.setInt_fc_min(fc_min);
-                fc_return.setInt_fc_max(fc_max);
-                fc_return.setInt_id(0);
-               }
-
-            //commit one of the both transaction
-            realm.commitTransaction();
-        }catch (Exception e){
-            e.printStackTrace();
-            //cancel transaction if try not succeded
-            realm.cancelTransaction();
-            //fc_return is empty because an Exception is raised
-        }
-    }//saveHeartRate
-
-    public HeartRate getHeartRate(){
-        HeartRate fc_return;
-        //get a realm Instance
-        realm = Realm.getInstance(context);
-        //begin a transaction
-        realm.beginTransaction();
-
-        try{
-            //get the id 0;
-            fc_return = realm.where(HeartRate.class).equalTo("int_id", 0).findAll().first();
-            //commit transaction
-            realm.commitTransaction();
-        }catch (Exception e){
-            //raise Exception and print message
-            e.printStackTrace();
-            //cancel realm transaction
-            realm.cancelTransaction();
-            //fc_return is empty
-            fc_return = null;
-           }
-        return fc_return;
-    }
-}
+}//class RealmDB
