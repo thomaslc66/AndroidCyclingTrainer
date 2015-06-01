@@ -16,7 +16,9 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/edtTxt_fc_max" />
+        android:id="@+id/edtTxt_fc_max"
+        android:imeOptions="actionDone"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -30,6 +32,8 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/edtTxt_fc_min" />
+        android:id="@+id/edtTxt_fc_min"
+        android:imeOptions="actionDone"
+        />
 
 </LinearLayout>

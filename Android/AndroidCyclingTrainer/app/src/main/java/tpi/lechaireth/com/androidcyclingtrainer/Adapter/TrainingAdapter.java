@@ -190,12 +190,8 @@ public class TrainingAdapter extends BaseSwipeAdapter {
             public void onClick(View view) {
                 RealmDB realmDB = new RealmDB(mContext);
 
-                Log.w("INT_ID",trainingList.get(position).getInt_id()+"" );
-
                 //get the training we want to delete
                 Training t = realmDB.getATrainingWithID(trainingList.get(position).getInt_id());
-
-                Log.w("trainingList.size", trainingList.size() + "");
 
                 //delete the training from the list first
                 trainingList.remove(t);
@@ -203,6 +199,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
                 //from the DB after
                 realmDB.removeTraining(t);
 
+                //hide the swipe Layout and display infos and training Name
                 swipeLayout.close();
 
                 //we notify that the Data list has changed
@@ -218,7 +215,13 @@ public class TrainingAdapter extends BaseSwipeAdapter {
             //fill data of the date and the training name.
             viewHolder.txtView_date.setText(trainingList.get(position).getStr_day());
             viewHolder.txtView_name.setText(trainingList.get(position).getStr_name());
-            viewHolder.txtView_recupIndice.setText("Indice de récupération: ");
+            //set textView_recupIndice depending of the rest_indice
+            if(trainingList.get(position).getInt_recup() > 0){
+                viewHolder.txtView_recupIndice.setText("Indice de récupération: " + trainingList.get(position).getInt_recup());
+            }else{
+                viewHolder.txtView_recupIndice.setText("-");
+            }
+
 
             //check if it is a VTT or ROAD training and set the img.
             if(trainingList.get(position).isBln_isVtt() == true){

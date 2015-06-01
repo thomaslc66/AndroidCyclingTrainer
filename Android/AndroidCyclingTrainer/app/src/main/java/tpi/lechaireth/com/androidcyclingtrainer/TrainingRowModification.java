@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,14 +42,13 @@ public class TrainingRowModification extends ActionBarActivity {
 
     //VARIABLES
     private int int_min_work, int_sec_work, int_min_rest, int_sec_rest, int_bpm, int_rpm;
-    private int int_id,int_recupMin_value,int_recupSec_value, int_rowId, int_training_id;
+    private int int_id, int_rowId, int_training_id;
     private int int_count = 1;
     private String str_work = "";
     private String str_rythm = "";
     private String str_note = "";
     private String str_gear = "";
     private String str_error;
-    private boolean bln_recup = false;
     //int value for both progression of the vertical bar
     private int int_progress_bpm;
     private int int_progress_rpm;
@@ -115,6 +115,8 @@ public class TrainingRowModification extends ActionBarActivity {
 
         //editText for the notes
         edtTxt_notes = (EditText) findViewById(R.id.edttext_note);
+        //add done button
+        edtTxt_notes.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         /**********************************************************************
          *
@@ -227,9 +229,10 @@ public class TrainingRowModification extends ActionBarActivity {
             }
         });
 
-
+        //get the current row.
         tRow = realmdb.getArowWithID(int_rowId);
 
+        //set Value to all UI element -> for modification of the row
         if(tRow != null){
 
             //Create a triningRow
@@ -237,13 +240,10 @@ public class TrainingRowModification extends ActionBarActivity {
             int rpm = tRow.getInt_rpm();
             int min = tRow.getInt_min();
             int sec = tRow.getInt_sec();
-            int min_rest = tRow.getInt_min_rest();
-            int sec_rest = tRow.getInt_sec_rest();
             String gear = tRow.getStr_gear();
             String note = tRow.getStr_note();
             String work = tRow.getStr_work();
             String rythm = tRow.getStr_rythm();
-            String time = tRow.getStr_time();
 
             //disable the rep button because it's only a modification of one Row
             btn_rep.setEnabled(false);
@@ -264,7 +264,7 @@ public class TrainingRowModification extends ActionBarActivity {
             txtView_restTime.setText("-");
 
             //set notes
-
+            edtTxt_notes.setText(note);
 
             //gear
             if(gear.length() > 0) {
@@ -285,10 +285,7 @@ public class TrainingRowModification extends ActionBarActivity {
                 spinner_rythm.setSelection(pos_rythm);
                 spinner_work.setSelection(pos_work);
             }
-
-
         }
-
     }//onCreate
 
     /*****************************************************************************
@@ -431,9 +428,10 @@ public class TrainingRowModification extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * OnActivity Stop this will just kill acces to the realm Database to avoid memory leak
-     */
+    /********************************************************************
+     * Name: onStop Method
+     * Goal: Method called when the phone stop the Avtivity
+     ***********************************************************************/
     @Override
     protected void onStop() {
         super.onStop();
@@ -441,6 +439,10 @@ public class TrainingRowModification extends ActionBarActivity {
         realmdb.close();
     }
 
+    /********************************************************************
+     * Name: onDestroy Method
+     * Goal: Method called when the phone kill the Avtivity
+     ***********************************************************************/
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -448,6 +450,10 @@ public class TrainingRowModification extends ActionBarActivity {
         freeMemory();
     }
 
+    /********************************************************************
+     * Name: freeMemory
+     * Goal: Run the garbage collector to get back some allocated memory
+     ***********************************************************************/
     public void freeMemory(){
         System.runFinalization();
         Runtime.getRuntime().gc();

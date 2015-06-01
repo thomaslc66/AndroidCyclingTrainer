@@ -82,6 +82,9 @@ public class TrainingRowActivity extends ActionBarActivity {
                 start_timer.putExtra("_id", _id);
                 startActivity(start_timer);
                 finish();
+                }else{
+                    //dispaly error message when start button is clicked but not row are added
+                    Toast.makeText(TrainingRowActivity.this,getString(R.string.no_training),Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -138,20 +141,24 @@ public class TrainingRowActivity extends ActionBarActivity {
 
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * OnActivity Stop this will just kill acces to the realm Database to avoid memory leak
-     */
+    /********************************************************************
+     * Name: onStop Method
+     * Goal: Method called when the phone stop the Avtivity
+     ***********************************************************************/
     @Override
     protected void onStop() {
         super.onStop();
-        //close Realm Instance
+        //close Realm. Close Acces to data
         realmDB.close();
     }
 
+    /********************************************************************
+     * Name: onDestroy Method
+     * Goal: Method called when the phone kill the Avtivity
+     ***********************************************************************/
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -162,6 +169,10 @@ public class TrainingRowActivity extends ActionBarActivity {
 
     }
 
+    /********************************************************************
+     * Name: freeMemory
+     * Goal: Run the garbage collector to get back some allocated memory
+     ***********************************************************************/
     public void freeMemory(){
         System.runFinalization();
         Runtime.getRuntime().gc();

@@ -3,6 +3,37 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="15dp">
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio_Group"
+            android:orientation="horizontal">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vélo de route"
+                android:id="@+id/rdbtn_race"
+                android:checked="true"
+                android:layout_marginRight="10dp" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VTT"
+                android:id="@+id/rdbtn_vtt"
+                android:layout_gravity="right"
+                android:checked="false" />
+        </RadioGroup>
+
+    </LinearLayout>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,35 +49,5 @@
         android:id="@+id/txtView_textWatcher"
         android:layout_gravity="right"
         android:layout_marginRight="10dp" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="15dp">
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/radio_Group"
-            android:orientation="horizontal">
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Vélo de route"
-                    android:id="@+id/rdbtn_race"
-                    android:checked="true"
-                    android:layout_marginRight="10dp" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="VTT"
-                    android:id="@+id/rdbtn_vtt"
-                    android:layout_gravity="right"
-                    android:checked="false" />
-        </RadioGroup>
-
-    </LinearLayout>
 
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -20,6 +22,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +50,7 @@ public class TrainingActivity extends ActionBarActivity {
     private Button btn_createTraining;
     private TrainingAdapter trainingAdapter;
     private EditText edt_input;
+    private EditText edtTxt_fc_min, edtTxt_fc_max;
     private RadioGroup radio_group;
     private AlertDialog alertDialog;
     private RadioButton rdbtn_vtt;
@@ -54,6 +59,7 @@ public class TrainingActivity extends ActionBarActivity {
     //VARIABLES
     private boolean isVtt = false;
     private RealmDB realmDB;
+    private boolean isHeartBeat;
 
     //CONSTANTS
     private  static int INT_MAX_LENGTH = 20;
@@ -69,6 +75,12 @@ public class TrainingActivity extends ActionBarActivity {
 
         try {
             training_list = realmDB.getListOfTraining();
+            //get isHeartRate value from DB
+            if(realmDB.getisHeartRate()){ //if return true
+                isHeartBeat = true;
+            }else{
+                isHeartBeat = false;
+            }
         }catch (Exception e ){
             e.printStackTrace();
         }
@@ -84,94 +96,117 @@ public class TrainingActivity extends ActionBarActivity {
         btn_createTraining.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View training_Dialog = mInflater.inflate(R.layout.training_dialog, null);
+                //need to check if HeartBeat are filled
+                if(!isHeartBeat){
+                    Toast.makeText(TrainingActivity.this,getString(R.string.add_fc),Toast.LENGTH_LONG).show();
+                }else{ //if isHeartBeat = true means that HeartRate are filled
+                    LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View training_Dialog = mInflater.inflate(R.layout.training_dialog, null);
 
-                //set is Vtt to false because by default Road is choosen
-                isVtt = false;
+                    //set is Vtt to false because by default Road is choosen
+                    isVtt = false;
 
-                //set the element of the view
-                edt_input = (EditText) training_Dialog.findViewById(R.id.edt_input);
-                radio_group = (RadioGroup) training_Dialog.findViewById(R.id.radio_Group);
-                rdbtn_vtt = (RadioButton) training_Dialog.findViewById(R.id.rdbtn_vtt);
-                txtView_textWatcher = (TextView) training_Dialog.findViewById(R.id.txtView_textWatcher);
+                    //set the element of the view
+                    edt_input = (EditText) training_Dialog.findViewById(R.id.edt_input);
+                    radio_group = (RadioGroup) training_Dialog.findViewById(R.id.radio_Group);
+                    rdbtn_vtt = (RadioButton) training_Dialog.findViewById(R.id.rdbtn_vtt);
+                    txtView_textWatcher = (TextView) training_Dialog.findViewById(R.id.txtView_textWatcher);
 
-                txtView_textWatcher.setText(String.valueOf(INT_MAX_LENGTH));
+                    txtView_textWatcher.setText(String.valueOf(INT_MAX_LENGTH));
 
-                //Create a TextWatcher for the editText input
-                TextWatcher mTextWatcher_forEdt_input = new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                    //Create a TextWatcher for the editText input
+                    TextWatcher mTextWatcher_forEdt_input = new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
 
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                        int int_nbr_letter = INT_MAX_LENGTH-charSequence.length();
-                        //value is ok
-                        if(int_nbr_letter >= INT_ZERO) {
-                            txtView_textWatcher.setTextColor(getResources().getColor(R.color.numbers_text_color));
-                            txtView_textWatcher.setText(String.valueOf(int_nbr_letter));
-                        }
-                        //text length is to big
-                        else if(int_nbr_letter < INT_ZERO){
-                            //set color to red
-                            txtView_textWatcher.setTextColor(getResources().getColor(R.color.red));
-                            txtView_textWatcher.setText(String.valueOf(int_nbr_letter));
-                        }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-
-                    }
-                };
-
-                /* link text Watcher to editText */
-                edt_input.addTextChangedListener(mTextWatcher_forEdt_input);
-
-                /* onCheckChange listener on the radio Group */
-                radio_group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                        if (rdbtn_vtt.isChecked()) {
-                            isVtt = true;
-                            Toast.makeText(TrainingActivity.this, "VTT", Toast.LENGTH_SHORT).show();
-                        } else {
-                            isVtt = false;
-                            Toast.makeText(TrainingActivity.this, "Route", Toast.LENGTH_SHORT).show();
                         }
 
-                    }
-                });
-
-                AlertDialog.Builder trainingDialog_builder = new AlertDialog.Builder(TrainingActivity.this)
-                        .setTitle("Ajout d'entraînement")
-                        .setView(training_Dialog)
-                        .setPositiveButton("Creer", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                /* we use a Custum Listener se the class */
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                            int int_nbr_letter = INT_MAX_LENGTH-charSequence.length();
+                            //value is ok
+                            if(int_nbr_letter >= INT_ZERO) {
+                                txtView_textWatcher.setTextColor(getResources().getColor(R.color.numbers_text_color));
+                                txtView_textWatcher.setText(String.valueOf(int_nbr_letter));
                             }
-                        }).setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //do nothing
-                                dialog.dismiss();
+                            //text length is to big
+                            else if(int_nbr_letter < INT_ZERO){
+                                //set color to red
+                                txtView_textWatcher.setTextColor(getResources().getColor(R.color.red));
+                                txtView_textWatcher.setText(String.valueOf(int_nbr_letter));
                             }
-                        });
+                        }
 
-                //create the builder
-                alertDialog = trainingDialog_builder.create();
-                alertDialog.show();
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    };
+
+                    /* set On Focus Change Listener to open keyBord when editText for the training Name has focus*/
+                    edt_input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            edt_input.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Make KeyBoard Visible
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.showSoftInput(edt_input, InputMethodManager.SHOW_IMPLICIT);
+                                }
+                            });
+                        }
+                    });
+
+                    // set cursor into edit Text
+                    edt_input.requestFocus();
+
+                    /* link text Watcher to editText */
+                    edt_input.addTextChangedListener(mTextWatcher_forEdt_input);
+
+                    /* onCheckChange listener on the radio Group */
+                    radio_group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                            if (rdbtn_vtt.isChecked()) {
+                                isVtt = true;
+                                Toast.makeText(TrainingActivity.this, "VTT", Toast.LENGTH_SHORT).show();
+                            } else {
+                                isVtt = false;
+                                Toast.makeText(TrainingActivity.this, "Route", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    });
+
+                    /* Build the AlertDialog with specific information from the layout */
+                    AlertDialog.Builder trainingDialog_builder = new AlertDialog.Builder(TrainingActivity.this)
+                            .setTitle(getString(R.string.add_training))
+                            .setView(training_Dialog)
+                            .setPositiveButton(getString(R.string.create), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                        /* we use a Custum Listener see the class */
+                                }
+                            }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //do nothing
+                                    dialog.dismiss();
+                                }
+                            });
+
+                    //create and show the builder
+                    alertDialog = trainingDialog_builder.create();
+                    alertDialog.show();
 
 
-                //link Button to the positive Button of the alertDialog
-                Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                //link Button to Custom Listener
-                positiveButton.setOnClickListener(new CheckValueTrainingListener(alertDialog));
-
+                    //link Button to the positive Button of the alertDialog
+                    Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                    //link Button to Custom Listener
+                    positiveButton.setOnClickListener(new CheckValueTrainingListener(alertDialog));
+                }//else
             }
         });
 
@@ -194,7 +229,7 @@ public class TrainingActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add_fc) {
-            Toast.makeText(this,"Fréquences Cardiaques", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.HeartRate), Toast.LENGTH_SHORT).show();
             //get the value
             HeartRate fc = realmDB.getHeartRate();
 
@@ -202,9 +237,30 @@ public class TrainingActivity extends ActionBarActivity {
             LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View bpm_dialog = mInflater.inflate(R.layout.bpm_dialog, null);
 
-            final EditText edtTxt_fc_max = (EditText) bpm_dialog.findViewById(R.id.edtTxt_fc_max);
-            final EditText edtTxt_fc_min = (EditText) bpm_dialog.findViewById(R.id.edtTxt_fc_min);
+            edtTxt_fc_max = (EditText) bpm_dialog.findViewById(R.id.edtTxt_fc_max);
+            edtTxt_fc_min = (EditText) bpm_dialog.findViewById(R.id.edtTxt_fc_min);
 
+            //set keyboard to numeric
+            edtTxt_fc_max.setRawInputType(Configuration.KEYBOARD_QWERTY);
+            edtTxt_fc_min.setRawInputType(Configuration.KEYBOARD_QWERTY);
+
+            /* set On Focus Change Listener to open keyBord when editText fc_max has focus*/
+            edtTxt_fc_max.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    edtTxt_fc_max.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Make KeyBoard Visible
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.showSoftInput(edtTxt_fc_max, InputMethodManager.SHOW_IMPLICIT);
+                        }
+                    });
+                }
+            });
+
+            // set cursor into edit Text
+            edtTxt_fc_max.requestFocus();
 
             //if fc is not empty. set the value
             if(fc != null){
@@ -215,25 +271,14 @@ public class TrainingActivity extends ActionBarActivity {
 
             //Build AlerDialog
             AlertDialog.Builder bpm_dialogBuilder = new AlertDialog.Builder(TrainingActivity.this)
-                    .setTitle("Vos fréquences cardiaques")
+                    .setTitle(getString(R.string.HeartRate))
                     .setView(bpm_dialog)
-                    .setPositiveButton("Valider", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getString(R.string.validate), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //get values from both edit Text
-                            String value_max = edtTxt_fc_max.getText().toString();
-                            String value_min = edtTxt_fc_min.getText().toString();
-
-                            //check if both value ar valide not max than 3 numbers and not empty
-                            if (value_max.matches("") || value_min.matches("") || value_max.length() > INT_MAX_LENGTH_BPM_RPM || value_min.length() > INT_MAX_LENGTH_BPM_RPM) {
-                                Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_insert_fc), Toast.LENGTH_SHORT).show();
-                            } else {
-                                //if the values are correct save the new value in the same
-                                realmDB.saveHeartRate(Integer.parseInt(value_max), Integer.parseInt(value_min));
-                            }
-
+                        /* All happend in the CheckValueHeartRateListener Class */
                         }
-                    }).setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                    }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //do nothing
@@ -245,19 +290,31 @@ public class TrainingActivity extends ActionBarActivity {
             alertDialog = bpm_dialogBuilder.create();
             alertDialog.show();
 
+            //link Button to the positive Button of the alertDialog
+            Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            //link Button to Custom Listener
+            positiveButton.setOnClickListener(new CheckValueHeartRateListener(alertDialog));
+
             return true;
         }
-
         return super.onOptionsItemSelected(item);
-    }
+    }//onOptionsItemSelected
 
+    /********************************************************************
+     * Name: onStop Method
+     * Goal: Method called when the phone stop the Avtivity
+     ***********************************************************************/
     @Override
     protected void onStop() {
         super.onStop();
         //close Realm Instance
         realmDB.close();
-    }
+    }//onStop
 
+    /********************************************************************
+     * Name: onDestroy Method
+     * Goal: Method called when the phone kill the Avtivity
+     ***********************************************************************/
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -265,18 +322,34 @@ public class TrainingActivity extends ActionBarActivity {
         listView_training = null;
         txtView_textWatcher = null;
         freeMemory();
-    }
+    }//onDestroy
 
+    /********************************************************************
+     * Name: freeMemory
+     * Goal: Run the garbage collector to get back some allocated memory
+     ***********************************************************************/
     public void freeMemory(){
         System.runFinalization();
         Runtime.getRuntime().gc();
         System.gc();
+    }//freeMemory
+
+    /********************************************************************
+     * Name: isNumeric
+     * Goal: Method to check if the string is numeric or not
+     ***********************************************************************/
+    public static boolean isNumeric(String str)
+    {
+        NumberFormat formatter = NumberFormat.getInstance();
+        ParsePosition pos = new ParsePosition(0);
+        formatter.parse(str, pos);
+        return str.length() == pos.getIndex();
     }
 
 
     /*******************************************************************************
      *
-     * private class Custom Listener to check data control on the check Box
+     * private class Custom Listener to check data control on the dialog_training box
      *
      **********************************************************************************/
     class CheckValueTrainingListener implements View.OnClickListener{
@@ -315,6 +388,45 @@ public class TrainingActivity extends ActionBarActivity {
         }
     }// class CheckValueTrainingListener
 
+    /*******************************************************************************
+     *
+     * private class Custom Listener to check data control on the dialog_heartBeat box
+     *
+     **********************************************************************************/
+    class CheckValueHeartRateListener implements View.OnClickListener{
+        private final Dialog dialog;
+        public CheckValueHeartRateListener (Dialog dialog){
+            this.dialog = dialog;
+        }
 
+        @Override
+        public void onClick(View view) {
+            //get values from both edit Text
+            String value_max = edtTxt_fc_max.getText().toString();
+            String value_min = edtTxt_fc_min.getText().toString();
 
+            //if value is empty
+            if(value_max.length() == INT_ZERO || value_min.length() == INT_ZERO){
+                Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_bpm_empty), Toast.LENGTH_SHORT).show();
+            }
+            else if(value_max.length() > INT_MAX_LENGTH_BPM_RPM || value_min.length() > INT_MAX_LENGTH_BPM_RPM){ //if value is to big
+                Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_bpm_length), Toast.LENGTH_SHORT).show();
+            }
+            //if value length is ok
+            else if(value_max.length() <= INT_MAX_LENGTH_BPM_RPM && value_min.length() <= INT_MAX_LENGTH_BPM_RPM ) {
+                //check if value is numeric
+                if (isNumeric(value_min) && isNumeric(value_max) ){
+                    //if the values are correct save the new value in the same
+                    realmDB.saveHeartRate(Integer.parseInt(value_max), Integer.parseInt(value_min));
+                    //everything is ok dismiss the dialog
+                    dialog.dismiss();
+                    //boolean isHeartBeat
+                    isHeartBeat = true;
+                }//if isNumeric
+                else{
+                    Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_numeric), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }// class CheckValueHeartRateListener
 }//class TrainingActivity

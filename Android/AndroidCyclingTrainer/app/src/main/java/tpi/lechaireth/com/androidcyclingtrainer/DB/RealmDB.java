@@ -217,14 +217,56 @@ public class RealmDB {
             training = realm.where(Training.class).equalTo("int_id",id).findFirst();
             //commit
             realm.commitTransaction();
-        }catch (Exception e){
+        }catch (Exception e){//catch Exceptions
+            e.printStackTrace();
+            //In Case of error. Create a Toast to tell user
             Toast.makeText(context,context.getResources().getString(R.string.error_recup_training),Toast.LENGTH_SHORT).show();
+            //in case of error cancel the transaction
             realm.cancelTransaction();
-
         }
 
         //return results
         return training;
+    }
+
+    /**********************************************
+     *
+     * Name: setRestIndice
+     * @param id
+     * Goal: calcul and save of and rest indice (fc_max - fc after 1min30)
+     *
+     ********************************************/
+    public void setRestIndice(int id, int fc_after_1min30){
+        //Objects
+        Training t = null;
+        HeartRate hr = null;
+
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+        //start transaction
+        realm.beginTransaction();
+
+        try {
+
+            //find the training to save the rest indice
+            t = realm.where(Training.class).equalTo("int_id", id).findFirst();
+            //find the heart Rate to use fc max
+            hr = realm.where(HeartRate.class).equalTo("int_id", 0).findFirst();
+            //get fc_max
+            int fc_max = hr.getInt_fc_max();
+            //calculate the rest indice
+            int rest_indice = fc_max - fc_after_1min30;
+            //set rest indice to Training
+            t.setInt_recup(rest_indice);
+            //commit changes to DB
+            realm.commitTransaction();
+
+        }catch (Exception e){ //catch Exceptions
+
+            e.printStackTrace();
+            //in case of error cancel the transaction
+            realm.cancelTransaction();
+        }
     }
 
 
@@ -489,8 +531,8 @@ public class RealmDB {
                 fc.setInt_id(0);
                 //set fc_max and fC_min
                 fc.setInt_fc_max(fc_max);
-
                 fc.setInt_fc_min(fc_min);
+                fc.setBln_isHeartRate(true);
                 //don't need to get the fc back because it's the first time we
                 fc_return = null;
             }else{ /* Here update the current row */
@@ -532,6 +574,32 @@ public class RealmDB {
             fc_return = null;
         }
         return fc_return;
+    }
+
+    public boolean getisHeartRate(){
+        HeartRate fc_return;
+        boolean isHeartRate;
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+        //begin a transaction
+        realm.beginTransaction();
+
+        try{
+            //get the id 0;
+            fc_return = realm.where(HeartRate.class).equalTo("int_id", 0).findFirst();
+            //get the value of isHeartRate to see if value are filled or not
+            isHeartRate = fc_return.isBln_isHeartRate();
+            //commit transaction
+            realm.commitTransaction();
+        }catch (Exception e){
+            //raise Exception and print message
+            e.printStackTrace();
+            //cancel realm transaction
+            realm.cancelTransaction();
+            //fc_return is empty
+            isHeartRate = false;
+        }
+        return isHeartRate;
     }
 
 //############################################# PART FOR THE TIME METHODS ########################################

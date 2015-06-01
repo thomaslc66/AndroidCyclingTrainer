@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/activity_training">
 
     <ProgressBar
         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
@@ -26,7 +27,7 @@
         android:layout_above="@+id/progressBar_total"
         android:layout_alignLeft="@+id/progressBar_total"
         android:layout_alignStart="@+id/progressBar_total"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="20dp"
         android:layout_alignRight="@+id/progressBar_total"
         android:layout_alignEnd="@+id/progressBar_total"
         android:indeterminate="false" />
@@ -37,9 +38,9 @@
         android:text="10:30"
         android:id="@+id/txtView_rowTime"
         android:textSize="35sp"
-        android:layout_above="@+id/progressBar_row"
+        android:layout_above="@+id/btn_stop"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="15dp"
         android:textIsSelectable="false" />
 
     <Button
@@ -76,107 +77,108 @@
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/btn_start"
         android:layout_alignStart="@+id/btn_start"
-        android:layout_marginTop="43dp"
-        android:textStyle="bold" />
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_label_size" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="RYTHME:"
         android:id="@+id/txtView_rythm"
+        android:layout_marginTop="@dimen/margin_work_rythm"
+        android:textStyle="bold"
         android:layout_below="@+id/txtView_work"
         android:layout_alignLeft="@+id/txtView_work"
         android:layout_alignStart="@+id/txtView_work"
-        android:layout_marginTop="20dp"
-        android:textStyle="bold" />
+        android:textSize="@dimen/text_label_size" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="Contre-la-Montre"
         android:id="@+id/txtView_work_value"
-        android:layout_alignTop="@+id/txtView_work"
-        android:layout_toRightOf="@+id/txtView_work"
-        android:layout_toEndOf="@+id/txtView_work"
-        android:layout_marginLeft="15dp" />
+        android:textSize="@dimen/text_work_size"
+        android:layout_above="@+id/txtView_rythm"
+        android:layout_alignLeft="@+id/txtView_rythm_value"
+        android:layout_alignStart="@+id/txtView_rythm_value" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="Power"
         android:id="@+id/txtView_rythm_value"
         android:layout_alignTop="@+id/txtView_rythm"
         android:layout_toRightOf="@+id/txtView_rythm"
         android:layout_toEndOf="@+id/txtView_rythm"
-        android:layout_marginLeft="15dp" />
+        android:layout_marginLeft="15dp"
+        android:textSize="@dimen/text_work_size" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="BPM:"
         android:id="@+id/txtView_bpm"
-        android:layout_alignTop="@+id/txtView_work_value"
-        android:layout_toRightOf="@+id/txtView_rowTime"
-        android:layout_toEndOf="@+id/txtView_rowTime"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_below="@+id/txtView_rythm"
+        android:layout_alignLeft="@+id/txtView_rythm"
+        android:layout_alignStart="@+id/txtView_rythm"
+        android:layout_marginTop="@dimen/margin_rythm_bpm_rpm"
+        android:textSize="@dimen/text_label_size" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="RPM:"
         android:id="@+id/txtview_rpm"
-        android:layout_alignTop="@+id/txtView_rythm_value"
-        android:layout_toRightOf="@+id/txtView_rowTime"
-        android:layout_toEndOf="@+id/txtView_rowTime"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textSize="@dimen/text_label_size"
+        android:layout_alignTop="@+id/txtView_bpm_value"
+        android:layout_toRightOf="@+id/txtView_gear_value"
+        android:layout_toEndOf="@+id/txtView_gear_value" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="187"
         android:id="@+id/txtView_bpm_value"
         android:layout_alignTop="@+id/txtView_bpm"
         android:layout_toRightOf="@+id/txtView_bpm"
         android:layout_toEndOf="@+id/txtView_bpm"
-        android:layout_marginLeft="15dp" />
+        android:layout_marginLeft="5dp"
+        android:textSize="@dimen/text_work_size" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="192"
         android:id="@+id/txtView_rpm_value"
+        android:textSize="@dimen/text_work_size"
         android:layout_alignTop="@+id/txtview_rpm"
-        android:layout_alignLeft="@+id/txtView_bpm_value"
-        android:layout_alignStart="@+id/txtView_bpm_value" />
+        android:layout_toRightOf="@+id/txtview_rpm"
+        android:layout_toEndOf="@+id/txtView_rowTime"
+        android:layout_marginLeft="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PLATEAU:"
+        android:text="PLATEAUX:"
         android:id="@+id/txtView_plate"
-        android:layout_below="@+id/txtView_rythm"
+        android:layout_below="@+id/txtview_rpm"
         android:layout_alignLeft="@+id/txtView_rythm"
         android:layout_alignStart="@+id/txtView_rythm"
-        android:layout_marginTop="44dp" />
+        android:layout_marginTop="@dimen/margin_rythm_bpm_rpm"
+        android:textSize="@dimen/text_label_size" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="REMARQUES:"
         android:id="@+id/txtView_note"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/txtView_plate"
-        android:layout_alignStart="@+id/txtView_plate"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/txtView_plate"
-        android:layout_marginTop="15dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0:0"
-        android:id="@+id/txtView_milis"
-        android:layout_above="@+id/txtView_rowTime"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignLeft="@+id/txtView_plate"
+        android:layout_alignStart="@+id/txtView_plate" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -188,14 +190,17 @@
         android:layout_below="@+id/txtView_note"
         android:layout_alignRight="@+id/btn_pause"
         android:layout_alignEnd="@+id/btn_pause"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="5dp"
+        android:layout_above="@+id/txtView_rowTime" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0x0"
         android:id="@+id/txtView_gear_value"
-        android:layout_alignTop="@+id/txtView_plate"
-        android:layout_alignLeft="@+id/txtView_rythm_value"
-        android:layout_alignStart="@+id/txtView_rythm_value" />
+        android:textSize="@dimen/text_gear"
+        android:layout_toRightOf="@+id/txtView_plate"
+        android:layout_toEndOf="@+id/txtView_plate"
+        android:layout_alignBaseline="@+id/txtView_plate"
+        android:layout_marginLeft="5dp" />
 </RelativeLayout>

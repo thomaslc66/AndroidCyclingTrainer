@@ -25,5 +25,16 @@
     <string name="fc_max">Fréquence cardiaque maximale</string>
     <string name="fc_min">Fréquence cardiaque minimale</string>
     <string name="error_insert_fc">Fréquences cardiaques non valides</string>
+    <string name="HeartRate">Fréquences Cardiaques</string>
     <string name="gear">Plateaux</string>
+    <string name="rest_indice">L\'entraînement est Terminé.\nPatientez, puis entrer votre fréquence cardiaque après une minute et demi de repos.</string>
+    <string name="validate">Valider</string>
+    <string name="cancel">Annuler</string>
+    <string name="recup_title">Indice de récupération</string>
+    <string name="create">Créer</string>
+    <string name="error_bpm_empty">Fréquence Cardiaque vide</string>
+    <string name="error_bpm_length">Fréquence Cardiaque trop longue</string>
+    <string name="error_numeric">Entrez un nombre</string>
+    <string name="add_fc">Merci d\'ajouter vos fréquences cardiaques grâce au coeur situé en haut à droite</string>
+    <string name="no_training">Merci d\'ajouter au moins une séquence dans l\'entraînement grâce au bouton situé en haut à droite</string>
 </resources>

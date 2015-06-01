@@ -10,7 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="5"
-        android:id="@+id/relativeLayout">
+        android:id="@+id/relativeLayout"
+        android:layout_above="@+id/linearLayout2"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true">
 
         <tpi.lechaireth.com.androidcyclingtrainer.library.VerticalSeekBar
             android:layout_width="wrap_content"
@@ -18,7 +21,7 @@
             android:id="@+id/verticalBar_bpm"
             android:indeterminate="false"
             android:layout_alignParentStart="true"
-            android:layout_above="@+id/txtView_rpm" />
+            android:layout_above="@+id/txtView_bpm" />
 
         <tpi.lechaireth.com.androidcyclingtrainer.library.VerticalSeekBar
             android:layout_width="wrap_content"
@@ -26,7 +29,8 @@
             android:id="@+id/verticalBar_rpm"
             android:indeterminate="false"
             android:layout_alignParentRight="true"
-            android:layout_above="@+id/txtView_rpm" />
+            android:layout_above="@+id/txtView_rpm"
+            android:layout_alignParentBottom="false" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,8 +38,7 @@
             android:id="@+id/txtView_rpm"
             android:hint="Rpm"
             android:layout_gravity="left"
-            android:layout_alignParentBottom="false"
-            android:layout_below="@+id/txtView_plate"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignRight="@+id/verticalBar_rpm" />
 
@@ -45,7 +48,7 @@
             android:id="@+id/txtView_bpm"
             android:hint="Bpm"
             android:layout_gravity="right"
-            android:layout_alignParentBottom="false"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="false"
             android:layout_alignBottom="@+id/txtView_rpm" />
 
@@ -108,7 +111,9 @@
             android:id="@+id/txtView_recup"
             android:layout_gravity="center"
             android:layout_below="@+id/frameLayout"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_rest"
+            android:padding="5dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -116,9 +121,10 @@
             android:text="@string/gear"
             android:id="@+id/txtView_plate"
             android:layout_gravity="center"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="@dimen/margin_from_rest"
             android:layout_below="@+id/txtView_recup"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:padding="5dp" />
 
     </RelativeLayout>
 
@@ -129,7 +135,6 @@
         android:layout_alignParentEnd="false"
         android:layout_alignParentBottom="true"
         android:id="@+id/linearLayout2"
-        android:layout_below="@+id/relativeLayout"
         android:layout_alignParentTop="false"
         android:layout_marginTop="20dp"
         android:gravity="bottom">
@@ -198,7 +203,7 @@
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
+            android:inputType="text"
             android:ems="8"
             android:id="@+id/edttext_note"
             android:imeOptions="actionDone"

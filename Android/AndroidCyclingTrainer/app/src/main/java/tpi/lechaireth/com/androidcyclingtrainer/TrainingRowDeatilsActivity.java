@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -109,6 +110,10 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
 
         //editText for the notes
         edtTxt_notes = (EditText) findViewById(R.id.edttext_note);
+        //editText for the notes
+        edtTxt_notes = (EditText) findViewById(R.id.edttext_note);
+        //add done button
+        edtTxt_notes.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         /**********************************************************************
          *

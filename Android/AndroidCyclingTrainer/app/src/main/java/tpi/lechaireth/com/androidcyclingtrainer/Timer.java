@@ -2,17 +2,30 @@ package tpi.lechaireth.com.androidcyclingtrainer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.List;
 
 import tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB;
@@ -27,7 +40,7 @@ public class Timer extends Activity {
     /* two progress Bar for time and row time */
     private ProgressBar prBar_total, prBar_row;
     /* all TextView for the UI display */
-    private TextView txtView_gear, txtView_note, txtView_timRow,txtView_rythm_value ,txtView_work_value ,txtView_bpm_value, txtView_rpm_value,txtView_milis;
+    private TextView txtView_gear, txtView_note, txtView_timRow,txtView_rythm_value ,txtView_work_value ,txtView_bpm_value, txtView_rpm_value;
     private Button btn_start, btn_stop, btn_pause;
 
     //Object
@@ -38,9 +51,13 @@ public class Timer extends Activity {
     private Handler handler = new Handler();
     private TimerRunnable runnable = new TimerRunnable();
     private AlertDialog alertDialog;
+    private TextView txtView_textWatcher;
+    private EditText edt_input;
+    private Context mContext;
 
     //VARIABLES
     private int _id;
+
 
     //Varibales for the Timer
     /* Int to translate seconds in milliseconds */
@@ -67,14 +84,17 @@ public class Timer extends Activity {
     /* variable to hold the time only for display */
     private volatile int int_rowTime_display;
 
-    int test = 0;
-
-
+    //CONSTANTS
+    private static int INT_BPM_LENGTH = 3;
+    private static int INT_ZERO = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
+
+        //set context
+        mContext = Timer.this;
 
         /* the 3 buttons */
         btn_start = (Button) findViewById(R.id.btn_start);
@@ -87,7 +107,6 @@ public class Timer extends Activity {
         txtView_work_value = (TextView) findViewById(R.id.txtView_work_value);
         txtView_bpm_value = (TextView) findViewById(R.id.txtView_bpm_value);
         txtView_rpm_value = (TextView) findViewById(R.id.txtView_rpm_value);
-        txtView_milis = (TextView) findViewById(R.id.txtView_milis);
         txtView_note = (TextView) findViewById(R.id.txtView_notes_value);
         txtView_gear = (TextView) findViewById(R.id.txtView_gear_value);
 
@@ -211,30 +230,20 @@ public class Timer extends Activity {
                 handler.removeCallbacks(runnable);
 
                 //check with an alertDialog if the user realy wants to stop the training.
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(Timer.this)
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
                         .setTitle(getResources().getString(R.string.stop_timer))
                         .setMessage(getResources().getString(R.string.stop_message))
                         .setPositiveButton("OUI", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                //disable start bouton
-                                btn_start.setEnabled(false);
-                                //set TxtView_timeRow to 0:0
-                                txtView_timRow.setText("0:0");
-                                //set PrBar_row progress to 0
-                                prBar_row.setProgress(0);
-                                //same for total time
-                                prBar_total.setProgress(0);
-
-                                //go back to previous activiy
+                                //go back to previous activiy if positive button is hit
                                 Intent intent_trainingRow = new Intent(Timer.this, TrainingRowActivity.class);
                                 //put extra id to get all Rows back
                                 intent_trainingRow.putExtra("_id", _id);
                                 //put a Flag to avoid recreate intent if he already exist in the queue
-                                intent_trainingRow.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                                intent_trainingRow.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 //get context to startActivity
-                                getBaseContext().startActivity(intent_trainingRow);
+                                mContext.startActivity(intent_trainingRow);
                                 //finish and cancel activty
                                 finish();
                             }
@@ -251,23 +260,9 @@ public class Timer extends Activity {
                 //show the dialog to user
                 alertDialog.show();
 
-                txtView_milis.setText("CountDownTimer Canceled/Stopped");
-
             }
         });
     }
-
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (runnable != null){
-            // kill runnable if the activity is destroyed
-            runnable.killRunnable();
-
-        }
-    }//onDestroy
 
 
     /********************************************************
@@ -285,9 +280,78 @@ public class Timer extends Activity {
         @Override
         public void run() {
                 //check if timer is paused or if total time is finish
-                if (isCanceled == true || int_total_timeInMillis == int_progress_value) {
+                if (isCanceled == true  || int_total_timeInMillis == int_progress_value) {
                     //set runnable to null
                     runnable = null;
+                    //if the time is finish. get the alert Dialog for the rest indice
+                    if(int_total_timeInMillis == int_progress_value){
+                        //inflate the layout to diplay the dialog layout created
+                        LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View rest_dialog = mInflater.inflate(R.layout.rest_indice_dialog, null);
+
+                        edt_input = (EditText) rest_dialog.findViewById(R.id.edt_input);
+                        //set keyboard to numeric
+                        edt_input.setRawInputType(Configuration.KEYBOARD_QWERTY);
+                        //let done button appears
+                        edt_input.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+                        txtView_textWatcher = (TextView) rest_dialog.findViewById(R.id.txtView_textWatcher);
+                        //set Text in text Watcher
+                        txtView_textWatcher.setText(String.valueOf(INT_BPM_LENGTH));
+
+                        //Create a TextWatcher for the editText input
+                        TextWatcher mTextWatcher_forEdt_input = new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                                int int_nbr_letter = INT_BPM_LENGTH-charSequence.length();
+                                //value is ok
+                                if(int_nbr_letter >= INT_ZERO) {
+                                    txtView_textWatcher.setTextColor(getResources().getColor(R.color.numbers_text_color));
+                                    txtView_textWatcher.setText(String.valueOf(int_nbr_letter));
+                                }
+                                //text length is to big
+                                else if(int_nbr_letter < INT_ZERO){
+                                    //set color to red
+                                    txtView_textWatcher.setTextColor(getResources().getColor(R.color.red));
+                                    txtView_textWatcher.setText(String.valueOf(int_nbr_letter));
+                                }
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable editable) {
+
+                            }
+                        };
+
+                        /* link text Watcher to editText */
+                        edt_input.addTextChangedListener(mTextWatcher_forEdt_input);
+
+                        AlertDialog.Builder rest_alrt_builder = new AlertDialog.Builder(Timer.this)
+                                .setView(rest_dialog)
+                                .setMessage(getString(R.string.rest_indice))
+                                .setPositiveButton("Valider", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        /* we use a Custum Listener to perform action see the class */
+                                    }
+                                })
+                                .setTitle(getString(R.string.recup_title));
+                        //create the builder
+                        alertDialog = rest_alrt_builder.create();
+                        alertDialog.show();
+
+
+                        //link Button to the positive Button of the alertDialog
+                        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                        //link Button to Custom Listener
+                        positiveButton.setOnClickListener(new CheckValueTrainingListener(alertDialog, Timer.this));
+
+                    }
                     //return
                     return;
                 } else {
@@ -358,12 +422,7 @@ public class Timer extends Activity {
                     int row_min = int_rowTime_display / INT_MILLIS;
                     //divide row_min by 60 to get minutes. and row_min % 60 to get seconds
                     txtView_timRow.setText("" + row_min / INT_SEC + ":" + row_min % INT_SEC);
-
-                    //$TEST
-                    test++;
-                    txtView_milis.setText(test +" - "+ "i = " + int_i);
-
-                }
+                }//else
             //delayed post handler every second
             handler.postDelayed(this, 100);
 
@@ -376,15 +435,57 @@ public class Timer extends Activity {
 
     }//Class TimerRunnable
 
+    /********************************************************************
+     * Name: onStop Method
+     * Goal: Method called when the phone stop the Avtivity
+     ***********************************************************************/
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //close Realm Instance
+        realmDB.close();
+    }
 
-    /**
-     * Return Method
-     */
+    /********************************************************************
+     * Name: onDestroy Method
+     * Goal: Method called when the phone kill the Avtivity
+     ***********************************************************************/
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //set to null objects that may take memory
+        lst_trainingRow = null;
+        handler = null;
+        runnable = null;
+        alertDialog = null;
+        //free memory
+        freeMemory();
+        if (runnable != null){
+            // kill runnable if the activity is destroyed
+            runnable.killRunnable();
+
+        }
+    }
+
+    /********************************************************************
+     * Name: freeMemory
+     * Goal: Run the garbage collector to get back some allocated memory
+     ***********************************************************************/
+    public void freeMemory(){
+        System.runFinalization();
+        Runtime.getRuntime().gc();
+        System.gc();
+    }
+
+
+    /********************************************************************
+     * Name: onBackPressed
+     * Goal: Method called when the user press on the back Button of the phone
+     ***********************************************************************/
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-        //get Back to TrainingRow Activit
+        //get Back to TrainingRow Activity
         Intent back_to_trainingRow = new Intent(Timer.this, TrainingRowActivity.class);
         //put id of training as extra, needed to charge the training Row
         back_to_trainingRow.putExtra("_id",_id);
@@ -393,4 +494,66 @@ public class Timer extends Activity {
         finish();
     }
 
+    /********************************************************************
+     * Name: isNumeric
+     * Goal: Method to check if the string is numeric or not
+     ***********************************************************************/
+    public static boolean isNumeric(String str)
+    {
+        NumberFormat formatter = NumberFormat.getInstance();
+        ParsePosition pos = new ParsePosition(0);
+        formatter.parse(str, pos);
+        return str.length() == pos.getIndex();
+    }
+
+    /*******************************************************************************
+     *
+     * private class Custom Listener to check data control on the check Box
+     *
+     **********************************************************************************/
+    class CheckValueTrainingListener implements View.OnClickListener{
+        private final Dialog dialog;
+        private final Context context;
+        public CheckValueTrainingListener (Dialog dialog, Context mContext){
+            this.dialog = dialog;
+            this.context = mContext;
+        }
+
+        @Override
+        public void onClick(View view) {
+            //get the value of the bpm from editText
+            String mValue = edt_input.getText().toString();
+
+            //if value is empty
+            if(mValue.length() == INT_ZERO){
+                Toast.makeText(Timer.this, getResources().getString(R.string.error_bpm_empty), Toast.LENGTH_SHORT).show();
+            }
+            else if(mValue.length() > INT_BPM_LENGTH){ //if value is to big
+                Toast.makeText(Timer.this, getResources().getString(R.string.error_bpm_length), Toast.LENGTH_SHORT).show();
+            }
+            //if value length is ok
+            else if(mValue.length() <= INT_BPM_LENGTH) {
+                //check if value is numeric
+                if (isNumeric(mValue)){
+                    int int_fc_rest = Integer.parseInt(mValue);
+                    //call realmDB instance to set the rest indice
+                    realmDB.setRestIndice(_id, int_fc_rest);
+                    //everything is ok dismiss the dialog
+                    dialog.dismiss();
+
+                    //go back to Training Intent
+                    Intent back_toTrainingAvtivity = new Intent(Timer.this, TrainingActivity.class);
+                    //clear activity to avoid error getting acces to realm DB
+                    back_toTrainingAvtivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //start Activity
+                    context.startActivity(back_toTrainingAvtivity);
+                    //finish
+                    finish();
+                }//if isNumeric
+                else{
+                    Toast.makeText(Timer.this, getResources().getString(R.string.error_numeric), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }// class CheckValueTrainingListener
 }//Class Timer
