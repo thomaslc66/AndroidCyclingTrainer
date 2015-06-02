@@ -1,14 +1,24 @@
+/***************************************************************
+ * Programm  : Android Cycling Trainer
+ * Society   : ETML
+ * Author    : Thomas Léchaire
+ * Date      : 26.05.2015
+ * Goal      : Class used to add a new row in a training
+ ******************************************************************** //
+ * Modifications:
+ * Date       : XX.XX.XXXX
+ * Author     :
+ * Purpose     :
+ *********************************************************************/
 package tpi.lechaireth.com.androidcyclingtrainer;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,8 +32,6 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import tpi.lechaireth.com.androidcyclingtrainer.DB.HeartRate;
 import tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB;
@@ -56,14 +64,19 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
     private static int INT_MAX_RPM_VALUE = 260;
 
     //VARIABLES
-    private int int_min_work, int_sec_work, int_min_rest, int_sec_rest, int_bpm, int_rpm;
-    private int int_id,int_recupMin_value,int_recupSec_value, int_rowId;
-    private int int_count = 1;
+    //variables for the training
+    private int int_id,int_min_work, int_sec_work, int_min_rest, int_sec_rest, int_bpm, int_rpm, int_recupMin_value,int_recupSec_value;
     private String str_work = "";
     private String str_rythm = "";
     private String str_note = "";
     private String str_gear = "";
+    //count for the number of repetitions
+    private int int_count = 1;
+    //value for the front and back gear
+    int int_front_value, int_back_value;
+    //error when we check the value
     private String str_error;
+    //if rest time is set bln_recup is true
     private boolean bln_recup = false;
     //int value for both progression of the vertical bar
     private int int_progress_bpm;
@@ -82,16 +95,18 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_training_row_details);
 
         /* MANAGE ACTION BAR TITLE*/
-        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
+        //add title and subTitle
         ab.setTitle(getString(R.string.app_name));
         ab.setSubtitle(getString(R.string.add_tRow));
 
-        //get data from last intent
+        //get id of training from the last intent
         int_id = getIntent().getIntExtra("_id",0);
 
         //UI Elements Initialisation
         txtView_bpm = (TextView) findViewById(R.id.txtView_bpm);
         txtView_rpm = (TextView) findViewById(R.id.txtView_rpm);
+
         //rest time UI element
         txtView_restTime = (TextView) findViewById(R.id.txtView_recup);
 
@@ -153,7 +168,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
                 alrt_builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int int_front_value, int_back_value;
+
                         //numberPickers
                         int_front_value = nbrPicker_front.getValue();
                         int_back_value = nbrPicker_back.getValue();
@@ -477,7 +492,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         }
         //check for the gear if it is selected or not
         if (txtView_gear.getText().toString() != getResources().getString(R.string.gear)){
-            str_gear = txtView_gear.getText().toString();
+            str_gear = int_front_value + "X" + int_back_value;
         }
         //check for notes
         if(edtTxt_notes.getText().length() > 0){

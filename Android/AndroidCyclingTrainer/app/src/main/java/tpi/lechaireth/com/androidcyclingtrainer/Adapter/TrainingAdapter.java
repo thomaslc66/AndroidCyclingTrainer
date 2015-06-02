@@ -2,7 +2,6 @@ package tpi.lechaireth.com.androidcyclingtrainer.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,14 +133,20 @@ public class TrainingAdapter extends BaseSwipeAdapter {
         viewHolder.txtView_recupIndice = (TextView) v.findViewById(R.id.txtView_recupIndice);
         viewHolder.btn_delete = (Button) v.findViewById(R.id.delete);
 
+        //setTag to send this throw fill view Method
         v.setTag(viewHolder);
+
         //set swipeLayout to proper linearLayout
         SwipeLayout swipeLayout = (SwipeLayout) v.findViewById(R.id.swipe);
+
+        //to Test
+        //swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
+
         //close the layout at the begining
         swipeLayout.close();
 
         //swipelayout Listener
-        swipeLayout.addSwipeListener(new SimpleSwipeListener(){
+        swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override
             public void onOpen(SwipeLayout layout) {
                 //make a small animation on the trash
@@ -150,6 +155,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
         });
 
         return v;
+
     }//generate View
 
     /********************************************
@@ -162,6 +168,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
     @Override
     public void fillValues(final int position, View convertView) {
 
+        //get bag view Holder from convertView getTag from genarate View method
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
         final SwipeLayout swipeLayout = (SwipeLayout) convertView.findViewById(R.id.swipe);
 

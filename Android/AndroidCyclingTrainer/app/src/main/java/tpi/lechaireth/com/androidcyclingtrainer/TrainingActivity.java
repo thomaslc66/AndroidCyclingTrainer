@@ -1,3 +1,15 @@
+/***************************************************************
+ * Programm  : Android Cycling Trainer
+ * Society   : ETML
+ * Author    : Thomas Léchaire
+ * Date      : 26.05.2015
+ * Goal      : Class used to make modification on a row
+ ******************************************************************** //
+ * Modifications:
+ * Date       : XX.XX.XXXX
+ * Author     :
+ * Purpose     :
+ *********************************************************************/
 package tpi.lechaireth.com.androidcyclingtrainer;
 
 import android.app.AlertDialog;
@@ -34,9 +46,6 @@ import tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB;
 import tpi.lechaireth.com.androidcyclingtrainer.DB.Training;
 
 
-/**
- * Created by Thomas on 27.05.2015.
- */
 public class TrainingActivity extends ActionBarActivity {
 
 
@@ -94,7 +103,7 @@ public class TrainingActivity extends ActionBarActivity {
 
         //UI Elements
         btn_createTraining = (Button) findViewById(R.id.btn_add_training);
-        listView_training = (ListView) findViewById(R.id.listView_traing);
+        listView_training = (ListView) findViewById(R.id.listView_training);
         trainingAdapter = new TrainingAdapter(this,training_list);
         listView_training.setAdapter(trainingAdapter);
 
@@ -133,13 +142,13 @@ public class TrainingActivity extends ActionBarActivity {
                             //value is ok
                             if(int_nbr_letter >= INT_ZERO) {
                                 txtView_textWatcher.setTextColor(getResources().getColor(R.color.numbers_text_color));
-                                txtView_textWatcher.setText(String.valueOf(int_nbr_letter));
+                                txtView_textWatcher.setText("caractères restants: "+String.valueOf(int_nbr_letter));
                             }
                             //text length is to big
                             else if(int_nbr_letter < INT_ZERO){
                                 //set color to red
                                 txtView_textWatcher.setTextColor(getResources().getColor(R.color.red));
-                                txtView_textWatcher.setText(String.valueOf(int_nbr_letter));
+                                txtView_textWatcher.setText("caractères en trop: "+String.valueOf(Math.abs(int_nbr_letter)));
                             }
                         }
 

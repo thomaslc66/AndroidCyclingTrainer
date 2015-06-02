@@ -35,7 +35,7 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
     private LayoutInflater mInflater;
     private int row_id;
 
-    //constructor
+    //constructor with the context, the list of TrainingRow and the training id
     public TrainingRowAdapter(Context context, List<TrainingRow> trainingRowList, int int_training_id ){
         this.mContext = context;
         this.trainingRowList = trainingRowList;
@@ -125,7 +125,7 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
     public View generateView(int position, ViewGroup viewGroup) {
         //inflate the view
         View v = mInflater.inflate(R.layout.training_row_list_item,null);
-        //new ViewHolder.
+        //new ViewHolder. Setting Elements of the UI Interface
         ViewHolder viewHolder = new ViewHolder();
         viewHolder.txtView_time = (TextView) v.findViewById(R.id.txtView_time);
         viewHolder.txtView_bpm = (TextView) v.findViewById(R.id.txtView_bpm);
@@ -134,11 +134,10 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
         viewHolder.txtView_gear = (TextView) v.findViewById(R.id.txtView_gear);
         viewHolder.btn_delete = (Button) v.findViewById(R.id.btn_delete);
 
+        //adding tag to View v
         v.setTag(viewHolder);
         //set swipeLayout to proper linearLayout
         SwipeLayout swipeLayout = (SwipeLayout) v.findViewById(R.id.swipe);
-        //close the layout at the begining
-        swipeLayout.close();
 
         //swipelayout Listener
         swipeLayout.addSwipeListener(new SimpleSwipeListener(){
@@ -164,7 +163,6 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
 
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
         final SwipeLayout swipeLayout = (SwipeLayout) convertView.findViewById(R.id.swipe);
-
 
         //swipe layout onClickLister - if we Click on the surface
         //Surface is the upper view
@@ -200,10 +198,11 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
                 //from the DB after
                 realmDB.removeTrainingRow(t_row);
 
-                swipeLayout.close();
-
                 //we notify that the Data list has changed
                 notifyDataSetChanged();
+
+                //close the layout at the begining
+                swipeLayout.close();
             }
         });
 

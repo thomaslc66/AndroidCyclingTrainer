@@ -134,8 +134,9 @@
         android:textStyle="bold"
         android:textSize="@dimen/text_label_size"
         android:layout_alignTop="@+id/txtView_bpm_value"
-        android:layout_toRightOf="@+id/txtView_gear_value"
-        android:layout_toEndOf="@+id/txtView_gear_value" />
+        android:layout_alignStart="@+id/txtView_rythm_value"
+        android:layout_alignBottom="@+id/txtView_bpm"
+        android:layout_toRightOf="@+id/txtView_bpm_value" />
 
     <TextView
         android:layout_width="wrap_content"

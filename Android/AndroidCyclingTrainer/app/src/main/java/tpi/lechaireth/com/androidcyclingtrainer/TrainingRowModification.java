@@ -1,12 +1,23 @@
+/***************************************************************
+ * Programm  : Android Cycling Trainer
+ * Society   : ETML
+ * Author    : Thomas Léchaire
+ * Date      : 26.05.2015
+ * Goal      : Class used to make modification on a row
+ ******************************************************************** //
+ * Modifications:
+ * Date       : XX.XX.XXXX
+ * Author     :
+ * Purpose     :
+ *********************************************************************/
 package tpi.lechaireth.com.androidcyclingtrainer;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,9 +39,7 @@ import tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB;
 import tpi.lechaireth.com.androidcyclingtrainer.DB.TrainingRow;
 import tpi.lechaireth.com.androidcyclingtrainer.library.VerticalSeekBar;
 
-/**
- * Created by Thomas on 30.05.15.
- */
+
 public class TrainingRowModification extends ActionBarActivity {
 
     //UI Elements
@@ -44,8 +53,8 @@ public class TrainingRowModification extends ActionBarActivity {
     private EditText edtTxt_notes;
 
     //VARIABLES
-    private int int_min_work, int_sec_work, int_min_rest, int_sec_rest, int_bpm, int_rpm;
-    private int int_id, int_rowId, int_training_id;
+    private int int_id, int_min_work, int_sec_work, int_min_rest, int_sec_rest, int_bpm, int_rpm;
+    private int int_rowId, int_training_id;
     private int int_count = 1;
     private String str_work = "";
     private String str_rythm = "";
@@ -79,13 +88,15 @@ public class TrainingRowModification extends ActionBarActivity {
         setContentView(R.layout.activity_training_row_details);
 
         /* MANAGE ACTION BAR TITLE*/
-        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
+        //set title and subtitle
         ab.setTitle(getString(R.string.app_name));
         ab.setSubtitle(getString(R.string.modification));
 
         //create realm Db object
         realmdb = new RealmDB(this);
 
+        //get both training and row id. used for modificaiton
         int_rowId = getIntent().getIntExtra("row_id",0);
         int_training_id = getIntent().getIntExtra("training_id",0);
         Log.w("Row ID", ""+int_rowId);
@@ -127,6 +138,7 @@ public class TrainingRowModification extends ActionBarActivity {
 
         //editText for the notes
         edtTxt_notes = (EditText) findViewById(R.id.edttext_note);
+
         //add done button
         edtTxt_notes.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
@@ -168,17 +180,19 @@ public class TrainingRowModification extends ActionBarActivity {
                     }
                 });
 
+                //create the alert dialog
                 alertDialog = alrt_builder.create();
 
                 //initialisation of the two number pickers for the gears
                 nbrPicker_front = (NumberPicker) v1.findViewById(R.id.nbPicker_front);
                 nbrPicker_back = (NumberPicker) v1.findViewById(R.id.nbPicker_back);
-
+                //set values of the pickers
                 nbrPicker_back.setMaxValue(INT_MAX_BACK_GEAR);
                 nbrPicker_back.setMinValue(INT_MIN_BACK_GEAR);
                 nbrPicker_front.setMaxValue(INT_MAX_FRONT_GEAR);
                 nbrPicker_front.setMinValue(INT_MIN_FRONT_GEAR);
 
+                //now show the alert dialog to user
                 alertDialog.show();
             }
         });
