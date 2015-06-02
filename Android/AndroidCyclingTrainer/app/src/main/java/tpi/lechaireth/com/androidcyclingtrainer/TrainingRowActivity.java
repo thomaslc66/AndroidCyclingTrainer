@@ -1,5 +1,6 @@
 package tpi.lechaireth.com.androidcyclingtrainer;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -30,7 +31,7 @@ public class TrainingRowActivity extends ActionBarActivity {
     private List<TrainingRow> trainingRowList;
     private RealmDB realmDB;
     private Button btn_start_training;
-    private TextView txtView_row_total, txtView_time_total;
+    private TextView txtView_row_total, txtView_time_total, txtView_bpm_rpm;
 
     /* variables */
     private int _id;
@@ -40,6 +41,10 @@ public class TrainingRowActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_row);
 
+        /* MANAGE ACTION BAR TITLE*/
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        ab.setTitle(getString(R.string.app_name));
+        ab.setSubtitle(getString(R.string.tRow_subTitle));
 
         /* UI ELements */
         listView_row = (ListView) findViewById(R.id.listView_row);
@@ -47,6 +52,7 @@ public class TrainingRowActivity extends ActionBarActivity {
         btn_start_training = (Button) findViewById(R.id.btn_start_training);
         txtView_row_total = (TextView) findViewById(R.id.txtView_Row_Total);
         txtView_time_total = (TextView) findViewById(R.id.txtView_Total_Time);
+        txtView_bpm_rpm = (TextView) findViewById(R.id.txtView_Bpm_Rpm);
 
         realmDB = new RealmDB(this);
 
@@ -102,6 +108,8 @@ public class TrainingRowActivity extends ActionBarActivity {
         @Override
         public void run() {
             final String time = realmDB.calculateTotalTime(_id);
+            //get avrg_bpm
+            final int avrg_bpm = realmDB.getAverageBpmOfTraining(_id);
 
             //run on main Thread
             runOnUiThread(new Runnable() {
@@ -109,6 +117,7 @@ public class TrainingRowActivity extends ActionBarActivity {
                 public void run() {
                     txtView_time_total.setText(time+"");
                     txtView_row_total.setText(trainingRowList.size()+"");
+                    txtView_bpm_rpm.setText("Bpm moyen: "+ avrg_bpm);
                 }
             });
         }

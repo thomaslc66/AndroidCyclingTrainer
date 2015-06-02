@@ -219,7 +219,7 @@ public class TrainingAdapter extends BaseSwipeAdapter {
             if(trainingList.get(position).getInt_recup() > 0){
                 viewHolder.txtView_recupIndice.setText("Indice de récupération: " + trainingList.get(position).getInt_recup());
             }else{
-                viewHolder.txtView_recupIndice.setText("-");
+                viewHolder.txtView_recupIndice.setText("Indice de récupération: -");
             }
 
 

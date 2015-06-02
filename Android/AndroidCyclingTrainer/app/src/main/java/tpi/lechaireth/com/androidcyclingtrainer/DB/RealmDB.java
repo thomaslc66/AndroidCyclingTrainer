@@ -602,6 +602,43 @@ public class RealmDB {
         return isHeartRate;
     }
 
+    public int getAverageBpmOfTraining(int _id){
+        Training t;
+        int bln_avrg_bpm;
+        //get a realm Instance
+        realm = Realm.getInstance(context);
+        //begin a transaction
+        realm.beginTransaction();
+
+        try{
+            //get the id 0;
+            t = realm.where(Training.class).equalTo("int_id", _id).findFirst();
+            //get the size of all training row
+            int size = t.getRlst_row().size();
+            //get the list of Training row
+            RealmList<TrainingRow> lst_tRow = t.getRlst_row();
+
+            int total_bpm = 0;
+            for(int i = 0; i < size; i++){
+                //add all training row bpm to total_bpm
+                total_bpm += lst_tRow.get(i).getInt_bpm();
+            }//for
+
+            bln_avrg_bpm = total_bpm/size;
+
+            //commit transaction
+            realm.commitTransaction();
+        }catch (Exception e){
+            //raise Exception and print message
+            e.printStackTrace();
+            //cancel realm transaction
+            realm.cancelTransaction();
+            //fc_return is empty
+            bln_avrg_bpm = 0;
+        }
+        return bln_avrg_bpm;
+    }
+
 //############################################# PART FOR THE TIME METHODS ########################################
 
 
@@ -654,7 +691,7 @@ public class RealmDB {
        min += totalSec / 60;
        int sec = totalSec%60;
 
-       time = ""+hour+":"+min +":"+sec;
+       time = ""+hour+"h "+min +"m "+sec+"s";
 
        return time;
    }

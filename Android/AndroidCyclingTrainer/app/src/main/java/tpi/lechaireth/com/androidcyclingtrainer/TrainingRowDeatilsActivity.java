@@ -1,9 +1,11 @@
 package tpi.lechaireth.com.androidcyclingtrainer;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -21,6 +23,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
+import tpi.lechaireth.com.androidcyclingtrainer.DB.HeartRate;
 import tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB;
 import tpi.lechaireth.com.androidcyclingtrainer.library.VerticalSeekBar;
 
@@ -31,8 +36,8 @@ import tpi.lechaireth.com.androidcyclingtrainer.library.VerticalSeekBar;
 public class TrainingRowDeatilsActivity extends ActionBarActivity {
 
     //UI Elements
-    private TextView txtView_gear, txtView_rpm, txtView_bpm, txtView_restTime;
-    private Button btn_rep;
+    private TextView txtView_gear, txtView_rpm, txtView_bpm, txtView_restTime, txtView_repetitions ;
+    private Button btn_rep_plus,btn_rep_minus;
     private VerticalSeekBar verticlalBar_rpm, verticalBar_bpm;
     private Spinner spinner_work,spinner_rythm;
     private NumberPicker nbrPicker_front, nbrPicker_back, nbrPicker_recup_min, nbrPicker_recup_sec;
@@ -46,6 +51,9 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
     private static final int INT_MIN_BACK_GEAR = 11;
     private static final int INT_MAX_BACK_GEAR = 27;
     private static final int INT_MAX_TIME = 59;
+    private static final int INT_MIN_TIME = 5;
+    private static int INT_MIN_RPM_VALUE = 40;
+    private static int INT_MAX_RPM_VALUE = 260;
 
     //VARIABLES
     private int int_min_work, int_sec_work, int_min_rest, int_sec_rest, int_bpm, int_rpm;
@@ -60,17 +68,23 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
     //int value for both progression of the vertical bar
     private int int_progress_bpm;
     private int int_progress_rpm;
+    //int for max and min value of bpm progressBar
+    int max_bpm ;
+    int min_bpm ;
 
-    //CONSTANT
-    private static int INT_MIN_BPM_VALUE = 30;
-    private static int INT_MIN_RPM_VALUE = 40;
-    private static int INT_MAX_BPM_VALUE = 200;
-    private static int INT_MAX_RPM_VALUE = 300;
+    //OBJECTS
+    private HeartRate hr;
+    private RealmDB realmDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_row_details);
+
+        /* MANAGE ACTION BAR TITLE*/
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        ab.setTitle(getString(R.string.app_name));
+        ab.setSubtitle(getString(R.string.add_tRow));
 
         //get data from last intent
         int_id = getIntent().getIntExtra("_id",0);
@@ -87,8 +101,10 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         nbrPicker_min.setMaxValue(INT_MAX_TIME);
         nbrPicker_sec.setMaxValue(INT_MAX_TIME);
 
-        /* Initialisation of the Button for the validation */
-        btn_rep = (Button) findViewById(R.id.btn_rep);
+        /* Initialisation of the Elements for the repetitions */
+        btn_rep_minus = (Button) findViewById(R.id.btn_minus);
+        btn_rep_plus = (Button) findViewById(R.id.btn_plus);
+        txtView_repetitions = (TextView) findViewById(R.id.txtView_repetitions);
 
         /* Initialisation of the 2 VerticalSeekBar*/
         verticlalBar_rpm = (VerticalSeekBar) findViewById(R.id.verticalBar_rpm);
@@ -141,10 +157,10 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
                         //numberPickers
                         int_front_value = nbrPicker_front.getValue();
                         int_back_value = nbrPicker_back.getValue();
-                        txtView_gear.setText(int_front_value + "X" + int_back_value);
+                        txtView_gear.setText(getString(R.string.gear_set)+int_front_value + "X" + int_back_value);
                     }
 
-                    });
+                });
                 alrt_builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -170,24 +186,49 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
 
         /**********************************************************************
          *
-         *  btn_rep onClickListener
-         *  Goal: let the user set the nomber of time he wants to repeat the row
+         *  btn_rep_plus onClickListener
+         *  Goal: let the user increase the nomber of time he wants to repeat the row
          *
          *********************************************************************/
-        btn_rep.setOnClickListener(new View.OnClickListener() {
+        btn_rep_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //get max 10 rep.
-                if(int_count > 10){
-                    int_count = 0;
+                if(int_count < 11){
+                    //add one to count
+                    int_count++;
                 }
-                //add one to count
-                int_count++;
+
                 //set text of button
-                btn_rep.setText(int_count+"X");
+                txtView_repetitions.setText(int_count+"X");
             }
         });
 
+        /**********************************************************************
+         *
+         *  btn_rep_plus onClickListener
+         *  Goal: let the user decrease the nomber of time he wants to repeat the row
+         *
+         *********************************************************************/
+        btn_rep_minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (int_count > 1){
+                    //decrease int_count
+                    int_count--;
+                }
+
+                //set text of button
+                txtView_repetitions.setText(int_count+"X");
+            }
+        });
+
+
+        /**********************************************************************
+         *
+         *  txtView_restTime onClickListener
+         *  Goal: let the user chose the rest time between two rows
+         *
+         *********************************************************************/
         txtView_restTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,7 +256,7 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
                         //numberPickers
                         int_recupMin_value = nbrPicker_recup_min.getValue();
                         int_recupSec_value = nbrPicker_recup_sec.getValue();
-                        txtView_restTime.setText(int_recupMin_value + ":" + int_recupSec_value);
+                        txtView_restTime.setText(getString(R.string.recuperation) +" "+ int_recupMin_value + ":" + int_recupSec_value);
                         bln_recup = true;
                     }
                 });
@@ -233,16 +274,34 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
                 //show the alert dialog
                 alertDialog.show();
             }
-        });
+        });//txtView_rest - onClicksetListener
+
+
+        //get Instance of realmDB
+        realmDB = new RealmDB(TrainingRowDeatilsActivity.this);
+
+        //get HeartRate to set max and min value of bpm progressBar
+        HeartRate hr = realmDB.getHeartRate();
+        //get
+        if(hr != null) {
+            max_bpm = hr.getInt_fc_max();
+            min_bpm = hr.getInt_fc_min();
+        }
+        //close instance
+        realmDB.close();
 
         //max bpm value
-        verticalBar_bpm.setMax(INT_MAX_BPM_VALUE);
-        /* Method for the seek bar change listener for bpm bar*/
+        verticalBar_bpm.setMax(max_bpm-min_bpm);
+
+        /******************************************************
+         * Method for the seek bar change listener for bpm bar
+         ******************************************************/
         verticalBar_bpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                //maximum = 200 and min = 30;
-                int_progress_bpm = progress + INT_MIN_BPM_VALUE;
+                //maximum = max bpm entered into the data base
+                //minimum = min bpm entered into the data base
+                int_progress_bpm = progress + min_bpm;
                 //set progression to textView
                 txtView_bpm.setText(int_progress_bpm+"");
             }
@@ -258,11 +317,14 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
 
         //max rpm value
         verticlalBar_rpm.setMax(INT_MAX_RPM_VALUE);
-        /* Method for the seek bar change listener for rpm bar */
+
+        /******************************************************
+         * Method for the seek bar change listener for rpm bar
+         ******************************************************/
         verticlalBar_rpm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                //maximum = 300 and min = 40;
+                //maximum = 260 and min = 40;
                 int_progress_rpm = progress + INT_MIN_RPM_VALUE;
                 //set progression to textView
                 txtView_rpm.setText(int_progress_rpm + "");
@@ -284,10 +346,10 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
      * Goal: method to validate the row, check the details, and add it to realm
      *
      ****************************************************************************/
-    private void validateRow(int nbr_repeat) {
+    private void validateRow(final int nbr_repeat) {
         //checkValue return true if there is an error
         if(!checkValue()){
-            RealmDB realmDB = new RealmDB(TrainingRowDeatilsActivity.this);
+            realmDB = new RealmDB(TrainingRowDeatilsActivity.this);
 
             try{
                 //this loop check how many times the user wants to repeat a row
@@ -307,26 +369,27 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
 
                     //here we check if bln_recup is true
                     if(bln_recup){
-                        //if it's true we add a new training row for recuperation
+                        //if it's true we add a new training row for rest
                         //add a row to the training we have selected
                         realmDB.addAtrainingRowToTraining(int_id,realmDB.createRow(
-                                int_recupMin_value,
-                                int_recupSec_value,
-                                0,
-                                0,
-                                0,
-                                0,
-                                str_gear,
-                                getResources().getString(R.string.recup),
-                                "",
-                                str_note));
+                                int_recupMin_value,     //change min value by rest min value
+                                int_recupSec_value,     //change sec value by rest sec value
+                                0,                      //no bpm
+                                0,                      //no rpm
+                                0,                      //no min rest
+                                0,                      //no sec rest
+                                str_gear,               //gear
+                                getResources().getString(R.string.recup), //name of the row
+                                "",             //rythm
+                                str_note));     //notes
                     }//if(bln_recup)
                 }//for
 
 
             }catch (Exception e){
+                //display a toast in case of Exception
                 Toast.makeText(TrainingRowDeatilsActivity.this, getResources().getString(R.string.add_error), Toast.LENGTH_SHORT).show();
-                Log.w("ERROR_ADD",e.getMessage().toString());
+                e.printStackTrace();
             }
 
             //close Realm
@@ -342,7 +405,6 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         }else{
             Toast.makeText(TrainingRowDeatilsActivity.this,str_error,Toast.LENGTH_LONG).show();
         }
-
     }//validateRow
 
 
@@ -357,11 +419,22 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         boolean bln_error = false;
         //error string back to empty
         str_error = "";
-        //check if time is bigger than 10 sec;
-        if((nbrPicker_min.getValue() * 10) + nbrPicker_sec.getValue() < 10){
-            str_error += getResources().getString(R.string.error_time);
+        //check if time is bigger than 5 sec (INT_MIN_TIME);
+        int int_duration = (nbrPicker_min.getValue() * 60) + nbrPicker_sec.getValue();
+        if((int_duration < INT_MIN_TIME)){
+            //print message that duration is to short
+            str_error += getString(R.string.error_duration);
+            //check if duration is empty
+            if(int_duration == 0){
+                //if duration is empty erase previous message
+                str_error = "";
+                //and set new message for duration empty
+                str_error += getString(R.string.error_time);
+            }
+            //set error to true
             bln_error = true;
-        }else{
+        }
+        else{
             //if value is bigger than 10 secondes qe can set the time
             int_min_work = nbrPicker_min.getValue();
             int_sec_work = nbrPicker_sec.getValue();
@@ -438,9 +511,10 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * OnActivity Stop this will just kill acces to the realm Database to avoid memory leak
-     */
+    /********************************************************************
+     * Name: onStop Method
+     * Goal: Method called when the phone stop the Avtivity
+     ***********************************************************************/
     @Override
     protected void onStop() {
         super.onStop();
@@ -448,6 +522,10 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
 
     }
 
+    /********************************************************************
+     * Name: onDestroy Method
+     * Goal: Method called when the phone kill the Avtivity
+     ***********************************************************************/
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -455,6 +533,10 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         freeMemory();
     }
 
+    /********************************************************************
+     * Name: freeMemory
+     * Goal: Run the garbage collector to get back some allocated memory
+     ***********************************************************************/
     public void freeMemory(){
         System.runFinalization();
         Runtime.getRuntime().gc();

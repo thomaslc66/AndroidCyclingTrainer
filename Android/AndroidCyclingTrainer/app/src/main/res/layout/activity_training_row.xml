@@ -36,7 +36,7 @@
             android:id="@+id/txtView_Row_Total"
             android:layout_weight="1"
             android:gravity="left"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -53,7 +53,8 @@
             android:id="@+id/txtView_Total_Time"
             android:gravity="right"
             android:layout_weight="1"
-            android:layout_marginRight="5dp" />
+            android:layout_marginRight="10dp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <Button

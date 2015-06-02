@@ -36,7 +36,7 @@
             android:layout_height="40dp"
             android:layout_weight="4"
             android:background="@drawable/white"
-            android:text="Yes,Delete"
+            android:text="EFFACER"
             android:textColor="#FF5534"
             android:layout_marginRight="5dp" />
     </LinearLayout>
@@ -78,8 +78,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Travail: Sprints"
-                        android:id="@+id/txtView_work"
+                        android:text="Sprints"
+                        android:id="@+id/txtView_work_rythm"
                         android:textSize="15dp"
                         android:layout_below="@+id/txtView_rowTime"
                         android:layout_alignLeft="@+id/txtView_rowTime"
@@ -88,13 +88,6 @@
                         android:gravity="center_vertical"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rythme: à bloc"
-                        android:id="@+id/txtView_rythm"
-                        android:layout_weight="1"
-                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout

@@ -129,9 +129,8 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
         ViewHolder viewHolder = new ViewHolder();
         viewHolder.txtView_time = (TextView) v.findViewById(R.id.txtView_time);
         viewHolder.txtView_bpm = (TextView) v.findViewById(R.id.txtView_bpm);
-        viewHolder.txtView_work = (TextView) v.findViewById(R.id.txtView_work);
+        viewHolder.txtView_work_rythm = (TextView) v.findViewById(R.id.txtView_work_rythm);
         viewHolder.txtView_rpm = (TextView) v.findViewById(R.id.txtView_rpm);
-        viewHolder.txtView_rythm = (TextView) v.findViewById(R.id.txtView_rythm);
         viewHolder.txtView_gear = (TextView) v.findViewById(R.id.txtView_gear);
         viewHolder.btn_delete = (Button) v.findViewById(R.id.btn_delete);
 
@@ -214,11 +213,10 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
 
         if (trainingRowList.size() > 0) {
             //set the value to each row
-            viewHolder.txtView_bpm.setText("BPM: "+ trainingRowList.get(position).getInt_bpm()+" ID"+ trainingRowList.get(position).getId());
-            viewHolder.txtView_rpm.setText("RPM: "+ trainingRowList.get(position).getInt_rpm()+" Position" + position);
+            viewHolder.txtView_bpm.setText("BPM: "+ trainingRowList.get(position).getInt_bpm());
+            viewHolder.txtView_rpm.setText("RPM: "+ trainingRowList.get(position).getInt_rpm());
             viewHolder.txtView_time.setText(trainingRowList.get(position).getStr_time()+"");
-            viewHolder.txtView_work.setText(trainingRowList.get(position).getStr_work() + "");
-            viewHolder.txtView_rythm.setText(trainingRowList.get(position).getStr_rythm());
+            viewHolder.txtView_work_rythm.setText(trainingRowList.get(position).getStr_work() + " " +trainingRowList.get(position).getStr_rythm());
             viewHolder.txtView_gear.setText(trainingRowList.get(position).getStr_gear());
 
         }
@@ -228,8 +226,7 @@ public class TrainingRowAdapter extends BaseSwipeAdapter {
         TextView txtView_time,
                 txtView_bpm,
                 txtView_rpm,
-                txtView_work,
-                txtView_rythm,
+                txtView_work_rythm,
                 txtView_gear;
         Button btn_delete;
     }

@@ -190,6 +190,7 @@
                     android:spinnerMode="dialog"
                     android:gravity="center"
                     android:textAlignment="center" />
+
             </LinearLayout>
 
         </LinearLayout>
@@ -221,10 +222,28 @@
             android:id="@+id/txtView_rep" />
 
             <Button
+                style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/btn_minus" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="1x"
-                android:id="@+id/btn_rep" />
+                android:id="@+id/txtView_repetitions"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/btn_plus" />
 
 
         </LinearLayout>

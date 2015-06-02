@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">Bike</string>
+    <string name="app_name">BIKE</string>
+    <string name="training_subTitle">Liste des entraînements</string>
+    <string name="tRow_subTitle">Liste des séquences</string>
+    <string name="modification">Modification d\'une séquence</string>
+    <string name="add_tRow">Ajout d\'une séquence</string>
     <string name="action_settings">Settings</string>
     <string name="action_add">Ajouter</string>
     <string name="add_training">Ajouter entraînement</string>
@@ -16,7 +20,8 @@
     <string name="error_training_isUnique">Nom déjà utilisé</string>
     <string name="add_error">Erreur lors de l\'ajout</string>
     <string name="modif_error">Erreur lors de la mise a jour</string>
-    <string name="recup">Récupération</string>
+    <string name="recup">Récupération: -</string>
+    <string name="recuperation">Récup: </string>
     <string name="start">Départ</string>
     <string name="resume">Reprise</string>
     <string name="error_recup_training">"Erreur de récupération de l\'entraînement"</string>
@@ -26,7 +31,8 @@
     <string name="fc_min">Fréquence cardiaque minimale</string>
     <string name="error_insert_fc">Fréquences cardiaques non valides</string>
     <string name="HeartRate">Fréquences Cardiaques</string>
-    <string name="gear">Plateaux</string>
+    <string name="gear">Plateaux: -</string>
+    <string name="gear_set">Plateaux: </string>
     <string name="rest_indice">L\'entraînement est Terminé.\nPatientez, puis entrer votre fréquence cardiaque après une minute et demi de repos.</string>
     <string name="validate">Valider</string>
     <string name="cancel">Annuler</string>
@@ -37,4 +43,5 @@
     <string name="error_numeric">Entrez un nombre</string>
     <string name="add_fc">Merci d\'ajouter vos fréquences cardiaques grâce au coeur situé en haut à droite</string>
     <string name="no_training">Merci d\'ajouter au moins une séquence dans l\'entraînement grâce au bouton situé en haut à droite</string>
+    <string name="error_duration">durée trop courte</string>
 </resources>

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -69,6 +70,11 @@ public class TrainingActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_list);
+
+        /* MANAGE ACTION BAR TITLE*/
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle(getString(R.string.app_name));
+        ab.setSubtitle(getString(R.string.training_subTitle));
 
         realmDB = new RealmDB(TrainingActivity.this);
         training_list = new ArrayList<>();
@@ -307,6 +313,18 @@ public class TrainingActivity extends ActionBarActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        training_list = null;
+        listView_training = null;
+        txtView_textWatcher = null;
+    }//onStop
+
+    /********************************************************************
+     * Name: onPause Method
+     * Goal: Method called when the phone paused the Avtivity
+     ***********************************************************************/
+    @Override
+    protected void onPause() {
+        super.onPause();
         //close Realm Instance
         realmDB.close();
     }//onStop
@@ -318,9 +336,6 @@ public class TrainingActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        training_list = null;
-        listView_training = null;
-        txtView_textWatcher = null;
         freeMemory();
     }//onDestroy
 
@@ -379,7 +394,7 @@ public class TrainingActivity extends ActionBarActivity {
                     Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_training_isUnique), Toast.LENGTH_SHORT).show();
                 }
             }//if
-            else if(mValue.length() == INT_ZERO){ //if value is empty
+            else if(mValue.length() <= INT_ZERO || mValue == ""){ //if value is empty
                 Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_training_empty), Toast.LENGTH_SHORT).show();
             }
             else if(mValue.length() > INT_MAX_LENGTH){ //if value is too big

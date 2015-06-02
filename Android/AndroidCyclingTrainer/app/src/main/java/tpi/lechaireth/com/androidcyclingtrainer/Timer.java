@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -294,6 +295,24 @@ public class Timer extends Activity {
                         edt_input.setRawInputType(Configuration.KEYBOARD_QWERTY);
                         //let done button appears
                         edt_input.setImeOptions(EditorInfo.IME_ACTION_DONE);
+                        //let keyboard appears automaticaly
+                                    /* set On Focus Change Listener to open keyBord when editText fc_max has focus*/
+                        edt_input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                            @Override
+                            public void onFocusChange(View v, boolean hasFocus) {
+                                edt_input.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //Make KeyBoard Visible
+                                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        imm.showSoftInput(edt_input, InputMethodManager.SHOW_IMPLICIT);
+                                    }
+                                });
+                            }
+                        });
+
+                        // set cursor into edit Text
+                        edt_input.requestFocus();
 
                         txtView_textWatcher = (TextView) rest_dialog.findViewById(R.id.txtView_textWatcher);
                         //set Text in text Watcher
@@ -312,13 +331,13 @@ public class Timer extends Activity {
                                 //value is ok
                                 if(int_nbr_letter >= INT_ZERO) {
                                     txtView_textWatcher.setTextColor(getResources().getColor(R.color.numbers_text_color));
-                                    txtView_textWatcher.setText(String.valueOf(int_nbr_letter));
+                                    txtView_textWatcher.setText("caractères restants: " + String.valueOf(int_nbr_letter));
                                 }
                                 //text length is to big
                                 else if(int_nbr_letter < INT_ZERO){
                                     //set color to red
                                     txtView_textWatcher.setTextColor(getResources().getColor(R.color.red));
-                                    txtView_textWatcher.setText(String.valueOf(int_nbr_letter));
+                                    txtView_textWatcher.setText("caractères en trop: "+String.valueOf(Math.abs(int_nbr_letter)));
                                 }
                             }
 
@@ -379,9 +398,9 @@ public class Timer extends Activity {
                             int_bpm = lst_trainingRow.get(int_i).getInt_bpm();
                             str_gear = lst_trainingRow.get(int_i).getStr_gear();
                             str_time = lst_trainingRow.get(int_i).getStr_time();
-                            str_rythm = lst_trainingRow.get(int_i).getStr_note();
+                            str_rythm = lst_trainingRow.get(int_i).getStr_rythm();
                             str_work = lst_trainingRow.get(int_i).getStr_work();
-                            str_note = lst_trainingRow.get(int_i).getStr_work();
+                            str_note = lst_trainingRow.get(int_i).getStr_note();
 
                             //set new max time for the row
                             int_row_time = ((int_min * INT_SEC) + int_sec) * INT_MILLIS;
@@ -485,13 +504,37 @@ public class Timer extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //get Back to TrainingRow Activity
-        Intent back_to_trainingRow = new Intent(Timer.this, TrainingRowActivity.class);
-        //put id of training as extra, needed to charge the training Row
-        back_to_trainingRow.putExtra("_id",_id);
-        back_to_trainingRow.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(back_to_trainingRow);
-        finish();
+        //check with an alertDialog if the user realy wants to stop the training.
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+                        .setCancelable(false)
+                        .setTitle(getResources().getString(R.string.stop_timer))
+                        .setMessage(getResources().getString(R.string.stop_message))
+                        .setPositiveButton("OUI", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //go back to previous activiy if positive button is hit
+                                Intent intent_trainingRow = new Intent(Timer.this, TrainingRowActivity.class);
+                                //put extra id to get all Rows back
+                                intent_trainingRow.putExtra("_id", _id);
+                                //put a Flag to avoid recreate intent if he already exist in the queue
+                                intent_trainingRow.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                //get context to startActivity
+                                mContext.startActivity(intent_trainingRow);
+                                //finish and cancel activty
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("NON", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //cancel the alertDialog
+                                dialogInterface.dismiss();
+                            }
+                        });
+                //from the builder create the alertDialog
+                alertDialog = builder.create();
+                //show the dialog to user
+                alertDialog.show();
     }
 
     /********************************************************************
