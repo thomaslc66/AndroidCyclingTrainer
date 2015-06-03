@@ -75,6 +75,8 @@ public class TrainingActivity extends ActionBarActivity {
     private  static int INT_MAX_LENGTH = 20;
     private static int INT_MAX_LENGTH_BPM_RPM = 3;
     private static int INT_ZERO = 0;
+    private static int INT_MAX_BPM = 220;
+    private static int INT_MIN_BPM = 30;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,13 +144,13 @@ public class TrainingActivity extends ActionBarActivity {
                             //value is ok
                             if(int_nbr_letter >= INT_ZERO) {
                                 txtView_textWatcher.setTextColor(getResources().getColor(R.color.numbers_text_color));
-                                txtView_textWatcher.setText("caractères restants: "+String.valueOf(int_nbr_letter));
+                                txtView_textWatcher.setText(getString(R.string.left_caracters)+" "+String.valueOf(int_nbr_letter));
                             }
                             //text length is to big
                             else if(int_nbr_letter < INT_ZERO){
                                 //set color to red
                                 txtView_textWatcher.setTextColor(getResources().getColor(R.color.red));
-                                txtView_textWatcher.setText("caractères en trop: "+String.valueOf(Math.abs(int_nbr_letter)));
+                                txtView_textWatcher.setText(getString(R.string.over_caracters)+" "+String.valueOf(Math.abs(int_nbr_letter)));
                             }
                         }
 
@@ -228,6 +230,11 @@ public class TrainingActivity extends ActionBarActivity {
     }//onCreate
 
 
+    /********************************************************************
+     * Name: onCreateOptionsMenu
+     * @param menu
+     * Goal: Method to link to right button to menu xml file
+     ***********************************************************************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -235,6 +242,11 @@ public class TrainingActivity extends ActionBarActivity {
         return true;
     }
 
+    /********************************************************************
+     * Name: onOptionsItemSelected
+     * @param item
+     * Goal: Method to tell what to do on menu item click
+     ***********************************************************************/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -358,19 +370,6 @@ public class TrainingActivity extends ActionBarActivity {
         System.gc();
     }//freeMemory
 
-    /********************************************************************
-     * Name: isNumeric
-     * Goal: Method to check if the string is numeric or not
-     ***********************************************************************/
-    public static boolean isNumeric(String str)
-    {
-        NumberFormat formatter = NumberFormat.getInstance();
-        ParsePosition pos = new ParsePosition(0);
-        formatter.parse(str, pos);
-        return str.length() == pos.getIndex();
-    }
-
-
     /*******************************************************************************
      *
      * private class Custom Listener to check data control on the dialog_training box
@@ -387,7 +386,7 @@ public class TrainingActivity extends ActionBarActivity {
             //get the name of the trining from editText
             String mValue = edt_input.getText().toString();
             //if value length is ok
-            if(mValue.length() <= INT_MAX_LENGTH){
+            if(mValue.length() <= INT_MAX_LENGTH && mValue.length() > INT_ZERO){
                 //if name is correct
                 if (realmDB.isUnique(mValue)) {
                     //add new training to DataBase with the boolean of the checkBox
@@ -403,7 +402,7 @@ public class TrainingActivity extends ActionBarActivity {
                     Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_training_isUnique), Toast.LENGTH_SHORT).show();
                 }
             }//if
-            else if(mValue.length() <= INT_ZERO || mValue == ""){ //if value is empty
+            else if(mValue.length() == INT_ZERO || mValue.equals("")){ //if value is empty
                 Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_training_empty), Toast.LENGTH_SHORT).show();
             }
             else if(mValue.length() > INT_MAX_LENGTH){ //if value is too big
@@ -428,27 +427,33 @@ public class TrainingActivity extends ActionBarActivity {
             //get values from both edit Text
             String value_max = edtTxt_fc_max.getText().toString();
             String value_min = edtTxt_fc_min.getText().toString();
+            int int_max, int_min;
 
-            //if value is empty
-            if(value_max.length() == INT_ZERO || value_min.length() == INT_ZERO){
-                Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_bpm_empty), Toast.LENGTH_SHORT).show();
-            }
-            else if(value_max.length() > INT_MAX_LENGTH_BPM_RPM || value_min.length() > INT_MAX_LENGTH_BPM_RPM){ //if value is to big
-                Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_bpm_length), Toast.LENGTH_SHORT).show();
-            }
-            //if value length is ok
-            else if(value_max.length() <= INT_MAX_LENGTH_BPM_RPM && value_min.length() <= INT_MAX_LENGTH_BPM_RPM ) {
-                //check if value is numeric
-                if (isNumeric(value_min) && isNumeric(value_max) ){
+            //test if heartRate are numbers
+            try{
+                //test if value are integer
+                int_max = Integer.parseInt(value_max);
+                int_min = Integer.parseInt(value_min);
+
+                //if they are numbers but not into the limits
+                if((int_max > INT_MAX_BPM || int_max < INT_MIN_BPM)||(int_min > INT_MAX_BPM || int_min < INT_MIN_BPM)){
+                    Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_limits), Toast.LENGTH_SHORT).show();
+                }else //means that value are into the limits
+                {
                     //if the values are correct save the new value in the same
-                    realmDB.saveHeartRate(Integer.parseInt(value_max), Integer.parseInt(value_min));
+                    realmDB.saveHeartRate(int_max, int_min);
                     //everything is ok dismiss the dialog
                     dialog.dismiss();
                     //boolean isHeartBeat
                     isHeartBeat = true;
-                }//if isNumeric
-                else{
-                    Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_numeric), Toast.LENGTH_SHORT).show();
+                }
+            //error can be catched if values are empty or value are text
+            }catch (Exception e){
+                //if value is empty
+                if(value_max.length() == INT_ZERO || value_min.length() == INT_ZERO){
+                    Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_bpm_empty), Toast.LENGTH_SHORT).show();
+                }else{//else if value are not empty but not integer... so they are text
+                    Toast.makeText(TrainingActivity.this, getResources().getString(R.string.error_integer), Toast.LENGTH_SHORT).show();
                 }
             }
         }

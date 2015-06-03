@@ -125,6 +125,13 @@ public class TrainingAdapter extends BaseSwipeAdapter {
     public View generateView(int position, ViewGroup viewGroup) {
         //inflate the view
         View v = mInflater.inflate(R.layout.training_list_item,null);
+
+        //set swipeLayout to proper linearLayout
+        SwipeLayout swipeLayout = (SwipeLayout) v.findViewById(R.id.swipe);
+
+        //close the layout at the begining
+        swipeLayout.close();
+
         //new ViewHolder.
         ViewHolder viewHolder = new ViewHolder();
         viewHolder.txtView_date = (TextView) v.findViewById(R.id.txtView_date);
@@ -136,14 +143,8 @@ public class TrainingAdapter extends BaseSwipeAdapter {
         //setTag to send this throw fill view Method
         v.setTag(viewHolder);
 
-        //set swipeLayout to proper linearLayout
-        SwipeLayout swipeLayout = (SwipeLayout) v.findViewById(R.id.swipe);
-
         //to Test
         //swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
-
-        //close the layout at the begining
-        swipeLayout.close();
 
         //swipelayout Listener
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {

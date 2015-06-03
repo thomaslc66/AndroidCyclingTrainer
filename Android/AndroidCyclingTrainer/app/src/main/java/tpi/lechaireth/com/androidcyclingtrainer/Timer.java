@@ -59,7 +59,6 @@ public class Timer extends Activity {
     //VARIABLES
     private int _id;
 
-
     //Varibales for the Timer
     /* Int to translate seconds in milliseconds */
     private static int INT_MILLIS = 1000;
@@ -88,6 +87,8 @@ public class Timer extends Activity {
     //CONSTANTS
     private static int INT_BPM_LENGTH = 3;
     private static int INT_ZERO = 0;
+    private static int INT_MAX_BPM = 250;
+    private static int INT_MIN_BPM = 30;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -331,13 +332,13 @@ public class Timer extends Activity {
                                 //value is ok
                                 if(int_nbr_letter >= INT_ZERO) {
                                     txtView_textWatcher.setTextColor(getResources().getColor(R.color.numbers_text_color));
-                                    txtView_textWatcher.setText("caractères restants: " + String.valueOf(int_nbr_letter));
+                                    txtView_textWatcher.setText(getString(R.string.left_caracters)+" "+String.valueOf(Math.abs(int_nbr_letter)));
                                 }
                                 //text length is to big
                                 else if(int_nbr_letter < INT_ZERO){
                                     //set color to red
                                     txtView_textWatcher.setTextColor(getResources().getColor(R.color.red));
-                                    txtView_textWatcher.setText("caractères en trop: "+String.valueOf(Math.abs(int_nbr_letter)));
+                                    txtView_textWatcher.setText(getString(R.string.over_caracters)+" "+String.valueOf(Math.abs(int_nbr_letter)));
                                 }
                             }
 
@@ -566,21 +567,20 @@ public class Timer extends Activity {
         public void onClick(View view) {
             //get the value of the bpm from editText
             String mValue = edt_input.getText().toString();
+            int int_value;
 
-            //if value is empty
-            if(mValue.length() == INT_ZERO){
-                Toast.makeText(Timer.this, getResources().getString(R.string.error_bpm_empty), Toast.LENGTH_SHORT).show();
-            }
-            else if(mValue.length() > INT_BPM_LENGTH){ //if value is to big
-                Toast.makeText(Timer.this, getResources().getString(R.string.error_bpm_length), Toast.LENGTH_SHORT).show();
-            }
-            //if value length is ok
-            else if(mValue.length() <= INT_BPM_LENGTH) {
-                //check if value is numeric
-                if (isNumeric(mValue)){
-                    int int_fc_rest = Integer.parseInt(mValue);
+            //test if heartRate are numbers
+            try{
+                //test if value is an integer
+                int_value = Integer.parseInt(mValue);
+
+                //if they are numbers but not into the limits
+                if(int_value > INT_MAX_BPM || int_value < INT_MIN_BPM){
+                    Toast.makeText(Timer.this, getResources().getString(R.string.error_limits_indice), Toast.LENGTH_SHORT).show();
+                }else //means that value is into the limits
+                {
                     //call realmDB instance to set the rest indice
-                    realmDB.setRestIndice(_id, int_fc_rest);
+                    realmDB.setRestIndice(_id, int_value);
                     //everything is ok dismiss the dialog
                     dialog.dismiss();
 
@@ -592,11 +592,16 @@ public class Timer extends Activity {
                     context.startActivity(back_toTrainingAvtivity);
                     //finish
                     finish();
-                }//if isNumeric
-                else{
-                    Toast.makeText(Timer.this, getResources().getString(R.string.error_numeric), Toast.LENGTH_SHORT).show();
+                }
+                //error can be catched if values is empty or value is text
+            }catch (Exception e){
+                //if value is empty
+                if(mValue.length() == INT_ZERO || mValue.length() == INT_ZERO){
+                    Toast.makeText(Timer.this, getResources().getString(R.string.error_bpm_empty), Toast.LENGTH_SHORT).show();
+                }else{//else if value are not empty but not integer... so they are text
+                    Toast.makeText(Timer.this, getResources().getString(R.string.error_integer), Toast.LENGTH_SHORT).show();
                 }
             }
-        }
+        }//onClick
     }// class CheckValueTrainingListener
 }//Class Timer

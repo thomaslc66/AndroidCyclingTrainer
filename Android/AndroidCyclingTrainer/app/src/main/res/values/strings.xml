@@ -44,4 +44,9 @@
     <string name="add_fc">Merci d\'ajouter vos fréquences cardiaques grâce au coeur situé en haut à droite</string>
     <string name="no_training">Merci d\'ajouter au moins une séquence dans l\'entraînement grâce au bouton situé en haut à droite</string>
     <string name="error_duration">durée trop courte</string>
+    <string name="error_integer">Merci d\'entrer des nombres</string>
+    <string name="error_limits">Fréquences cardiaques entre 30 et 220</string>
+    <string name="error_limits_indice">Fréquences cardiaques entre 30 et 250</string>
+    <string name="left_caracters">caractères restants</string>
+    <string name="over_caracters">caractères en trop</string>
 </resources>
