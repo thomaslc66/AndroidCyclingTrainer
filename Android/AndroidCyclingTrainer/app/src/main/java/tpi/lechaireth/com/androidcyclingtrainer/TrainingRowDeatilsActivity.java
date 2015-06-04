@@ -125,13 +125,15 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
         verticlalBar_rpm = (VerticalSeekBar) findViewById(R.id.verticalBar_rpm);
         verticalBar_bpm = (VerticalSeekBar) findViewById(R.id.verticalBar_bpm);
 
+
         /* Initialisation of the 2 spinners */
         spinner_work = (Spinner) findViewById(R.id.spinner_travail);
         spinner_rythm = (Spinner) findViewById(R.id.spinner_rythme);
 
         // put the two list into the spinners
-        ArrayAdapter<CharSequence> adapter_work = ArrayAdapter.createFromResource(this,R.array.work, android.R.layout.simple_spinner_item);
-        ArrayAdapter<CharSequence> adapter_rythm = ArrayAdapter.createFromResource(this,R.array.rythm, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter_work = ArrayAdapter.createFromResource(this,R.array.work, R.layout.textview_spinner);
+        ArrayAdapter<CharSequence> adapter_rythm = ArrayAdapter.createFromResource(this,R.array.rythm,R.layout.textview_spinner);
+
         // link list to spinners
         spinner_work.setAdapter(adapter_work);
         spinner_rythm.setAdapter(adapter_rythm);
@@ -367,20 +369,21 @@ public class TrainingRowDeatilsActivity extends ActionBarActivity {
             realmDB = new RealmDB(TrainingRowDeatilsActivity.this);
 
             try{
+
                 //this loop check how many times the user wants to repeat a row
                 for (int i = 0; i < nbr_repeat; i++){
                     //add a row to the training we have selected
                     realmDB.addAtrainingRowToTraining(int_id,realmDB.createRow(
-                            int_min_work,
-                            int_sec_work,
-                            int_rpm,
-                            int_bpm,
-                            int_min_rest,
-                            int_sec_rest,
-                            str_gear,
-                            str_work,
-                            str_rythm,
-                            str_note));
+                            int_min_work, //min
+                            int_sec_work, //sec
+                            int_rpm, //rpm
+                            int_bpm, //bpm
+                            int_min_rest, //min rest
+                            int_sec_rest, //sec rest
+                            str_gear, //gear
+                            str_work, //work
+                            str_rythm, //rythm
+                            str_note)); //notes
 
                     //here we check if bln_recup is true
                     if(bln_recup){

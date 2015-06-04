@@ -127,8 +127,8 @@ public class TrainingRowModification extends ActionBarActivity {
         spinner_rythm = (Spinner) findViewById(R.id.spinner_rythme);
 
         // put the two list into the spinners
-        ArrayAdapter<CharSequence> adapter_work = ArrayAdapter.createFromResource(this,R.array.work, android.R.layout.simple_spinner_item);
-        ArrayAdapter<CharSequence> adapter_rythm = ArrayAdapter.createFromResource(this,R.array.rythm, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter_work = ArrayAdapter.createFromResource(this,R.array.work, R.layout.textview_spinner);
+        ArrayAdapter<CharSequence> adapter_rythm = ArrayAdapter.createFromResource(this,R.array.rythm,R.layout.textview_spinner);
         // link list to spinners
         spinner_work.setAdapter(adapter_work);
         spinner_rythm.setAdapter(adapter_rythm);
