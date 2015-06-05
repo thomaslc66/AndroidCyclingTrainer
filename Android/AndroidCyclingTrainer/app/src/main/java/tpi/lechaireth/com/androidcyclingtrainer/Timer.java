@@ -443,7 +443,8 @@ public class Timer extends Activity {
                     //divide row_min by 60 to get minutes. and row_min % 60 to get seconds
                     txtView_timRow.setText("" + row_min / INT_SEC + ":" + row_min % INT_SEC);
                 }//else
-            //delayed post handler every second
+            //THE TRICK FOR THE TIMER IS HERE
+            //delayed post handler every 100 mililSecond
             handler.postDelayed(this, 100);
 
         }

@@ -686,9 +686,13 @@ public class RealmDB {
            totalMin += min;
        }
 
+       //total min/ 60 and we get hours
        int hour = totalMin / 60;
+       //totalMin % 60 and we get minutes
        int min = totalMin % 60;
+       //totalSec / 60 and we get the minutes
        min += totalSec / 60;
+       //totalSec % 50 and we get the seconds
        int sec = totalSec%60;
 
        time = ""+hour+"h "+min +"m "+sec+"s";

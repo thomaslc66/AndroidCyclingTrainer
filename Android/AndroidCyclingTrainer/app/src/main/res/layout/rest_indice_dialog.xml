@@ -9,7 +9,7 @@
         android:id="@+id/edt_input"
         android:layout_margin="5dp"
         android:layout_marginTop="10dp"
-        android:hint="Fréquence cardiaque après 1 min 30 de repos" />
+        android:hint="@string/hint_indice" />
 
     <TextView
         android:layout_width="wrap_content"
