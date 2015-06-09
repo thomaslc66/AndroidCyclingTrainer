@@ -1,0 +1,8 @@
+#Automatically generated header file. Editing this file may cause problems.
+#Fri May 22 14:51:37 CEST 2015
+serverVersion=2.5.2
+dexState=SANDBOX_UPDATED
+package=tpi.lechaireth.com.androidcyclingtrainer
+version=322
+serverVersionCode=61
+appTheme=@style/AppTheme

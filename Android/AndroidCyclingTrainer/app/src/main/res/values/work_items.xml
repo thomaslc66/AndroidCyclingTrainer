@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="work">
+        <item>Sprints</item>
+        <item>Contre-la-montre</item>
+        <item>Échauffement</item>
+        <item>Départ</item>
+        <item>Côtes</item>
+    </string-array>
+</resources>

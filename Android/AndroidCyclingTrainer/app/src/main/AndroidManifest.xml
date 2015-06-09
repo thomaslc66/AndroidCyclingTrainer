@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="tpi.lechaireth.com.androidcyclingtrainer" >
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".TrainingActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".TrainingRowActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="my.activity.TrainingRowActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".TrainingRowDeatilsActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="my.activity.TrainingRowDeatilsActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".Timer"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="my.activity.Timer" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".TrainingRowModification"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="my.activity.TrainingRowModification" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
