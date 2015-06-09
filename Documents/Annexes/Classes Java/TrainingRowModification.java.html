@@ -1,0 +1,596 @@
+<html>
+<head>
+<title>TrainingRowModification.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(98,151,85); font-style: italic; }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(204,120,50); }
+.s3 { color: rgb(128,128,128); }
+.s4 { color: rgb(104,151,187); }
+.s5 { color: rgb(106,135,89); }
+.s6 { color: rgb(98,151,85); font-weight: bold; font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+TrainingRowModification.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">/*************************************************************** 
+ * Programm  : Android Cycling Trainer 
+ * Society   : ETML 
+ * Author    : Thomas Léchaire 
+ * Date      : 26.05.2015 
+ * Goal      : Class used to make modification on a row 
+ ******************************************************************** // 
+ * Modifications: 
+ * Date       : XX.XX.XXXX 
+ * Author     : 
+ * Purpose     : 
+ *********************************************************************/</span><span class="s1"> 
+</span><span class="s2">package </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer</span><span class="s2">;</span><span class="s1"> 
+ 
+</span><span class="s2">import </span><span class="s1">android.app.AlertDialog</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.content.Context</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.content.DialogInterface</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.content.Intent</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.os.Bundle</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.support.v7.app.ActionBar</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.support.v7.app.ActionBarActivity</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.util.Log</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.view.LayoutInflater</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.view.Menu</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.view.MenuItem</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.view.View</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.view.inputmethod.EditorInfo</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.ArrayAdapter</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.Button</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.EditText</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.NumberPicker</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.SeekBar</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.Spinner</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.TextView</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.Toast</span><span class="s2">;</span><span class="s1"> 
+ 
+</span><span class="s2">import </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer.DB.HeartRate</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer.DB.TrainingRow</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer.library.VerticalSeekBar</span><span class="s2">;</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">public class </span><span class="s1">TrainingRowModification </span><span class="s2">extends </span><span class="s1">ActionBarActivity { 
+ 
+    </span><span class="s3">//UI Elements</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">TextView txtView_gear</span><span class="s2">, </span><span class="s1">txtView_rpm</span><span class="s2">, </span><span class="s1">txtView_bpm</span><span class="s2">, </span><span class="s1">txtView_restTime</span><span class="s2">, </span><span class="s1">txtView_repetitions </span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">Button btn_rep_plus</span><span class="s2">,</span><span class="s1">btn_rep_minus</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">VerticalSeekBar verticlalBar_rpm</span><span class="s2">, </span><span class="s1">verticalBar_bpm</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">Spinner spinner_work</span><span class="s2">,</span><span class="s1">spinner_rythm</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">NumberPicker nbrPicker_front</span><span class="s2">, </span><span class="s1">nbrPicker_back</span><span class="s2">, </span><span class="s1">nbrPicker_recup_min</span><span class="s2">, </span><span class="s1">nbrPicker_recup_sec</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">AlertDialog alertDialog</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">NumberPicker nbrPicker_min</span><span class="s2">,</span><span class="s1">nbrPicker_sec</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">EditText edtTxt_notes</span><span class="s2">;</span><span class="s1"> 
+ 
+    </span><span class="s3">//VARIABLES</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_id</span><span class="s2">, </span><span class="s1">int_min_work</span><span class="s2">, </span><span class="s1">int_sec_work</span><span class="s2">, </span><span class="s1">int_min_rest</span><span class="s2">, </span><span class="s1">int_sec_rest</span><span class="s2">, </span><span class="s1">int_bpm</span><span class="s2">, </span><span class="s1">int_rpm</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_rowId</span><span class="s2">, </span><span class="s1">int_training_id</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_count = </span><span class="s4">1</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">String str_work = </span><span class="s5">&quot;&quot;</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">String str_rythm = </span><span class="s5">&quot;&quot;</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">String str_note = </span><span class="s5">&quot;&quot;</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">String str_gear = </span><span class="s5">&quot;&quot;</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">String str_error</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//int value for both progression of the vertical bar</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_progress_bpm</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_progress_rpm</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//int for max and min value of bpm progressBar</span><span class="s1"> 
+    </span><span class="s2">int </span><span class="s1">max_bpm </span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">int </span><span class="s1">min_bpm </span><span class="s2">;</span><span class="s1"> 
+ 
+    </span><span class="s3">//CONSTANT</span><span class="s1"> 
+    </span><span class="s2">private static int </span><span class="s1">INT_MIN_RPM_VALUE = </span><span class="s4">40</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private static int </span><span class="s1">INT_MAX_RPM_VALUE = </span><span class="s4">260</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private static final int </span><span class="s1">INT_MIN_FRONT_GEAR = </span><span class="s4">36</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private static final int </span><span class="s1">INT_MAX_FRONT_GEAR = </span><span class="s4">56</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private static final int </span><span class="s1">INT_MIN_BACK_GEAR = </span><span class="s4">11</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private static final int </span><span class="s1">INT_MAX_BACK_GEAR = </span><span class="s4">27</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private static final int </span><span class="s1">INT_MAX_TIME = </span><span class="s4">59</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private static final int </span><span class="s1">INT_MIN_TIME = </span><span class="s4">5</span><span class="s2">;</span><span class="s1"> 
+ 
+    </span><span class="s3">//OBJECT</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">RealmDB realmdb</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">TrainingRow tRow = </span><span class="s2">null;</span><span class="s1"> 
+ 
+    @Override 
+    </span><span class="s2">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s2">super</span><span class="s1">.onCreate(savedInstanceState)</span><span class="s2">;</span><span class="s1"> 
+        setContentView(R.layout.activity_training_row_details)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">/* MANAGE ACTION BAR TITLE*/</span><span class="s1"> 
+        ActionBar ab = getSupportActionBar()</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s3">//set title and subtitle</span><span class="s1"> 
+        ab.setTitle(getString(R.string.app_name))</span><span class="s2">;</span><span class="s1"> 
+        ab.setSubtitle(getString(R.string.modification))</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//create realm Db object</span><span class="s1"> 
+        realmdb = </span><span class="s2">new </span><span class="s1">RealmDB(</span><span class="s2">this</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//get both training and row id. used for modificaiton</span><span class="s1"> 
+        int_rowId = getIntent().getIntExtra(</span><span class="s5">&quot;row_id&quot;</span><span class="s2">,</span><span class="s4">0</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+        int_training_id = getIntent().getIntExtra(</span><span class="s5">&quot;training_id&quot;</span><span class="s2">,</span><span class="s4">0</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+        Log.w(</span><span class="s5">&quot;Row ID&quot;</span><span class="s2">, </span><span class="s5">&quot;&quot;</span><span class="s1">+int_rowId)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//UI Elements Initialisation</span><span class="s1"> 
+        txtView_bpm = (TextView) findViewById(R.id.txtView_bpm)</span><span class="s2">;</span><span class="s1"> 
+        txtView_rpm = (TextView) findViewById(R.id.txtView_rpm)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s3">//rest time UI element</span><span class="s1"> 
+        txtView_restTime = (TextView) findViewById(R.id.txtView_recup)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//initialisation of the two number pickers for the time</span><span class="s1"> 
+        nbrPicker_min = ( NumberPicker) findViewById(R.id.nbrPricker_min)</span><span class="s2">;</span><span class="s1"> 
+        nbrPicker_sec = (NumberPicker) findViewById(R.id.nbrPicker_sec)</span><span class="s2">;</span><span class="s1"> 
+        nbrPicker_min.setMaxValue(INT_MAX_TIME)</span><span class="s2">;</span><span class="s1"> 
+        nbrPicker_sec.setMaxValue(INT_MAX_TIME)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">/* Initialisation of the Elements for the repetitions */</span><span class="s1"> 
+        btn_rep_minus = (Button) findViewById(R.id.btn_minus)</span><span class="s2">;</span><span class="s1"> 
+        btn_rep_plus = (Button) findViewById(R.id.btn_plus)</span><span class="s2">;</span><span class="s1"> 
+        txtView_repetitions = (TextView) findViewById(R.id.txtView_repetitions)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">/* Initialisation of the 2 VerticalSeekBar*/</span><span class="s1"> 
+        verticlalBar_rpm = (VerticalSeekBar) findViewById(R.id.verticalBar_rpm)</span><span class="s2">;</span><span class="s1"> 
+        verticalBar_bpm = (VerticalSeekBar) findViewById(R.id.verticalBar_bpm)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">/* Initialisation of the 2 spinners */</span><span class="s1"> 
+        spinner_work = (Spinner) findViewById(R.id.spinner_travail)</span><span class="s2">;</span><span class="s1"> 
+        spinner_rythm = (Spinner) findViewById(R.id.spinner_rythme)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">// put the two list into the spinners</span><span class="s1"> 
+        ArrayAdapter&lt;CharSequence&gt; adapter_work = ArrayAdapter.createFromResource(</span><span class="s2">this,</span><span class="s1">R.array.work</span><span class="s2">, </span><span class="s1">R.layout.textview_spinner)</span><span class="s2">;</span><span class="s1"> 
+        ArrayAdapter&lt;CharSequence&gt; adapter_rythm = ArrayAdapter.createFromResource(</span><span class="s2">this,</span><span class="s1">R.array.rythm</span><span class="s2">,</span><span class="s1">R.layout.textview_spinner)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s3">// link list to spinners</span><span class="s1"> 
+        spinner_work.setAdapter(adapter_work)</span><span class="s2">;</span><span class="s1"> 
+        spinner_rythm.setAdapter(adapter_rythm)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//chose the gear for bike</span><span class="s1"> 
+        txtView_gear = (TextView) findViewById(R.id.txtView_plate)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//editText for the notes</span><span class="s1"> 
+        edtTxt_notes = (EditText) findViewById(R.id.edttext_note)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//add done button</span><span class="s1"> 
+        edtTxt_notes.setImeOptions(EditorInfo.IME_ACTION_DONE)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s0">/********************************************************************** 
+         * 
+         *  txtView_gear onClickListener 
+         *  Goal: let the user set the gear of the bike for the current row. 
+         * 
+         *********************************************************************/</span><span class="s1"> 
+        txtView_gear.setOnClickListener(</span><span class="s2">new </span><span class="s1">View.OnClickListener() { 
+            @Override 
+            </span><span class="s2">public void </span><span class="s1">onClick(View v) { 
+                </span><span class="s3">//Creation of an inflater for the layout</span><span class="s1"> 
+                LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)</span><span class="s2">;</span><span class="s1"> 
+                </span><span class="s3">//Create a view that inflate the layout gear_dialog</span><span class="s1"> 
+                View v1 = mInflater.inflate(R.layout.gear_dialog</span><span class="s2">, null</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+ 
+                </span><span class="s3">//Build an Alert Dialod</span><span class="s1"> 
+                AlertDialog.Builder alrt_builder = </span><span class="s2">new </span><span class="s1">AlertDialog.Builder(TrainingRowModification.</span><span class="s2">this</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+                </span><span class="s3">//set the view of the Dialog</span><span class="s1"> 
+                alrt_builder.setView(v1)</span><span class="s2">;</span><span class="s1"> 
+                alrt_builder.setTitle(getResources().getString(R.string.choice_braquets))</span><span class="s2">; </span><span class="s3">//title</span><span class="s1"> 
+                alrt_builder.setPositiveButton(getString(R.string.validate)</span><span class="s2">, new </span><span class="s1">DialogInterface.OnClickListener() { 
+                    @Override 
+                    </span><span class="s2">public void </span><span class="s1">onClick(DialogInterface dialog</span><span class="s2">, int </span><span class="s1">which) { </span><span class="s3">//OK Button</span><span class="s1"> 
+                        </span><span class="s2">int </span><span class="s1">int_front_value</span><span class="s2">, </span><span class="s1">int_back_value</span><span class="s2">;</span><span class="s1"> 
+                        </span><span class="s3">//numberPickers</span><span class="s1"> 
+                        int_front_value = nbrPicker_front.getValue()</span><span class="s2">;</span><span class="s1"> 
+                        int_back_value = nbrPicker_back.getValue()</span><span class="s2">;</span><span class="s1"> 
+                        txtView_gear.setText(getString(R.string.gear_set)+int_front_value + </span><span class="s5">&quot;X&quot; </span><span class="s1">+ int_back_value)</span><span class="s2">;</span><span class="s1"> 
+                    } 
+ 
+                })</span><span class="s2">;</span><span class="s1"> 
+                alrt_builder.setNegativeButton(getString(R.string.cancel)</span><span class="s2">, new </span><span class="s1">DialogInterface.OnClickListener() { 
+                    @Override 
+                    </span><span class="s2">public void </span><span class="s1">onClick(DialogInterface dialog</span><span class="s2">, int </span><span class="s1">which) { </span><span class="s3">//Cancel Button</span><span class="s1"> 
+                        </span><span class="s3">//do nothing</span><span class="s1"> 
+                        dialog.dismiss()</span><span class="s2">;</span><span class="s1"> 
+                    } 
+                })</span><span class="s2">;</span><span class="s1"> 
+ 
+                </span><span class="s3">//create the alert dialog</span><span class="s1"> 
+                alertDialog = alrt_builder.create()</span><span class="s2">;</span><span class="s1"> 
+ 
+                </span><span class="s3">//initialisation of the two number pickers for the gears</span><span class="s1"> 
+                nbrPicker_front = (NumberPicker) v1.findViewById(R.id.nbPicker_front)</span><span class="s2">;</span><span class="s1"> 
+                nbrPicker_back = (NumberPicker) v1.findViewById(R.id.nbPicker_back)</span><span class="s2">;</span><span class="s1"> 
+                </span><span class="s3">//set values of the pickers</span><span class="s1"> 
+                nbrPicker_back.setMaxValue(INT_MAX_BACK_GEAR)</span><span class="s2">;</span><span class="s1"> 
+                nbrPicker_back.setMinValue(INT_MIN_BACK_GEAR)</span><span class="s2">;</span><span class="s1"> 
+                nbrPicker_front.setMaxValue(INT_MAX_FRONT_GEAR)</span><span class="s2">;</span><span class="s1"> 
+                nbrPicker_front.setMinValue(INT_MIN_FRONT_GEAR)</span><span class="s2">;</span><span class="s1"> 
+ 
+                </span><span class="s3">//now show the alert dialog to user</span><span class="s1"> 
+                alertDialog.show()</span><span class="s2">;</span><span class="s1"> 
+            } 
+        })</span><span class="s2">;</span><span class="s1"> 
+ 
+ 
+        </span><span class="s0">/********************************************************************** 
+         * 
+         *  btn_rep_plus onClickListener 
+         *  Goal: let the user increase the nomber of time he wants to repeat the row 
+         * 
+         *********************************************************************/</span><span class="s1"> 
+        btn_rep_plus.setOnClickListener(</span><span class="s2">new </span><span class="s1">View.OnClickListener() { 
+            @Override 
+            </span><span class="s2">public void </span><span class="s1">onClick(View v) { 
+                </span><span class="s3">//get max 10 rep.</span><span class="s1"> 
+                </span><span class="s2">if</span><span class="s1">(int_count &gt; </span><span class="s4">0</span><span class="s1">){ 
+                    </span><span class="s3">//add one to count</span><span class="s1"> 
+                    int_count++</span><span class="s2">;</span><span class="s1"> 
+                } 
+ 
+                </span><span class="s3">//set text of button</span><span class="s1"> 
+                txtView_repetitions.setText(int_count+</span><span class="s5">&quot;X&quot;</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+            } 
+        })</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s0">/********************************************************************** 
+         * 
+         *  btn_rep_plus onClickListener 
+         *  Goal: let the user decrease the nomber of time he wants to repeat the row 
+         * 
+         *********************************************************************/</span><span class="s1"> 
+        btn_rep_minus.setOnClickListener(</span><span class="s2">new </span><span class="s1">View.OnClickListener() { 
+            @Override 
+            </span><span class="s2">public void </span><span class="s1">onClick(View v) { 
+                </span><span class="s3">//get max 10 rep.</span><span class="s1"> 
+                </span><span class="s2">if</span><span class="s1">(int_count &lt;= </span><span class="s4">0</span><span class="s1">){ 
+                    int_count = </span><span class="s4">0</span><span class="s2">;</span><span class="s1"> 
+                }</span><span class="s2">else</span><span class="s1">{ 
+                    </span><span class="s3">//add one to count</span><span class="s1"> 
+                    int_count--</span><span class="s2">;</span><span class="s1"> 
+                } 
+                </span><span class="s3">//set text of button</span><span class="s1"> 
+                txtView_repetitions.setText(int_count+</span><span class="s5">&quot;X&quot;</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+            } 
+        })</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//get HeartRate to set max and min value of bpm progressBar</span><span class="s1"> 
+        HeartRate hr = realmdb.getHeartRate()</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s3">//get</span><span class="s1"> 
+        </span><span class="s2">if</span><span class="s1">(hr != </span><span class="s2">null</span><span class="s1">) { 
+            max_bpm = hr.getInt_fc_max()</span><span class="s2">;</span><span class="s1"> 
+            min_bpm = hr.getInt_fc_min()</span><span class="s2">;</span><span class="s1"> 
+        } 
+ 
+        </span><span class="s3">//max bpm value</span><span class="s1"> 
+        verticalBar_bpm.setMax(max_bpm-min_bpm)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s0">/****************************************************** 
+         * Method for the seek bar change listener for bpm bar 
+         ******************************************************/</span><span class="s1"> 
+        verticalBar_bpm.setOnSeekBarChangeListener(</span><span class="s2">new </span><span class="s1">SeekBar.OnSeekBarChangeListener() { 
+            @Override 
+            </span><span class="s2">public void </span><span class="s1">onProgressChanged(SeekBar seekBar</span><span class="s2">, int </span><span class="s1">progress</span><span class="s2">, boolean </span><span class="s1">fromUser) { 
+                </span><span class="s3">//maximum = 200 and min = 30;</span><span class="s1"> 
+                int_progress_bpm = progress + min_bpm</span><span class="s2">;</span><span class="s1"> 
+                </span><span class="s3">//set progression to textView</span><span class="s1"> 
+                txtView_bpm.setText(int_progress_bpm+</span><span class="s5">&quot;&quot;</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+            } 
+ 
+            @Override 
+            </span><span class="s2">public void </span><span class="s1">onStartTrackingTouch(SeekBar seekBar) { 
+            } 
+ 
+            @Override 
+            </span><span class="s2">public void </span><span class="s1">onStopTrackingTouch(SeekBar seekBar) { 
+            } 
+        })</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//max rpm value</span><span class="s1"> 
+        verticlalBar_rpm.setMax(INT_MAX_RPM_VALUE)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s0">/****************************************************** 
+         * Method for the seek bar change listener for rpm bar 
+         ******************************************************/</span><span class="s1"> 
+        verticlalBar_rpm.setOnSeekBarChangeListener(</span><span class="s2">new </span><span class="s1">SeekBar.OnSeekBarChangeListener() { 
+            @Override 
+            </span><span class="s2">public void </span><span class="s1">onProgressChanged(SeekBar seekBar</span><span class="s2">, int </span><span class="s1">progress</span><span class="s2">, boolean </span><span class="s1">fromUser) { 
+                </span><span class="s3">//maximum = 260 and min = 40;</span><span class="s1"> 
+                int_progress_rpm = progress + INT_MIN_RPM_VALUE</span><span class="s2">;</span><span class="s1"> 
+                </span><span class="s3">//set progression to textView</span><span class="s1"> 
+                txtView_rpm.setText(int_progress_rpm + </span><span class="s5">&quot;&quot;</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+            } 
+ 
+            @Override 
+            </span><span class="s2">public void </span><span class="s1">onStartTrackingTouch(SeekBar seekBar) { 
+            } 
+ 
+            @Override 
+            </span><span class="s2">public void </span><span class="s1">onStopTrackingTouch(SeekBar seekBar) { 
+            } 
+        })</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//get the current row.</span><span class="s1"> 
+        tRow = realmdb.getArowWithID(int_rowId)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//set Value to all UI element -&gt; for modification of the row</span><span class="s1"> 
+        </span><span class="s2">if</span><span class="s1">(tRow != </span><span class="s2">null</span><span class="s1">){ 
+ 
+            </span><span class="s3">//Create a triningRow</span><span class="s1"> 
+            </span><span class="s2">int </span><span class="s1">bpm = tRow.getInt_bpm()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s2">int </span><span class="s1">rpm = tRow.getInt_rpm()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s2">int </span><span class="s1">min = tRow.getInt_min()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s2">int </span><span class="s1">sec = tRow.getInt_sec()</span><span class="s2">;</span><span class="s1"> 
+            String gear = tRow.getStr_gear()</span><span class="s2">;</span><span class="s1"> 
+            String note = tRow.getStr_note()</span><span class="s2">;</span><span class="s1"> 
+            String work = tRow.getStr_work()</span><span class="s2">;</span><span class="s1"> 
+            String rythm = tRow.getStr_rythm()</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">//disable the repetition buttons because it's only a modification of one Row</span><span class="s1"> 
+            btn_rep_minus.setEnabled(</span><span class="s2">false</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+            btn_rep_plus.setEnabled(</span><span class="s2">false</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">//assign all value to TextView</span><span class="s1"> 
+            </span><span class="s3">//Rpm and BPM</span><span class="s1"> 
+            verticalBar_bpm.setProgress(bpm-min_bpm)</span><span class="s2">;</span><span class="s1"> 
+            verticlalBar_rpm.setProgress(rpm)</span><span class="s2">;</span><span class="s1"> 
+ 
+            txtView_bpm.setText(</span><span class="s5">&quot;&quot;</span><span class="s1">+bpm)</span><span class="s2">;</span><span class="s1"> 
+            txtView_rpm.setText(</span><span class="s5">&quot;&quot;</span><span class="s1">+rpm)</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">//Time</span><span class="s1"> 
+            nbrPicker_min.setValue(min)</span><span class="s2">;</span><span class="s1"> 
+            nbrPicker_sec.setValue(sec)</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">//Rest</span><span class="s1"> 
+            txtView_restTime.setText(</span><span class="s5">&quot;-&quot;</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">//set notes</span><span class="s1"> 
+            edtTxt_notes.setText(note)</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">//gear</span><span class="s1"> 
+            </span><span class="s2">if</span><span class="s1">(gear.length() &gt; </span><span class="s4">0</span><span class="s1">) { 
+                txtView_gear.setText(gear)</span><span class="s2">;</span><span class="s1"> 
+            }</span><span class="s2">else</span><span class="s1">{ 
+                txtView_gear.setText(getResources().getString(R.string.gear))</span><span class="s2">;</span><span class="s1"> 
+            } 
+ 
+            </span><span class="s3">//check if the row is a rest row. if it is disable spinners</span><span class="s1"> 
+            </span><span class="s2">if </span><span class="s1">(work.toString() == getResources().getString(R.string.recup)){ 
+                </span><span class="s3">//disable spinners not working</span><span class="s1"> 
+                spinner_rythm.setEnabled(</span><span class="s2">false</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+                spinner_work.setEnabled(</span><span class="s2">false</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+                </span><span class="s3">//so we disabled the visibility</span><span class="s1"> 
+                spinner_rythm.setVisibility(View.INVISIBLE)</span><span class="s2">;</span><span class="s1"> 
+                spinner_work.setVisibility(View.INVISIBLE)</span><span class="s2">;</span><span class="s1"> 
+            }</span><span class="s2">else</span><span class="s1">{ 
+                </span><span class="s3">//work and rythm</span><span class="s1"> 
+                </span><span class="s2">int </span><span class="s1">pos_rythm = adapter_rythm.getPosition(rythm)</span><span class="s2">;</span><span class="s1"> 
+                </span><span class="s2">int </span><span class="s1">pos_work = adapter_work.getPosition(work)</span><span class="s2">;</span><span class="s1"> 
+                spinner_rythm.setSelection(pos_rythm)</span><span class="s2">;</span><span class="s1"> 
+                spinner_work.setSelection(pos_work)</span><span class="s2">;</span><span class="s1"> 
+            } 
+        } 
+    }</span><span class="s3">//onCreate</span><span class="s1"> 
+ 
+    </span><span class="s0">/***************************************************************************** 
+     * 
+     * Name: validateRow() 
+     * Goal: method to validate the row, check the details, and add it to realm 
+     * 
+     ****************************************************************************/</span><span class="s1"> 
+    </span><span class="s2">private void </span><span class="s1">validateRow() { 
+        </span><span class="s3">//checkValue return true if there is an error</span><span class="s1"> 
+        </span><span class="s2">if</span><span class="s1">(!checkValue()){ 
+            RealmDB realmDB = </span><span class="s2">new </span><span class="s1">RealmDB(TrainingRowModification.</span><span class="s2">this</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s2">try</span><span class="s1">{ 
+                </span><span class="s3">//add a row to the training we have selected</span><span class="s1"> 
+                Log.w(</span><span class="s5">&quot;Check value&quot;</span><span class="s2">, </span><span class="s5">&quot;&quot;</span><span class="s1">+int_min_work +</span><span class="s5">&quot;-&quot;</span><span class="s1">+int_sec_work+</span><span class="s5">&quot;-&quot;</span><span class="s1">+int_rpm+</span><span class="s5">&quot;-&quot;</span><span class="s1">+int_bpm)</span><span class="s2">;</span><span class="s1"> 
+ 
+                realmDB.updateTrainingRow(int_rowId</span><span class="s2">,</span><span class="s1"> 
+                        int_min_work</span><span class="s2">,</span><span class="s1"> 
+                        int_sec_work</span><span class="s2">,</span><span class="s1"> 
+                        int_rpm</span><span class="s2">,</span><span class="s1"> 
+                        int_bpm</span><span class="s2">,</span><span class="s1"> 
+                        str_gear</span><span class="s2">,</span><span class="s1"> 
+                        str_work</span><span class="s2">,</span><span class="s1"> 
+                        str_rythm</span><span class="s2">,</span><span class="s1"> 
+                        str_note)</span><span class="s2">;</span><span class="s1"> 
+            }</span><span class="s2">catch </span><span class="s1">(Exception e){ 
+                Toast.makeText(TrainingRowModification.</span><span class="s2">this, </span><span class="s1">getResources().getString(R.string.modif_error)</span><span class="s2">, </span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+                Log.w(</span><span class="s5">&quot;ERROR_ADD&quot;</span><span class="s2">,</span><span class="s1">e.getMessage().toString())</span><span class="s2">;</span><span class="s1"> 
+            } 
+            </span><span class="s3">//close Realm</span><span class="s1"> 
+            realmDB.close()</span><span class="s2">;</span><span class="s1"> 
+ 
+            Intent backtoRows = </span><span class="s2">new </span><span class="s1">Intent(TrainingRowModification.</span><span class="s2">this, </span><span class="s1">TrainingRowActivity.</span><span class="s2">class</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s3">//return to the same Training</span><span class="s1"> 
+            backtoRows.putExtra(</span><span class="s5">&quot;_id&quot;</span><span class="s2">,</span><span class="s1">int_id)</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s3">//reorder the activity to front</span><span class="s1"> 
+            backtoRows.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s3">//startActivity</span><span class="s1"> 
+            startActivity(backtoRows)</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s3">//fininsh the activity and get back to trainingRow listView</span><span class="s1"> 
+            finish()</span><span class="s2">;</span><span class="s1"> 
+ 
+        }</span><span class="s2">else</span><span class="s1">{ </span><span class="s3">//if there is an error</span><span class="s1"> 
+            Toast.makeText(TrainingRowModification.</span><span class="s2">this,</span><span class="s1">str_error</span><span class="s2">,</span><span class="s1">Toast.LENGTH_LONG).show()</span><span class="s2">;</span><span class="s1"> 
+        } 
+    }</span><span class="s3">//validateRow</span><span class="s1"> 
+ 
+ 
+    </span><span class="s0">/*********************************************************************** 
+     * 
+     * Name: chackValue() 
+     * </span><span class="s6">@return </span><span class="s0">bln_error 
+     * Goal: check if all the value are set /time, bpm, rpm, work and rythm 
+     * 
+     ************************************************************************/</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">Boolean checkValue() { 
+        </span><span class="s2">boolean </span><span class="s1">bln_error = </span><span class="s2">false;</span><span class="s1"> 
+        </span><span class="s3">//error string back to empty</span><span class="s1"> 
+        str_error = </span><span class="s5">&quot;&quot;</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s3">//check if time is bigger than 5 sec (INT_MIN_TIME);</span><span class="s1"> 
+        </span><span class="s2">int </span><span class="s1">int_duration = (nbrPicker_min.getValue() * </span><span class="s4">60</span><span class="s1">) + nbrPicker_sec.getValue()</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s2">if</span><span class="s1">((int_duration &lt; INT_MIN_TIME)){ 
+            </span><span class="s3">//print message that duration is to short</span><span class="s1"> 
+            str_error += getString(R.string.error_duration)</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s3">//check if duration is empty</span><span class="s1"> 
+            </span><span class="s2">if</span><span class="s1">(int_duration == </span><span class="s4">0</span><span class="s1">){ 
+                </span><span class="s3">//if duration is empty erase previous message</span><span class="s1"> 
+                str_error = </span><span class="s5">&quot;&quot;</span><span class="s2">;</span><span class="s1"> 
+                </span><span class="s3">//and set new message for duration empty</span><span class="s1"> 
+                str_error += getString(R.string.error_time)</span><span class="s2">;</span><span class="s1"> 
+            } 
+            </span><span class="s3">//set error to true</span><span class="s1"> 
+            bln_error = </span><span class="s2">true;</span><span class="s1"> 
+        } 
+        </span><span class="s2">else</span><span class="s1">{ 
+            </span><span class="s3">//if value is bigger than 5 secondes (INT_MIN_TIME) we can set the time</span><span class="s1"> 
+            int_min_work = nbrPicker_min.getValue()</span><span class="s2">;</span><span class="s1"> 
+            int_sec_work = nbrPicker_sec.getValue()</span><span class="s2">;</span><span class="s1"> 
+        } 
+        </span><span class="s3">//check if bpm is set</span><span class="s1"> 
+        </span><span class="s2">if</span><span class="s1">(txtView_bpm.getText().length() &gt; </span><span class="s4">3 </span><span class="s1">|| txtView_bpm.getText().length() &lt; </span><span class="s4">2</span><span class="s1">){ 
+            str_error = str_error + </span><span class="s5">&quot;</span><span class="s2">\n</span><span class="s5">&quot;</span><span class="s1">+getResources().getString(R.string.error_bpm)</span><span class="s2">;</span><span class="s1"> 
+            bln_error = </span><span class="s2">true;</span><span class="s1"> 
+        }</span><span class="s2">else</span><span class="s1">{ 
+            </span><span class="s3">//set int_bpm to the value of the progressBar</span><span class="s1"> 
+            int_bpm = int_progress_bpm</span><span class="s2">;</span><span class="s1"> 
+        } 
+        </span><span class="s3">//check if rpm is set</span><span class="s1"> 
+        </span><span class="s2">if</span><span class="s1">(txtView_rpm.getText().length() &gt; </span><span class="s4">3 </span><span class="s1">|| txtView_rpm.getText().length() &lt; </span><span class="s4">2</span><span class="s1">){ 
+            str_error += </span><span class="s5">&quot;</span><span class="s2">\n</span><span class="s5">&quot;</span><span class="s1">+getResources().getString(R.string.error_rpm)</span><span class="s2">;</span><span class="s1"> 
+            bln_error = </span><span class="s2">true;</span><span class="s1"> 
+        }</span><span class="s2">else</span><span class="s1">{ 
+            </span><span class="s3">//set int_rpm to the value of the progressBar</span><span class="s1"> 
+            int_rpm = int_progress_rpm</span><span class="s2">;</span><span class="s1"> 
+        } 
+        </span><span class="s3">//check if spinner work is selected</span><span class="s1"> 
+        </span><span class="s2">if </span><span class="s1">(spinner_work.getSelectedItem().toString() == </span><span class="s5">&quot;&quot; </span><span class="s1">|| spinner_work.getSelectedItem().toString().equals(</span><span class="s2">null</span><span class="s1">)){ 
+            str_error += </span><span class="s5">&quot;</span><span class="s2">\n</span><span class="s5">&quot;</span><span class="s1">+getResources().getString(R.string.error_work)</span><span class="s2">;</span><span class="s1"> 
+        }</span><span class="s2">else</span><span class="s1">{ 
+            </span><span class="s3">//if value is not empty set str_work to the value of th spinner</span><span class="s1"> 
+            str_work = spinner_work.getSelectedItem().toString()</span><span class="s2">;</span><span class="s1"> 
+        } 
+        </span><span class="s3">//check if spinner rythm is selected</span><span class="s1"> 
+        </span><span class="s2">if </span><span class="s1">(spinner_rythm.getSelectedItem().toString() == </span><span class="s5">&quot;&quot; </span><span class="s1">|| spinner_rythm.getSelectedItem().toString().equals(</span><span class="s2">null</span><span class="s1">)){ 
+            str_error += </span><span class="s5">&quot;</span><span class="s2">\n</span><span class="s5">&quot;</span><span class="s1">+getResources().getString(R.string.error_rythm)</span><span class="s2">;</span><span class="s1"> 
+            bln_error = </span><span class="s2">true;</span><span class="s1"> 
+        }</span><span class="s2">else</span><span class="s1">{ 
+            </span><span class="s3">//if value is not empty set str_rythm to the value of th spinner</span><span class="s1"> 
+            str_rythm = spinner_rythm.getSelectedItem().toString()</span><span class="s2">;</span><span class="s1"> 
+        } 
+        </span><span class="s3">//check for the gear if it is selected or not</span><span class="s1"> 
+        </span><span class="s2">if </span><span class="s1">(txtView_gear.getText().toString() != getResources().getString(R.string.gear)){ 
+            str_gear = txtView_gear.getText().toString()</span><span class="s2">;</span><span class="s1"> 
+        } 
+        </span><span class="s3">//check for notes</span><span class="s1"> 
+        </span><span class="s2">if</span><span class="s1">(edtTxt_notes.getText().length() &gt; </span><span class="s4">0</span><span class="s1">){ 
+            str_note = edtTxt_notes.getText().toString()</span><span class="s2">;</span><span class="s1"> 
+        } 
+ 
+        </span><span class="s2">return </span><span class="s1">bln_error</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+ 
+    </span><span class="s0">/************************************************************************* 
+     * onCreateOptionsMenu Method 
+     * </span><span class="s6">@param </span><span class="s0">menu 
+     * Goal: get the layout for the actionBar menu 
+     ***********************************************************************/</span><span class="s1"> 
+    @Override 
+    </span><span class="s2">public boolean </span><span class="s1">onCreateOptionsMenu(Menu menu) { 
+        </span><span class="s3">// Inflate the menu; this adds items to the action bar if it is present.</span><span class="s1"> 
+        getMenuInflater().inflate(R.menu.menu_validate_row</span><span class="s2">, </span><span class="s1">menu)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s2">return true;</span><span class="s1"> 
+    } 
+ 
+ 
+    </span><span class="s0">/******************************************************************** 
+     * Name: onOptionsItemSelected 
+     * </span><span class="s6">@param </span><span class="s0">item 
+     * Goal: Method to tell what to do on menu item click 
+     ***********************************************************************/</span><span class="s1"> 
+    @Override 
+    </span><span class="s2">public boolean </span><span class="s1">onOptionsItemSelected(MenuItem item) { 
+        </span><span class="s3">// Handle action bar item clicks here. The action bar will</span><span class="s1"> 
+        </span><span class="s3">// automatically handle clicks on the Home/Up button, so long</span><span class="s1"> 
+        </span><span class="s3">// as you specify a parent activity in AndroidManifest.xml.</span><span class="s1"> 
+        </span><span class="s2">int </span><span class="s1">id = item.getItemId()</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//noinspection SimplifiableIfStatement</span><span class="s1"> 
+        </span><span class="s2">if </span><span class="s1">(id == R.id.action_validate) { 
+            </span><span class="s3">//validate row with the number of repetitions</span><span class="s1"> 
+            validateRow()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s2">return true;</span><span class="s1"> 
+        } 
+ 
+        </span><span class="s2">return super</span><span class="s1">.onOptionsItemSelected(item)</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">/******************************************************************** 
+     * Name: onStop Method 
+     * Goal: Method called when the phone stop the Avtivity 
+     ***********************************************************************/</span><span class="s1"> 
+    @Override 
+    </span><span class="s2">protected void </span><span class="s1">onStop() { 
+        </span><span class="s2">super</span><span class="s1">.onStop()</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s3">//close Realm Instance</span><span class="s1"> 
+        realmdb.close()</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">/******************************************************************** 
+     * Name: onDestroy Method 
+     * Goal: Method called when the phone kill the Avtivity 
+     ***********************************************************************/</span><span class="s1"> 
+    @Override 
+    </span><span class="s2">protected void </span><span class="s1">onDestroy() { 
+        </span><span class="s2">super</span><span class="s1">.onDestroy()</span><span class="s2">;</span><span class="s1"> 
+        freeMemory()</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">/******************************************************************** 
+     * Name: freeMemory 
+     * Goal: Run the garbage collector to get back some allocated memory 
+     ***********************************************************************/</span><span class="s1"> 
+    </span><span class="s2">public void </span><span class="s1">freeMemory(){ 
+        System.runFinalization()</span><span class="s2">;</span><span class="s1"> 
+        Runtime.getRuntime().gc()</span><span class="s2">;</span><span class="s1"> 
+        System.gc()</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">/******************************************************************** 
+     * Name: onBackPressed 
+     * Goal: Method called when the user press on the back Button of the phone 
+     ***********************************************************************/</span><span class="s1"> 
+    @Override 
+    </span><span class="s2">public void </span><span class="s1">onBackPressed() { 
+        </span><span class="s2">super</span><span class="s1">.onBackPressed()</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//get Back to TrainingRow Activity</span><span class="s1"> 
+        Intent back_to_trainingRow = </span><span class="s2">new </span><span class="s1">Intent(TrainingRowModification.</span><span class="s2">this, </span><span class="s1">TrainingRowActivity.</span><span class="s2">class</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s3">//put id of training as extra, needed to charge the training Row</span><span class="s1"> 
+        back_to_trainingRow.putExtra(</span><span class="s5">&quot;_id&quot;</span><span class="s2">,</span><span class="s1">int_training_id)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s3">//add a flag to clear all previous activity</span><span class="s1"> 
+        back_to_trainingRow.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s3">//start new activity</span><span class="s1"> 
+        startActivity(back_to_trainingRow)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s3">//stop</span><span class="s1"> 
+        finish()</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+ 
+} 
+</span></pre>
+</body>
+</html>

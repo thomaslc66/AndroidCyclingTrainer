@@ -1,0 +1,488 @@
+<html>
+<head>
+<title>TrainingActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(98,151,85); font-style: italic; }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(204,120,50); }
+.s3 { color: rgb(128,128,128); }
+.s4 { color: rgb(104,151,187); }
+.s5 { color: rgb(106,135,89); }
+.s6 { color: rgb(98,151,85); font-weight: bold; font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+TrainingActivity.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">/*************************************************************** 
+ * Programm  : Android Cycling Trainer 
+ * Society   : ETML 
+ * Author    : Thomas Léchaire 
+ * Date      : 26.05.2015 
+ * Goal      : Class used to display training ListView 
+ ******************************************************************** // 
+ * Modifications: 
+ * Date       : XX.XX.XXXX 
+ * Author     : 
+ * Purpose     : 
+ *********************************************************************/</span><span class="s1"> 
+</span><span class="s2">package </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer</span><span class="s2">;</span><span class="s1"> 
+ 
+</span><span class="s2">import </span><span class="s1">android.app.AlertDialog</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.app.Dialog</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.content.Context</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.content.DialogInterface</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.content.res.Configuration</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.os.Bundle</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.support.v7.app.ActionBar</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.support.v7.app.ActionBarActivity</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.text.Editable</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.text.TextWatcher</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.view.LayoutInflater</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.view.Menu</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.view.MenuItem</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.view.View</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.view.inputmethod.InputMethodManager</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.Button</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.EditText</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.ListView</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.RadioButton</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.RadioGroup</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.TextView</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">android.widget.Toast</span><span class="s2">;</span><span class="s1"> 
+ 
+</span><span class="s2">import </span><span class="s1">java.text.NumberFormat</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">java.text.ParsePosition</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">java.util.ArrayList</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">java.util.List</span><span class="s2">;</span><span class="s1"> 
+ 
+</span><span class="s2">import </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer.Adapter.TrainingAdapter</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer.DB.HeartRate</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer.DB.Training</span><span class="s2">;</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">public class </span><span class="s1">TrainingActivity </span><span class="s2">extends </span><span class="s1">ActionBarActivity { 
+ 
+ 
+    </span><span class="s3">//UI Elements</span><span class="s1"> 
+    </span><span class="s3">//The list View</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">ListView listView_training</span><span class="s2">;</span><span class="s1"> 
+ 
+    </span><span class="s3">//the list of training</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">List&lt;Training&gt; training_list</span><span class="s2">;</span><span class="s1"> 
+ 
+    </span><span class="s3">//Buton to create Training</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">Button btn_createTraining</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">TrainingAdapter trainingAdapter</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">EditText edt_input</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">EditText edtTxt_fc_min</span><span class="s2">, </span><span class="s1">edtTxt_fc_max</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">RadioGroup radio_group</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">AlertDialog alertDialog</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">RadioButton rdbtn_vtt</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">TextView txtView_textWatcher</span><span class="s2">;</span><span class="s1"> 
+ 
+    </span><span class="s3">//VARIABLES</span><span class="s1"> 
+    </span><span class="s2">private boolean </span><span class="s1">isVtt = </span><span class="s2">false;</span><span class="s1"> 
+    </span><span class="s2">private </span><span class="s1">RealmDB realmDB</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private boolean </span><span class="s1">isHeartBeat</span><span class="s2">;</span><span class="s1"> 
+ 
+    </span><span class="s3">//CONSTANTS</span><span class="s1"> 
+    </span><span class="s2">private  static int </span><span class="s1">INT_MAX_LENGTH = </span><span class="s4">20</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private static int </span><span class="s1">INT_MAX_LENGTH_BPM_RPM = </span><span class="s4">3</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private static int </span><span class="s1">INT_ZERO = </span><span class="s4">0</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private static int </span><span class="s1">INT_MAX_BPM = </span><span class="s4">220</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s2">private static int </span><span class="s1">INT_MIN_BPM = </span><span class="s4">30</span><span class="s2">;</span><span class="s1"> 
+    @Override 
+    </span><span class="s2">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s2">super</span><span class="s1">.onCreate(savedInstanceState)</span><span class="s2">;</span><span class="s1"> 
+        setContentView(R.layout.activity_training_list)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">/* MANAGE ACTION BAR TITLE*/</span><span class="s1"> 
+        ActionBar ab = getSupportActionBar()</span><span class="s2">;</span><span class="s1"> 
+        ab.setTitle(getString(R.string.app_name))</span><span class="s2">;</span><span class="s1"> 
+        ab.setSubtitle(getString(R.string.training_subTitle))</span><span class="s2">;</span><span class="s1"> 
+ 
+        realmDB = </span><span class="s2">new </span><span class="s1">RealmDB(TrainingActivity.</span><span class="s2">this</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+        training_list = </span><span class="s2">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s2">try </span><span class="s1">{ 
+            training_list = realmDB.getListOfTraining()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s3">//get isHeartRate value from DB</span><span class="s1"> 
+            </span><span class="s2">if</span><span class="s1">(realmDB.getisHeartRate()){ </span><span class="s3">//if return true</span><span class="s1"> 
+                isHeartBeat = </span><span class="s2">true;</span><span class="s1"> 
+            }</span><span class="s2">else</span><span class="s1">{ 
+                isHeartBeat = </span><span class="s2">false;</span><span class="s1"> 
+            } 
+        }</span><span class="s2">catch </span><span class="s1">(Exception e ){ 
+            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
+        } 
+ 
+ 
+        </span><span class="s3">//UI Elements</span><span class="s1"> 
+        btn_createTraining = (Button) findViewById(R.id.btn_add_training)</span><span class="s2">;</span><span class="s1"> 
+        listView_training = (ListView) findViewById(R.id.listView_training)</span><span class="s2">;</span><span class="s1"> 
+        trainingAdapter = </span><span class="s2">new </span><span class="s1">TrainingAdapter(</span><span class="s2">this,</span><span class="s1">training_list)</span><span class="s2">;</span><span class="s1"> 
+        listView_training.setAdapter(trainingAdapter)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">/* onClickListener on btn_createTraining */</span><span class="s1"> 
+        btn_createTraining.setOnClickListener(</span><span class="s2">new </span><span class="s1">View.OnClickListener() { 
+            @Override 
+            </span><span class="s2">public void </span><span class="s1">onClick(View v) { 
+                </span><span class="s3">//need to check if HeartBeat are filled</span><span class="s1"> 
+                </span><span class="s2">if</span><span class="s1">(!isHeartBeat){ 
+                    Toast.makeText(TrainingActivity.</span><span class="s2">this,</span><span class="s1">getString(R.string.add_fc)</span><span class="s2">,</span><span class="s1">Toast.LENGTH_LONG).show()</span><span class="s2">;</span><span class="s1"> 
+                }</span><span class="s2">else</span><span class="s1">{ </span><span class="s3">//if isHeartBeat = true means that HeartRate are filled</span><span class="s1"> 
+                    LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)</span><span class="s2">;</span><span class="s1"> 
+                    View training_Dialog = mInflater.inflate(R.layout.training_dialog</span><span class="s2">, null</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+ 
+                    </span><span class="s3">//set is Vtt to false because by default Road is choosen</span><span class="s1"> 
+                    isVtt = </span><span class="s2">false;</span><span class="s1"> 
+ 
+                    </span><span class="s3">//set the element of the view</span><span class="s1"> 
+                    edt_input = (EditText) training_Dialog.findViewById(R.id.edt_input)</span><span class="s2">;</span><span class="s1"> 
+                    radio_group = (RadioGroup) training_Dialog.findViewById(R.id.radio_Group)</span><span class="s2">;</span><span class="s1"> 
+                    rdbtn_vtt = (RadioButton) training_Dialog.findViewById(R.id.rdbtn_vtt)</span><span class="s2">;</span><span class="s1"> 
+                    txtView_textWatcher = (TextView) training_Dialog.findViewById(R.id.txtView_textWatcher)</span><span class="s2">;</span><span class="s1"> 
+ 
+                    txtView_textWatcher.setText(String.valueOf(INT_MAX_LENGTH))</span><span class="s2">;</span><span class="s1"> 
+ 
+                    </span><span class="s3">//Create a TextWatcher for the editText input</span><span class="s1"> 
+                    TextWatcher mTextWatcher_forEdt_input = </span><span class="s2">new </span><span class="s1">TextWatcher() { 
+                        @Override 
+                        </span><span class="s2">public void </span><span class="s1">beforeTextChanged(CharSequence charSequence</span><span class="s2">, int </span><span class="s1">i</span><span class="s2">, int </span><span class="s1">i2</span><span class="s2">, int </span><span class="s1">i3) { 
+ 
+                        } 
+ 
+                        @Override 
+                        </span><span class="s2">public void </span><span class="s1">onTextChanged(CharSequence charSequence</span><span class="s2">, int </span><span class="s1">i</span><span class="s2">, int </span><span class="s1">i2</span><span class="s2">, int </span><span class="s1">i3) { 
+                            </span><span class="s2">int </span><span class="s1">int_nbr_letter = INT_MAX_LENGTH-charSequence.length()</span><span class="s2">;</span><span class="s1"> 
+                            </span><span class="s3">//value is ok</span><span class="s1"> 
+                            </span><span class="s2">if</span><span class="s1">(int_nbr_letter &gt;= INT_ZERO) { 
+                                txtView_textWatcher.setTextColor(getResources().getColor(R.color.numbers_text_color))</span><span class="s2">;</span><span class="s1"> 
+                                txtView_textWatcher.setText(getString(R.string.left_caracters)+</span><span class="s5">&quot; &quot;</span><span class="s1">+String.valueOf(int_nbr_letter))</span><span class="s2">;</span><span class="s1"> 
+                            } 
+                            </span><span class="s3">//text length is to big</span><span class="s1"> 
+                            </span><span class="s2">else if</span><span class="s1">(int_nbr_letter &lt; INT_ZERO){ 
+                                </span><span class="s3">//set color to red</span><span class="s1"> 
+                                txtView_textWatcher.setTextColor(getResources().getColor(R.color.red))</span><span class="s2">;</span><span class="s1"> 
+                                txtView_textWatcher.setText(getString(R.string.over_caracters)+</span><span class="s5">&quot; &quot;</span><span class="s1">+String.valueOf(Math.abs(int_nbr_letter)))</span><span class="s2">;</span><span class="s1"> 
+                            } 
+                        } 
+ 
+                        @Override 
+                        </span><span class="s2">public void </span><span class="s1">afterTextChanged(Editable editable) { 
+ 
+                        } 
+                    }</span><span class="s2">;</span><span class="s1"> 
+ 
+                    </span><span class="s3">/* set On Focus Change Listener to open keyBord when editText for the training Name has focus*/</span><span class="s1"> 
+                    edt_input.setOnFocusChangeListener(</span><span class="s2">new </span><span class="s1">View.OnFocusChangeListener() { 
+                        @Override 
+                        </span><span class="s2">public void </span><span class="s1">onFocusChange(View v</span><span class="s2">, boolean </span><span class="s1">hasFocus) { 
+                            edt_input.post(</span><span class="s2">new </span><span class="s1">Runnable() { 
+                                @Override 
+                                </span><span class="s2">public void </span><span class="s1">run() { 
+                                    </span><span class="s3">//Make KeyBoard Visible</span><span class="s1"> 
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)</span><span class="s2">;</span><span class="s1"> 
+                                    imm.showSoftInput(edt_input</span><span class="s2">, </span><span class="s1">InputMethodManager.SHOW_IMPLICIT)</span><span class="s2">;</span><span class="s1"> 
+                                } 
+                            })</span><span class="s2">;</span><span class="s1"> 
+                        } 
+                    })</span><span class="s2">;</span><span class="s1"> 
+ 
+                    </span><span class="s3">// set cursor into edit Text</span><span class="s1"> 
+                    edt_input.requestFocus()</span><span class="s2">;</span><span class="s1"> 
+ 
+                    </span><span class="s3">/* link text Watcher to editText */</span><span class="s1"> 
+                    edt_input.addTextChangedListener(mTextWatcher_forEdt_input)</span><span class="s2">;</span><span class="s1"> 
+ 
+                    </span><span class="s3">/* onCheckChange listener on the radio Group */</span><span class="s1"> 
+                    radio_group.setOnCheckedChangeListener(</span><span class="s2">new </span><span class="s1">RadioGroup.OnCheckedChangeListener() { 
+                        @Override 
+                        </span><span class="s2">public void </span><span class="s1">onCheckedChanged(RadioGroup group</span><span class="s2">, int </span><span class="s1">checkedId) { 
+ 
+                            </span><span class="s2">if </span><span class="s1">(rdbtn_vtt.isChecked()) { 
+                                isVtt = </span><span class="s2">true;</span><span class="s1"> 
+                                Toast.makeText(TrainingActivity.</span><span class="s2">this, </span><span class="s5">&quot;VTT&quot;</span><span class="s2">, </span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+                            } </span><span class="s2">else </span><span class="s1">{ 
+                                isVtt = </span><span class="s2">false;</span><span class="s1"> 
+                                Toast.makeText(TrainingActivity.</span><span class="s2">this, </span><span class="s5">&quot;Route&quot;</span><span class="s2">, </span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+                            } 
+ 
+                        } 
+                    })</span><span class="s2">;</span><span class="s1"> 
+ 
+                    </span><span class="s3">/* Build the AlertDialog with specific information from the layout */</span><span class="s1"> 
+                    AlertDialog.Builder trainingDialog_builder = </span><span class="s2">new </span><span class="s1">AlertDialog.Builder(TrainingActivity.</span><span class="s2">this</span><span class="s1">) 
+                            .setTitle(getString(R.string.add_training)) 
+                            .setView(training_Dialog) 
+                            .setPositiveButton(getString(R.string.create)</span><span class="s2">, new </span><span class="s1">DialogInterface.OnClickListener() { 
+                                @Override 
+                                </span><span class="s2">public void </span><span class="s1">onClick(DialogInterface dialog</span><span class="s2">, int </span><span class="s1">which) { 
+                        </span><span class="s3">/* we use a Custum Listener see the class */</span><span class="s1"> 
+                                } 
+                            }).setNegativeButton(getString(R.string.cancel)</span><span class="s2">, new </span><span class="s1">DialogInterface.OnClickListener() { 
+                                @Override 
+                                </span><span class="s2">public void </span><span class="s1">onClick(DialogInterface dialog</span><span class="s2">, int </span><span class="s1">which) { 
+                                    </span><span class="s3">//do nothing</span><span class="s1"> 
+                                    dialog.dismiss()</span><span class="s2">;</span><span class="s1"> 
+                                } 
+                            })</span><span class="s2">;</span><span class="s1"> 
+ 
+                    </span><span class="s3">//create and show the builder</span><span class="s1"> 
+                    alertDialog = trainingDialog_builder.create()</span><span class="s2">;</span><span class="s1"> 
+                    alertDialog.show()</span><span class="s2">;</span><span class="s1"> 
+ 
+ 
+                    </span><span class="s3">//link Button to the positive Button of the alertDialog</span><span class="s1"> 
+                    Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)</span><span class="s2">;</span><span class="s1"> 
+                    </span><span class="s3">//link Button to Custom Listener</span><span class="s1"> 
+                    positiveButton.setOnClickListener(</span><span class="s2">new </span><span class="s1">CheckValueTrainingListener(alertDialog))</span><span class="s2">;</span><span class="s1"> 
+                }</span><span class="s3">//else</span><span class="s1"> 
+            } 
+        })</span><span class="s2">;</span><span class="s1"> 
+ 
+    }</span><span class="s3">//onCreate</span><span class="s1"> 
+ 
+ 
+    </span><span class="s0">/************************************************************************* 
+     * onCreateOptionsMenu Method 
+     * </span><span class="s6">@param </span><span class="s0">menu 
+     * Goal: get the layout for the actionBar menu 
+     ***********************************************************************/</span><span class="s1"> 
+    @Override 
+    </span><span class="s2">public boolean </span><span class="s1">onCreateOptionsMenu(Menu menu) { 
+        </span><span class="s3">// Inflate the menu; this adds items to the action bar if it is present.</span><span class="s1"> 
+        getMenuInflater().inflate(R.menu.menu_fc</span><span class="s2">, </span><span class="s1">menu)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s2">return true;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">/******************************************************************** 
+     * Name: onOptionsItemSelected 
+     * </span><span class="s6">@param </span><span class="s0">item 
+     * Goal: Method to tell what to do on menu item click 
+     ***********************************************************************/</span><span class="s1"> 
+    @Override 
+    </span><span class="s2">public boolean </span><span class="s1">onOptionsItemSelected(MenuItem item) { 
+        </span><span class="s3">// Handle action bar item clicks here. The action bar will</span><span class="s1"> 
+        </span><span class="s3">// automatically handle clicks on the Home/Up button, so long</span><span class="s1"> 
+        </span><span class="s3">// as you specify a parent activity in AndroidManifest.xml.</span><span class="s1"> 
+        </span><span class="s2">int </span><span class="s1">id = item.getItemId()</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s3">//noinspection SimplifiableIfStatement</span><span class="s1"> 
+        </span><span class="s2">if </span><span class="s1">(id == R.id.action_add_fc) { 
+            Toast.makeText(</span><span class="s2">this,</span><span class="s1">getString(R.string.HeartRate)</span><span class="s2">, </span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s3">//get the value</span><span class="s1"> 
+            HeartRate fc = realmDB.getHeartRate()</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">//Inflate Layout</span><span class="s1"> 
+            LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)</span><span class="s2">;</span><span class="s1"> 
+            View bpm_dialog = mInflater.inflate(R.layout.bpm_dialog</span><span class="s2">, null</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+ 
+            edtTxt_fc_max = (EditText) bpm_dialog.findViewById(R.id.edtTxt_fc_max)</span><span class="s2">;</span><span class="s1"> 
+            edtTxt_fc_min = (EditText) bpm_dialog.findViewById(R.id.edtTxt_fc_min)</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">//set keyboard to numeric</span><span class="s1"> 
+            edtTxt_fc_max.setRawInputType(Configuration.KEYBOARD_QWERTY)</span><span class="s2">;</span><span class="s1"> 
+            edtTxt_fc_min.setRawInputType(Configuration.KEYBOARD_QWERTY)</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">/* set On Focus Change Listener to open keyBord when editText fc_max has focus*/</span><span class="s1"> 
+            edtTxt_fc_max.setOnFocusChangeListener(</span><span class="s2">new </span><span class="s1">View.OnFocusChangeListener() { 
+                @Override 
+                </span><span class="s2">public void </span><span class="s1">onFocusChange(View v</span><span class="s2">, boolean </span><span class="s1">hasFocus) { 
+                    edtTxt_fc_max.post(</span><span class="s2">new </span><span class="s1">Runnable() { 
+                        @Override 
+                        </span><span class="s2">public void </span><span class="s1">run() { 
+                            </span><span class="s3">//Make KeyBoard Visible</span><span class="s1"> 
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)</span><span class="s2">;</span><span class="s1"> 
+                            imm.showSoftInput(edtTxt_fc_max</span><span class="s2">, </span><span class="s1">InputMethodManager.SHOW_IMPLICIT)</span><span class="s2">;</span><span class="s1"> 
+                        } 
+                    })</span><span class="s2">;</span><span class="s1"> 
+                } 
+            })</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">// set cursor into edit Text</span><span class="s1"> 
+            edtTxt_fc_max.requestFocus()</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">//if fc is not empty. set the value</span><span class="s1"> 
+            </span><span class="s2">if</span><span class="s1">(fc != </span><span class="s2">null</span><span class="s1">){ 
+                </span><span class="s3">//fill the edit text With the last saved values</span><span class="s1"> 
+                edtTxt_fc_max.setText(fc.getInt_fc_max()+</span><span class="s5">&quot;&quot;</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+                edtTxt_fc_min.setText(fc.getInt_fc_min()+</span><span class="s5">&quot;&quot;</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+            } 
+ 
+            </span><span class="s3">//Build AlerDialog</span><span class="s1"> 
+            AlertDialog.Builder bpm_dialogBuilder = </span><span class="s2">new </span><span class="s1">AlertDialog.Builder(TrainingActivity.</span><span class="s2">this</span><span class="s1">) 
+                    .setTitle(getString(R.string.HeartRate)) 
+                    .setView(bpm_dialog) 
+                    .setPositiveButton(getString(R.string.validate)</span><span class="s2">, new </span><span class="s1">DialogInterface.OnClickListener() { 
+                        @Override 
+                        </span><span class="s2">public void </span><span class="s1">onClick(DialogInterface dialog</span><span class="s2">, int </span><span class="s1">which) { 
+                        </span><span class="s3">/* All happend in the CheckValueHeartRateListener Class */</span><span class="s1"> 
+                        } 
+                    }).setNegativeButton(getString(R.string.cancel)</span><span class="s2">, new </span><span class="s1">DialogInterface.OnClickListener() { 
+                        @Override 
+                        </span><span class="s2">public void </span><span class="s1">onClick(DialogInterface dialog</span><span class="s2">, int </span><span class="s1">which) { 
+                            </span><span class="s3">//do nothing</span><span class="s1"> 
+                            dialog.dismiss()</span><span class="s2">;</span><span class="s1"> 
+                        } 
+                    })</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">//create the builder</span><span class="s1"> 
+            alertDialog = bpm_dialogBuilder.create()</span><span class="s2">;</span><span class="s1"> 
+            alertDialog.show()</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">//link Button to the positive Button of the alertDialog</span><span class="s1"> 
+            Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s3">//link Button to Custom Listener</span><span class="s1"> 
+            positiveButton.setOnClickListener(</span><span class="s2">new </span><span class="s1">CheckValueHeartRateListener(alertDialog))</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s2">return true;</span><span class="s1"> 
+        } 
+        </span><span class="s2">return super</span><span class="s1">.onOptionsItemSelected(item)</span><span class="s2">;</span><span class="s1"> 
+    }</span><span class="s3">//onOptionsItemSelected</span><span class="s1"> 
+ 
+    </span><span class="s0">/******************************************************************** 
+     * Name: onStop Method 
+     * Goal: Method called when the phone stop the Avtivity 
+     ***********************************************************************/</span><span class="s1"> 
+    @Override 
+    </span><span class="s2">protected void </span><span class="s1">onStop() { 
+        </span><span class="s2">super</span><span class="s1">.onStop()</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s3">//free objects</span><span class="s1"> 
+        training_list = </span><span class="s2">null;</span><span class="s1"> 
+        listView_training = </span><span class="s2">null;</span><span class="s1"> 
+        txtView_textWatcher = </span><span class="s2">null;</span><span class="s1"> 
+    }</span><span class="s3">//onStop</span><span class="s1"> 
+ 
+    </span><span class="s0">/******************************************************************** 
+     * Name: onPause Method 
+     * Goal: Method called when the phone paused the Avtivity 
+     ***********************************************************************/</span><span class="s1"> 
+    @Override 
+    </span><span class="s2">protected void </span><span class="s1">onPause() { 
+        </span><span class="s2">super</span><span class="s1">.onPause()</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s3">//close Realm Instance</span><span class="s1"> 
+        realmDB.close()</span><span class="s2">;</span><span class="s1"> 
+    }</span><span class="s3">//onStop</span><span class="s1"> 
+ 
+    </span><span class="s0">/******************************************************************** 
+     * Name: onDestroy Method 
+     * Goal: Method called when the phone kill the Avtivity 
+     ***********************************************************************/</span><span class="s1"> 
+    @Override 
+    </span><span class="s2">protected void </span><span class="s1">onDestroy() { 
+        </span><span class="s2">super</span><span class="s1">.onDestroy()</span><span class="s2">;</span><span class="s1"> 
+        freeMemory()</span><span class="s2">;</span><span class="s1"> 
+    }</span><span class="s3">//onDestroy</span><span class="s1"> 
+ 
+    </span><span class="s0">/******************************************************************** 
+     * Name: freeMemory 
+     * Goal: Run the garbage collector to get back some allocated memory 
+     ***********************************************************************/</span><span class="s1"> 
+    </span><span class="s2">public void </span><span class="s1">freeMemory(){ 
+        System.runFinalization()</span><span class="s2">;</span><span class="s1"> 
+        Runtime.getRuntime().gc()</span><span class="s2">;</span><span class="s1"> 
+        System.gc()</span><span class="s2">;</span><span class="s1"> 
+    }</span><span class="s3">//freeMemory</span><span class="s1"> 
+ 
+    </span><span class="s0">/******************************************************************************* 
+     * 
+     * private class Custom Listener to check data control on the dialog_training box 
+     * 
+     **********************************************************************************/</span><span class="s1"> 
+    </span><span class="s2">class </span><span class="s1">CheckValueTrainingListener </span><span class="s2">implements </span><span class="s1">View.OnClickListener{ 
+        </span><span class="s2">private final </span><span class="s1">Dialog dialog</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s2">public </span><span class="s1">CheckValueTrainingListener (Dialog dialog){ 
+            </span><span class="s2">this</span><span class="s1">.dialog = dialog</span><span class="s2">;</span><span class="s1"> 
+        } 
+ 
+        @Override 
+        </span><span class="s2">public void </span><span class="s1">onClick(View view) { 
+            </span><span class="s3">//get the name of the trining from editText</span><span class="s1"> 
+            String mValue = edt_input.getText().toString()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s3">//if value length is ok</span><span class="s1"> 
+            </span><span class="s2">if</span><span class="s1">(mValue.length() &lt;= INT_MAX_LENGTH &amp;&amp; mValue.length() &gt; INT_ZERO){ 
+                </span><span class="s3">//if name is correct</span><span class="s1"> 
+                </span><span class="s2">if </span><span class="s1">(realmDB.isUnique(mValue)) { 
+                    </span><span class="s3">//add new training to DataBase with the boolean of the checkBox</span><span class="s1"> 
+                    realmDB.createTraining(mValue</span><span class="s2">, </span><span class="s1">isVtt)</span><span class="s2">;</span><span class="s1"> 
+                    </span><span class="s3">//update the adapter with the new list</span><span class="s1"> 
+                    training_list = realmDB.getListOfTraining()</span><span class="s2">;</span><span class="s1"> 
+ 
+                    </span><span class="s3">//notifiyDataSetChanged</span><span class="s1"> 
+                    trainingAdapter.updateLevel(training_list)</span><span class="s2">;</span><span class="s1"> 
+                    </span><span class="s3">//everything is ok dismiss the dialog</span><span class="s1"> 
+                    dialog.dismiss()</span><span class="s2">;</span><span class="s1"> 
+                } </span><span class="s2">else </span><span class="s1">{ </span><span class="s3">//if name is already used</span><span class="s1"> 
+                    Toast.makeText(TrainingActivity.</span><span class="s2">this, </span><span class="s1">getResources().getString(R.string.error_training_isUnique)</span><span class="s2">, </span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+                } 
+            }</span><span class="s3">//if</span><span class="s1"> 
+            </span><span class="s2">else if</span><span class="s1">(mValue.length() == INT_ZERO || mValue.equals(</span><span class="s5">&quot;&quot;</span><span class="s1">)){ </span><span class="s3">//if value is empty</span><span class="s1"> 
+                Toast.makeText(TrainingActivity.</span><span class="s2">this, </span><span class="s1">getResources().getString(R.string.error_training_empty)</span><span class="s2">, </span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+            } 
+            </span><span class="s2">else if</span><span class="s1">(mValue.length() &gt; INT_MAX_LENGTH){ </span><span class="s3">//if value is too big</span><span class="s1"> 
+                Toast.makeText(TrainingActivity.</span><span class="s2">this, </span><span class="s1">getResources().getString(R.string.error_training_length)</span><span class="s2">, </span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+            } 
+        } 
+    }</span><span class="s3">// class CheckValueTrainingListener</span><span class="s1"> 
+ 
+    </span><span class="s0">/******************************************************************************* 
+     * 
+     * private class Custom Listener to check data control on the dialog_heartBeat box 
+     * 
+     **********************************************************************************/</span><span class="s1"> 
+    </span><span class="s2">class </span><span class="s1">CheckValueHeartRateListener </span><span class="s2">implements </span><span class="s1">View.OnClickListener{ 
+        </span><span class="s2">private final </span><span class="s1">Dialog dialog</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s2">public </span><span class="s1">CheckValueHeartRateListener (Dialog dialog){ 
+            </span><span class="s2">this</span><span class="s1">.dialog = dialog</span><span class="s2">;</span><span class="s1"> 
+        } 
+ 
+        @Override 
+        </span><span class="s2">public void </span><span class="s1">onClick(View view) { 
+            </span><span class="s3">//get values from both edit Text</span><span class="s1"> 
+            String value_max = edtTxt_fc_max.getText().toString()</span><span class="s2">;</span><span class="s1"> 
+            String value_min = edtTxt_fc_min.getText().toString()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s2">int </span><span class="s1">int_max</span><span class="s2">, </span><span class="s1">int_min</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s3">//test if heartRate are numbers</span><span class="s1"> 
+            </span><span class="s2">try</span><span class="s1">{ 
+                </span><span class="s3">//test if value are integer</span><span class="s1"> 
+                int_max = Integer.parseInt(value_max)</span><span class="s2">;</span><span class="s1"> 
+                int_min = Integer.parseInt(value_min)</span><span class="s2">;</span><span class="s1"> 
+ 
+                </span><span class="s3">//if they are numbers but not into the limits</span><span class="s1"> 
+                </span><span class="s2">if</span><span class="s1">((int_max &gt; INT_MAX_BPM || int_max &lt; INT_MIN_BPM)||(int_min &gt; INT_MAX_BPM || int_min &lt; INT_MIN_BPM)){ 
+                    Toast.makeText(TrainingActivity.</span><span class="s2">this, </span><span class="s1">getResources().getString(R.string.error_limits)</span><span class="s2">, </span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+                }</span><span class="s2">else </span><span class="s3">//means that value are into the limits</span><span class="s1"> 
+                { 
+                    </span><span class="s3">//if the values are correct save the new value in the same</span><span class="s1"> 
+                    realmDB.saveHeartRate(int_max</span><span class="s2">, </span><span class="s1">int_min)</span><span class="s2">;</span><span class="s1"> 
+                    </span><span class="s3">//everything is ok dismiss the dialog</span><span class="s1"> 
+                    dialog.dismiss()</span><span class="s2">;</span><span class="s1"> 
+                    </span><span class="s3">//boolean isHeartBeat</span><span class="s1"> 
+                    isHeartBeat = </span><span class="s2">true;</span><span class="s1"> 
+                } 
+            </span><span class="s3">//error can be catched if values are empty or value are text</span><span class="s1"> 
+            }</span><span class="s2">catch </span><span class="s1">(Exception e){ 
+                </span><span class="s3">//if value is empty</span><span class="s1"> 
+                </span><span class="s2">if</span><span class="s1">(value_max.length() == INT_ZERO || value_min.length() == INT_ZERO){ 
+                    Toast.makeText(TrainingActivity.</span><span class="s2">this, </span><span class="s1">getResources().getString(R.string.error_bpm_empty)</span><span class="s2">, </span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+                }</span><span class="s2">else</span><span class="s1">{</span><span class="s3">//else if value are not empty but not integer... so they are text</span><span class="s1"> 
+                    Toast.makeText(TrainingActivity.</span><span class="s2">this, </span><span class="s1">getResources().getString(R.string.error_integer)</span><span class="s2">, </span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+                } 
+            } 
+        } 
+    }</span><span class="s3">// class CheckValueHeartRateListener</span><span class="s1"> 
+}</span><span class="s3">//class TrainingActivity</span><span class="s1"> 
+</span></pre>
+</body>
+</html>

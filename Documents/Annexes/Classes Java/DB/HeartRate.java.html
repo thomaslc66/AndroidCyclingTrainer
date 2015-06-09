@@ -1,0 +1,84 @@
+<html>
+<head>
+<title>HeartRate.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(98,151,85); font-style: italic; }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(204,120,50); }
+.s3 { color: rgb(128,128,128); }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+HeartRate.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">/*************************************************************** 
+ * Programm  : Android Cycling Trainer 
+ * Society   : ETML 
+ * Author    : Thomas Léchaire 
+ * Date      : 26.05.2015 
+ * Goal      : Class used to backup in the realm data base all Max and Min 
+ *              user HeartRate. 
+ ******************************************************************** // 
+ * Modifications: 
+ * Date       : XX.XX.XXXX 
+ * Author     : 
+ * Purpose    : 
+ *********************************************************************/</span><span class="s1"> 
+</span><span class="s2">package </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer.DB</span><span class="s2">;</span><span class="s1"> 
+ 
+</span><span class="s2">import </span><span class="s1">io.realm.RealmObject</span><span class="s2">;</span><span class="s1"> 
+ 
+</span><span class="s0">/** 
+ * Begining of HeartRate class 
+ */</span><span class="s1"> 
+</span><span class="s2">public class </span><span class="s1">HeartRate </span><span class="s2">extends </span><span class="s1">RealmObject { 
+ 
+    </span><span class="s3">//id for the HeartRate</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_id</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//int heartRate Max</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_fc_max</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//int heartRate Min</span><span class="s1"> 
+    </span><span class="s2">private int </span><span class="s1">int_fc_min</span><span class="s2">;</span><span class="s1"> 
+    </span><span class="s3">//boolean HeartRate filled</span><span class="s1"> 
+    </span><span class="s2">private boolean </span><span class="s1">bln_isHeartRate</span><span class="s2">;</span><span class="s1"> 
+ 
+    </span><span class="s3">/* Getters and Setters for all atributs */</span><span class="s1"> 
+ 
+    </span><span class="s2">public int </span><span class="s1">getInt_fc_max() { 
+        </span><span class="s2">return </span><span class="s1">int_fc_max</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s2">public void </span><span class="s1">setInt_fc_max(</span><span class="s2">int </span><span class="s1">int_fc_max) { 
+        </span><span class="s2">this</span><span class="s1">.int_fc_max = int_fc_max</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s2">public int </span><span class="s1">getInt_fc_min() { 
+        </span><span class="s2">return </span><span class="s1">int_fc_min</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s2">public void </span><span class="s1">setInt_fc_min(</span><span class="s2">int </span><span class="s1">int_fc_min) { 
+        </span><span class="s2">this</span><span class="s1">.int_fc_min = int_fc_min</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s2">public int </span><span class="s1">getInt_id() { 
+        </span><span class="s2">return </span><span class="s1">int_id</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s2">public void </span><span class="s1">setInt_id(</span><span class="s2">int </span><span class="s1">int_id) { 
+        </span><span class="s2">this</span><span class="s1">.int_id = int_id</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s2">public boolean </span><span class="s1">isBln_isHeartRate() {</span><span class="s2">return </span><span class="s1">bln_isHeartRate</span><span class="s2">;</span><span class="s1">} 
+ 
+    </span><span class="s2">public void </span><span class="s1">setBln_isHeartRate(</span><span class="s2">boolean </span><span class="s1">bln_isHeartRate) {</span><span class="s2">this</span><span class="s1">.bln_isHeartRate = bln_isHeartRate</span><span class="s2">;</span><span class="s1">} 
+}</span><span class="s3">//HearRate</span><span class="s1"> 
+</span></pre>
+</body>
+</html>
