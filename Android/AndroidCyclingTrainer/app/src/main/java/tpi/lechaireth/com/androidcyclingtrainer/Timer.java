@@ -1,3 +1,16 @@
+/***************************************************************
+ * Programm  : Android Cycling Trainer
+ * Society   : ETML
+ * Author    : Thomas Léchaire
+ * Date      : 26.05.2015
+ * Goal      : Class used to display CountDown and Timer for the user to
+ *              see Row during Training
+ ******************************************************************** //
+ * Modifications:
+ * Date       : XX.XX.XXXX
+ * Author     :
+ * Purpose     :
+ *********************************************************************/
 package tpi.lechaireth.com.androidcyclingtrainer;
 
 import android.app.Activity;
@@ -23,8 +36,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.List;
@@ -32,9 +43,6 @@ import java.util.List;
 import tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB;
 import tpi.lechaireth.com.androidcyclingtrainer.DB.TrainingRow;
 
-/**
- * Created by Thomas on 23.05.2015.
- */
 public class Timer extends Activity {
 
     //UI Elements
@@ -505,38 +513,41 @@ public class Timer extends Activity {
      ***********************************************************************/
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //AlertDialog
+        AlertDialog alertDialog;
+        //if the timer is started
+        if(runnable != null){
+            runnable.killRunnable();
+        }
+
         //check with an alertDialog if the user realy wants to stop the training.
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
-                        .setCancelable(false)
-                        .setTitle(getResources().getString(R.string.stop_timer))
-                        .setMessage(getResources().getString(R.string.stop_message))
-                        .setPositiveButton("OUI", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //go back to previous activiy if positive button is hit
-                                Intent intent_trainingRow = new Intent(Timer.this, TrainingRowActivity.class);
-                                //put extra id to get all Rows back
-                                intent_trainingRow.putExtra("_id", _id);
-                                //put a Flag to avoid recreate intent if he already exist in the queue
-                                intent_trainingRow.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                //get context to startActivity
-                                mContext.startActivity(intent_trainingRow);
-                                //finish and cancel activty
-                                finish();
-                            }
-                        })
-                        .setNegativeButton("NON", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //cancel the alertDialog
-                                dialogInterface.dismiss();
-                            }
-                        });
-                //from the builder create the alertDialog
-                alertDialog = builder.create();
-                //show the dialog to user
-                alertDialog.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+                .setTitle(getResources().getString(R.string.stop_timer))
+                .setMessage(getResources().getString(R.string.stop_message))
+                .setCancelable(false)
+                .setPositiveButton("OUI", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //go back to previous activiy if positive button is hit
+                        Intent intent_trainingRow = new Intent(mContext, TrainingRowActivity.class);
+                        //put extra id to get all Rows back
+                        intent_trainingRow.putExtra("_id", _id);
+                        //put a Flag to avoid recreate intent if he already exist in the queue
+                        intent_trainingRow.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        //get context to startActivity
+                        mContext.startActivity(intent_trainingRow);
+                    }
+                })
+                .setNegativeButton("NON", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //cancel the alertDialog
+                        dialogInterface.dismiss();
+                    }
+                });
+
+        alertDialog = builder.create();
+        alertDialog.show();
     }
 
     /********************************************************************

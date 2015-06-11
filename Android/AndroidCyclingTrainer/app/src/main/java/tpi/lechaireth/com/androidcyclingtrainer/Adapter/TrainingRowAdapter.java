@@ -1,3 +1,17 @@
+/***************************************************************
+ * Programm  : Android Cycling Trainer
+ * Society   : ETML
+ * Author    : Thomas Lechaire
+ * Date      : 26.05.2015
+ * Goal      : Class used to link ListView with data from database
+ *              for rows
+ ******************************************************************** //
+ * Modifications:
+ * Date       : XX.XX.XXXX
+ * Author     :
+ * Purpose    :
+ *********************************************************************/
+
 package tpi.lechaireth.com.androidcyclingtrainer.Adapter;
 
 import android.content.Context;

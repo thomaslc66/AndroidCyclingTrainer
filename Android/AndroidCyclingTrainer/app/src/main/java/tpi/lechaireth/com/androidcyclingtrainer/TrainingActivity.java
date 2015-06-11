@@ -1,9 +1,9 @@
 /***************************************************************
  * Programm  : Android Cycling Trainer
  * Society   : ETML
- * Author    : Thomas Léchaire
+ * Author    : Thomas Lechaire
  * Date      : 26.05.2015
- * Goal      : Class used to make modification on a row
+ * Goal      : Class used to display training ListView
  ******************************************************************** //
  * Modifications:
  * Date       : XX.XX.XXXX
@@ -230,10 +230,10 @@ public class TrainingActivity extends ActionBarActivity {
     }//onCreate
 
 
-    /********************************************************************
-     * Name: onCreateOptionsMenu
+    /*************************************************************************
+     * onCreateOptionsMenu Method
      * @param menu
-     * Goal: Method to link to right button to menu xml file
+     * Goal: get the layout for the actionBar menu
      ***********************************************************************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -334,6 +334,7 @@ public class TrainingActivity extends ActionBarActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        //free objects
         training_list = null;
         listView_training = null;
         txtView_textWatcher = null;

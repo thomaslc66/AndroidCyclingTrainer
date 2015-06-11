@@ -46,6 +46,7 @@ RealmDB.java</FONT>
 </span><span class="s2">import </span><span class="s1">io.realm.Realm</span><span class="s2">;</span><span class="s1"> 
 </span><span class="s2">import </span><span class="s1">io.realm.RealmList</span><span class="s2">;</span><span class="s1"> 
 </span><span class="s2">import </span><span class="s1">io.realm.RealmResults</span><span class="s2">;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">tpi.lechaireth.com.androidcyclingtrainer.R</span><span class="s2">;</span><span class="s1"> 
  
  
 </span><span class="s0">/*********************************** 
@@ -93,7 +94,8 @@ RealmDB.java</FONT>
         RealmResults results = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;str_name&quot;</span><span class="s2">, </span><span class="s1">name).findAll()</span><span class="s2">;</span><span class="s4">//send transaction</span><span class="s1"> 
         </span><span class="s4">//end of transaction</span><span class="s1"> 
         realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
-        </span><span class="s4">//Try to add a row</span><span class="s1"> 
+        </span><span class="s4">//check if the size of the result table is bigger than 0</span><span class="s1"> 
+        </span><span class="s4">//if it is that means there is already and training named the same</span><span class="s1"> 
         </span><span class="s2">if</span><span class="s1">(results.size() &gt; </span><span class="s6">0</span><span class="s1">){ 
             isNotUnique = </span><span class="s2">false;</span><span class="s1"> 
         } 
@@ -104,6 +106,7 @@ RealmDB.java</FONT>
      * 
      * Name: createTrainig 
      * </span><span class="s3">@param </span><span class="s0">name 
+     * </span><span class="s3">@param </span><span class="s0">isVtt 
      * Goal: Method used to create a new training 
      * 
      ********************************************************/</span><span class="s1"> 
@@ -124,8 +127,11 @@ RealmDB.java</FONT>
             Calendar calendar = Calendar.getInstance()</span><span class="s2">;</span><span class="s1"> 
             calendar.getTime()</span><span class="s2">;</span><span class="s1"> 
  
+            </span><span class="s4">//get year</span><span class="s1"> 
             </span><span class="s2">int </span><span class="s1">year = calendar.get(Calendar.YEAR)</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s2">int </span><span class="s1">month = calendar.get(Calendar.MONTH)</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//add one tho calendar month because January is = month 0</span><span class="s1"> 
+            </span><span class="s2">int </span><span class="s1">month = calendar.get(Calendar.MONTH)+</span><span class="s6">1</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//get day of month</span><span class="s1"> 
             </span><span class="s2">int </span><span class="s1">dayMonth = calendar.get(Calendar.DAY_OF_MONTH)</span><span class="s2">;</span><span class="s1"> 
  
             </span><span class="s4">//Add a trainingRow by creating a new realmObject with the class TrainingRow</span><span class="s1"> 
@@ -138,6 +144,8 @@ RealmDB.java</FONT>
             training.setStr_day(dayMonth + </span><span class="s5">&quot;/&quot; </span><span class="s1">+ month + </span><span class="s5">&quot;/&quot; </span><span class="s1">+ year)</span><span class="s2">;</span><span class="s1"> 
             </span><span class="s4">//training set isVTT</span><span class="s1"> 
             training.setBln_isVtt(isVtt)</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//set rest indice</span><span class="s1"> 
+            training.setInt_recup(</span><span class="s6">0</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
             </span><span class="s4">//commit the transaction</span><span class="s1"> 
             realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
             </span><span class="s4">//catch Exceptions</span><span class="s1"> 
@@ -152,55 +160,36 @@ RealmDB.java</FONT>
  
     }</span><span class="s4">//createTraining</span><span class="s1"> 
  
-    </span><span class="s0">/***************************************************************************** 
+    </span><span class="s0">/********************************************************* 
      * 
-     * addAtrainingRowToTraining 
-     * </span><span class="s3">@param </span><span class="s0">realm_training_ID 
-     * </span><span class="s3">@param </span><span class="s0">row 
-     * Goal: Method that add a row to a training session 
+     * Name: removeTraining 
+     * </span><span class="s3">@param </span><span class="s0">t 
+     * Goal: Remove the training passed in parameter 
      * 
-     * *****************************************************************************/</span><span class="s1"> 
-    </span><span class="s2">public void </span><span class="s1">addAtrainingRowToTraining(</span><span class="s2">int </span><span class="s1">realm_training_ID</span><span class="s2">, </span><span class="s1">TrainingRow row){ 
-        </span><span class="s2">int </span><span class="s1">_id = </span><span class="s6">0</span><span class="s2">;</span><span class="s1"> 
+     *******************************************************/</span><span class="s1"> 
+    </span><span class="s2">public void </span><span class="s1">removeTraining (Training t){ 
         </span><span class="s4">//get a realm Instance</span><span class="s1"> 
         realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
-        </span><span class="s4">// no transaction because it has started in createRow Method</span><span class="s1"> 
-        </span><span class="s4">//Try to add a row</span><span class="s1"> 
-        </span><span class="s2">try</span><span class="s1">{ 
-            </span><span class="s4">//get the training with realm_training_ID</span><span class="s1"> 
-            Training training = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;id&quot;</span><span class="s2">,</span><span class="s1">realm_training_ID).findAll().first()</span><span class="s2">;</span><span class="s1">
-            </span><span class="s4">//From this training get the List of TrainingRow.</span><span class="s1"> 
-            RealmList&lt;TrainingRow&gt; trainingRows = training.getRlst_row()</span><span class="s2">;</span><span class="s1"> 
- 
-            </span><span class="s4">// Search for the last row and get is id.</span><span class="s1"> 
-            </span><span class="s2">if</span><span class="s1">(trainingRows.size() &gt; </span><span class="s6">0</span><span class="s1">) { 
-                _id = trainingRows.last().getInt_id()</span><span class="s2">;</span><span class="s1"> 
-            } 
-            </span><span class="s4">//check value of id</span><span class="s1"> 
-            Log.w(</span><span class="s5">&quot;_ID&quot;</span><span class="s2">, </span><span class="s1">_id + </span><span class="s5">&quot;&quot;</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//set row is id = id of the last row of the trainingDay + 1;</span><span class="s1"> 
-            row.setInt_id(_id++)</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//get list and add row to it.</span><span class="s1"> 
-            training.getRlst_row().add(row)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//start transaction to facilitate multithreading</span><span class="s1"> 
+        realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s2">try </span><span class="s1">{ 
+            </span><span class="s4">//remove the training from the DB</span><span class="s1"> 
+            t.removeFromRealm()</span><span class="s2">;</span><span class="s1"> 
             </span><span class="s4">//commit the transaction</span><span class="s1"> 
             realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//catch Exceptions</span><span class="s1"> 
-        }</span><span class="s2">catch </span><span class="s1">(Exception e){ 
-            </span><span class="s4">//get error message</span><span class="s1"> 
+        }</span><span class="s2">catch </span><span class="s1">(Exception e){ </span><span class="s4">//catch Exceptions</span><span class="s1"> 
+            </span><span class="s4">//print error message</span><span class="s1"> 
             e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//clear transaction - we don't want to add an empty or partial row</span><span class="s1"> 
+            </span><span class="s4">//if and Exceptions is catched we need to cancel the transaction</span><span class="s1"> 
             realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//get status</span><span class="s1"> 
-            Toast.makeText(context</span><span class="s2">,</span><span class="s5">&quot;Row not added to training &quot;</span><span class="s2">,</span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
-        }</span><span class="s4">//catch</span><span class="s1"> 
+        } 
  
-    }</span><span class="s4">//createRow</span><span class="s1"> 
- 
+    } 
  
     </span><span class="s0">/*************************************************** 
      * Name: getListOfTraining 
      * </span><span class="s3">@return </span><span class="s0">List</span><span class="s1">&lt;</span><span class="s0">Training</span><span class="s1">&gt;</span><span class="s0"> 
-     * Goal: this method return all the training in the database 
+     * Goal: this method returns all the training in the database 
      * 
      ***************************************************/</span><span class="s1"> 
     </span><span class="s2">public </span><span class="s1">List&lt;Training&gt; getListOfTraining(){ 
@@ -231,66 +220,6 @@ RealmDB.java</FONT>
         </span><span class="s2">return </span><span class="s1">t</span><span class="s2">;</span><span class="s1"> 
     } 
  
- 
-    </span><span class="s0">/*************************************************** 
-     * 
-     * Name: getTraining 
-     * </span><span class="s3">@param </span><span class="s0">name 
-     * </span><span class="s3">@return </span><span class="s0">Training t 
-     * Goal: this method return a Training with is name 
-     * 
-     *************************************************/</span><span class="s1"> 
-    </span><span class="s2">public </span><span class="s1">Training getTraining(String name){ 
-        </span><span class="s4">//Create Variable</span><span class="s1"> 
-        Training t = </span><span class="s2">null;</span><span class="s1"> 
-        </span><span class="s4">//get a realm Instance</span><span class="s1"> 
-        realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
-        </span><span class="s4">//All writes must be wrapped in a transaction to facilitate safe multi threading</span><span class="s1"> 
-        realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
-        </span><span class="s2">try </span><span class="s1">{ 
-            </span><span class="s4">//searching for the training with is name</span><span class="s1"> 
-            t = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;str_name&quot;</span><span class="s2">, </span><span class="s1">name).findAll().first()</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//commit the transaction</span><span class="s1"> 
-            realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
-        }</span><span class="s2">catch </span><span class="s1">(Exception e){ </span><span class="s4">//catch Exceptions</span><span class="s1"> 
-            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//in cas of error cancel the transaction</span><span class="s1"> 
-            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
-        } 
- 
-        </span><span class="s4">//return the training</span><span class="s1"> 
-        </span><span class="s2">return </span><span class="s1">t</span><span class="s2">;</span><span class="s1"> 
-    } 
- 
-    </span><span class="s0">/********************************************************* 
-     * 
-     * removeTrainingWithID 
-     * </span><span class="s3">@param </span><span class="s0">realm_training_ID 
-     * Goal: Remove the training with his id 
-     * NOT USED - NEEDED TIME TO ADD IT IN THE CODE 
-     * 
-     *******************************************************/</span><span class="s1"> 
-    </span><span class="s2">public void </span><span class="s1">removeTrainingWithID(</span><span class="s2">int </span><span class="s1">realm_training_ID){ 
-        </span><span class="s4">//get a realm Instance</span><span class="s1"> 
-        realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
-        </span><span class="s4">//All writes must be wrapped in a transaction to facilitate safe multi threading</span><span class="s1"> 
-        realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
-        </span><span class="s2">try </span><span class="s1">{ 
-            </span><span class="s4">//find the training with his id</span><span class="s1"> 
-            Training training = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;id&quot;</span><span class="s2">, </span><span class="s1">realm_training_ID).findAll().first()</span><span class="s2">;</span><span class="s1">
-            </span><span class="s4">//remove the training from the DB</span><span class="s1"> 
-            training.removeFromRealm()</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//commit</span><span class="s1"> 
-            realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
-        </span><span class="s4">//catch Exceptions</span><span class="s1"> 
-        }</span><span class="s2">catch </span><span class="s1">(Exception e){ 
-            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//cancel transaction</span><span class="s1"> 
-            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
-        } 
- 
-    } 
- 
     </span><span class="s0">/********************************************** 
      * 
      * Name: getATrainingWithID 
@@ -309,82 +238,64 @@ RealmDB.java</FONT>
  
         </span><span class="s2">try</span><span class="s1">{ 
             </span><span class="s4">//get all and find into the training with the id</span><span class="s1"> 
-            training = realm.where(Training.</span><span class="s2">class</span><span class="s1">).findAll().get(id)</span><span class="s2">;</span><span class="s1"> 
+            training = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">,</span><span class="s1">id).findFirst()</span><span class="s2">;</span><span class="s1"> 
             </span><span class="s4">//commit</span><span class="s1"> 
             realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
-        }</span><span class="s2">catch </span><span class="s1">(Exception e){ 
-            Toast.makeText(context</span><span class="s2">,</span><span class="s5">&quot;Erreur de récupération de l'entraînement&quot;</span><span class="s2">,</span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+        }</span><span class="s2">catch </span><span class="s1">(Exception e){</span><span class="s4">//catch Exceptions</span><span class="s1"> 
+            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//In Case of error. Create a Toast to tell user</span><span class="s1"> 
+            Toast.makeText(context</span><span class="s2">,</span><span class="s1">context.getResources().getString(R.string.error_recup_training)</span><span class="s2">,</span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//in case of error cancel the transaction</span><span class="s1"> 
             realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
- 
         } 
  
         </span><span class="s4">//return results</span><span class="s1"> 
         </span><span class="s2">return </span><span class="s1">training</span><span class="s2">;</span><span class="s1"> 
     } 
  
-    </span><span class="s0">/********************************************************* 
+    </span><span class="s0">/********************************************** 
      * 
-     * Name: removeTrainingWithID 
-     * </span><span class="s3">@param </span><span class="s0">t 
-     * Goal: Remove the training passed in parameter 
+     * Name: setRestIndice 
+     * </span><span class="s3">@param </span><span class="s0">id 
+     * </span><span class="s3">@param </span><span class="s0">fc_after_1min30 
+     * Goal: calcul and save of and rest indice (fc_max - fc after 1min30) 
      * 
-     *******************************************************/</span><span class="s1"> 
-    </span><span class="s2">public void </span><span class="s1">removeTraining (Training t){ 
-        </span><span class="s4">//get a realm Instance</span><span class="s1"> 
-        realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
-        </span><span class="s4">//start transaction to facilitate multithreading</span><span class="s1"> 
-        realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
-        </span><span class="s2">try </span><span class="s1">{ 
-            </span><span class="s4">//remove the training from the DB</span><span class="s1"> 
-            t.removeFromRealm()</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//commit the transaction</span><span class="s1"> 
-            realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
-        }</span><span class="s2">catch </span><span class="s1">(Exception e){ </span><span class="s4">//catch Exceptions</span><span class="s1"> 
-            </span><span class="s4">//print error message</span><span class="s1"> 
-            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//if and Exceptions is catched we need to cancel the transaction</span><span class="s1"> 
-            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
-        } 
+     ********************************************/</span><span class="s1"> 
+    </span><span class="s2">public void </span><span class="s1">setRestIndice(</span><span class="s2">int </span><span class="s1">id</span><span class="s2">, int </span><span class="s1">fc_after_1min30){ 
+        </span><span class="s4">//Objects</span><span class="s1"> 
+        Training t = </span><span class="s2">null;</span><span class="s1"> 
+        HeartRate hr = </span><span class="s2">null;</span><span class="s1"> 
  
-    } 
- 
- 
-    </span><span class="s4">//############################################################# PART FOR TRAINIG ROW CLASS OPERATION ##############################################################################</span><span class="s1"> 
- 
-    </span><span class="s0">/************************************************************* 
-     * 
-     * Name: getAllTrainingRows 
-     * </span><span class="s3">@param </span><span class="s0">realm_training_id 
-     * </span><span class="s3">@return </span><span class="s0">a list of training Row 
-     * Goal: By id we get a training a we get all the row within this training 
-     * 
-     * ***********************************************************/</span><span class="s1"> 
-    </span><span class="s2">public </span><span class="s1">List&lt;TrainingRow&gt; getAllTrainingRows(</span><span class="s2">int </span><span class="s1">realm_training_id){ 
-        Log.w(</span><span class="s5">&quot;ID TRAINING&quot;</span><span class="s2">, </span><span class="s1">realm_training_id+</span><span class="s5">&quot;&quot;</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
-        List&lt;TrainingRow&gt; list_of_row</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s4">//get a realm Instance</span><span class="s1"> 
         realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s4">//start transaction</span><span class="s1"> 
         realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
-        </span><span class="s2">try</span><span class="s1">{ 
-            </span><span class="s4">//get the training with the id</span><span class="s1"> 
-            Training t = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;id&quot;</span><span class="s2">,</span><span class="s1">realm_training_id).findAll().first()</span><span class="s2">;</span><span class="s1">
-            </span><span class="s4">//then get the list of row contained in the training</span><span class="s1"> 
-            list_of_row = t.getRlst_row()</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//commit the transcation</span><span class="s1"> 
-            realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
-        }</span><span class="s2">catch </span><span class="s1">(Exception e){ </span><span class="s4">//catch Exceptions</span><span class="s1"> 
-            </span><span class="s4">//print error message in logcat</span><span class="s1"> 
-            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//if Exception is catched cancel the transaction</span><span class="s1"> 
-            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
-            </span><span class="s4">//and set the list to null</span><span class="s1"> 
-            list_of_row = </span><span class="s2">null;</span><span class="s1"> 
-        } 
  
-        </span><span class="s4">//return the list of all rows</span><span class="s1"> 
-        </span><span class="s2">return </span><span class="s1">list_of_row</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s2">try </span><span class="s1">{ 
+ 
+            </span><span class="s4">//find the training to save the rest indice</span><span class="s1"> 
+            t = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">, </span><span class="s1">id).findFirst()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//find the heart Rate to use fc max</span><span class="s1"> 
+            hr = realm.where(HeartRate.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">, </span><span class="s6">0</span><span class="s1">).findFirst()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//get fc_max</span><span class="s1"> 
+            </span><span class="s2">int </span><span class="s1">fc_max = hr.getInt_fc_max()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//calculate the rest indice</span><span class="s1"> 
+            </span><span class="s2">int </span><span class="s1">rest_indice = fc_max - fc_after_1min30</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//set rest indice to Training</span><span class="s1"> 
+            t.setInt_recup(rest_indice)</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//commit changes to DB</span><span class="s1"> 
+            realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
+ 
+        }</span><span class="s2">catch </span><span class="s1">(Exception e){ </span><span class="s4">//catch Exceptions</span><span class="s1"> 
+ 
+            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//in case of error cancel the transaction</span><span class="s1"> 
+            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
+        } 
     } 
+ 
+ 
+    </span><span class="s4">//############################################################# PART FOR TRAINIG ROW CLASS OPERATION ##############################################################################</span><span class="s1"> 
  
     </span><span class="s0">/******************************************************************** 
      * 
@@ -404,13 +315,18 @@ RealmDB.java</FONT>
      * 
      ******************************************************************/</span><span class="s1"> 
     </span><span class="s2">public </span><span class="s1">TrainingRow createRow(</span><span class="s2">int </span><span class="s1">min_work</span><span class="s2">, int </span><span class="s1">sec_work</span><span class="s2">, int </span><span class="s1">tour</span><span class="s2">, int </span><span class="s1">bpm</span><span class="s2">, int </span><span class="s1">min_recup</span><span class="s2">, int </span><span class="s1">sec_recup</span><span class="s2">, </span><span class="s1">String str_gear</span><span class="s2">, </span><span class="s1">String str_work</span><span class="s2">, </span><span class="s1">String str_rythm</span><span class="s2">, </span><span class="s1">String str_note ){ 
-        TrainingRow trainingRow</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s4">//get a realm Instance</span><span class="s1"> 
         realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s4">//All writes must be wrapped in a transaction to facilitate safe multi threading</span><span class="s1"> 
         realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//Try to add a row</span><span class="s1"> 
         </span><span class="s4">//Add a trainingRow by creating a new realmObject with the class TrainingRow</span><span class="s1"> 
-        trainingRow = realm.createObject(TrainingRow.</span><span class="s2">class</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+        TrainingRow trainingRow = realm.createObject(TrainingRow.</span><span class="s2">class</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">// increatement index</span><span class="s1"> 
+        </span><span class="s2">int </span><span class="s1">nextID = (</span><span class="s2">int</span><span class="s1">) (realm.where(TrainingRow.</span><span class="s2">class</span><span class="s1">).maximumInt(</span><span class="s5">&quot;id&quot;</span><span class="s1">) + </span><span class="s6">1</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s4">//set id</span><span class="s1"> 
+        trainingRow.setId(nextID)</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s4">//set min</span><span class="s1"> 
         trainingRow.setInt_min(min_work)</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s4">//set sec</span><span class="s1"> 
@@ -440,67 +356,342 @@ RealmDB.java</FONT>
         </span><span class="s2">return </span><span class="s1">trainingRow</span><span class="s2">;</span><span class="s1"> 
     }</span><span class="s4">//createRow</span><span class="s1"> 
  
- 
-    </span><span class="s0">/***************************************************************************** 
+    </span><span class="s0">/********************************************************* 
      * 
-     * Name: removeRowWithID 
-     * </span><span class="s3">@param </span><span class="s0">realm_Row_ID 
-     * Goal: method used to remove a row from the training 
+     * Name: removeTrainingRow 
+     * </span><span class="s3">@param </span><span class="s0">t 
+     * Goal: Remove the trainingRow passed in parameter 
      * 
-     *****************************************************************************/</span><span class="s1"> 
-    </span><span class="s2">public void </span><span class="s1">removeRowWithID(</span><span class="s2">int </span><span class="s1">realm_Row_ID){ 
-        </span><span class="s4">//get instance of Realm</span><span class="s1"> 
+     *******************************************************/</span><span class="s1"> 
+    </span><span class="s2">public void </span><span class="s1">removeTrainingRow (TrainingRow t){ 
+        </span><span class="s4">//get a realm Instance</span><span class="s1"> 
         realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
-        </span><span class="s4">//begin a transaction to facilitate safe multi threading</span><span class="s1"> 
+        </span><span class="s4">//start transaction to facilitate multithreading</span><span class="s1"> 
         realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s2">try </span><span class="s1">{ 
-            </span><span class="s4">//find the training row equal to the id passed in parameter</span><span class="s1"> 
-            TrainingRow trainingRow = realm.where(TrainingRow.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;id&quot;</span><span class="s2">, </span><span class="s1">realm_Row_ID).findAll().first()</span><span class="s2">;</span><span class="s1">
-            </span><span class="s4">//remove the row</span><span class="s1"> 
-            trainingRow.removeFromRealm()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//remove the training from the DB</span><span class="s1"> 
+            t.removeFromRealm()</span><span class="s2">;</span><span class="s1"> 
             </span><span class="s4">//commit the transaction</span><span class="s1"> 
             realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
         }</span><span class="s2">catch </span><span class="s1">(Exception e){ </span><span class="s4">//catch Exceptions</span><span class="s1"> 
-            e.printStackTrace()</span><span class="s2">;</span><span class="s4">// print error message in logcat</span><span class="s1"> 
-            </span><span class="s4">//if Exception is catched cancel the transaction</span><span class="s1"> 
+            </span><span class="s4">//print error message</span><span class="s1"> 
+            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//if and Exceptions is catched we need to cancel the transaction</span><span class="s1"> 
             realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
         } 
  
+    } 
+ 
+    </span><span class="s0">/********************************************************** 
+     * 
+     * Name: updateTrainingRow 
+     * </span><span class="s3">@param </span><span class="s0">int_rowId 
+     * Goal: Update value of a trainingRow 
+     * 
+     *************************************************************/</span><span class="s1"> 
+    </span><span class="s2">public void </span><span class="s1">updateTrainingRow(</span><span class="s2">int </span><span class="s1">int_rowId</span><span class="s2">, int </span><span class="s1">min_work</span><span class="s2">, int </span><span class="s1">sec_work</span><span class="s2">, int </span><span class="s1">tour</span><span class="s2">, int </span><span class="s1">bpm</span><span class="s2">, </span><span class="s1">String str_gear</span><span class="s2">, </span><span class="s1">String str_work</span><span class="s2">, </span><span class="s1">String str_rythm</span><span class="s2">, </span><span class="s1">String str_note ){ 
+        TrainingRow t</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//get a realm Instance</span><span class="s1"> 
+        realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//start transaction to facilitate multithreading</span><span class="s1"> 
+        realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s2">try </span><span class="s1">{ 
+            </span><span class="s4">//remove the training from the DB</span><span class="s1"> 
+            t = realm.where(TrainingRow.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;id&quot;</span><span class="s2">, </span><span class="s1">int_rowId).findFirst()</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s4">//update the TrainingRow t</span><span class="s1"> 
+            </span><span class="s4">//set the time</span><span class="s1"> 
+            Log.w(</span><span class="s5">&quot;t before&quot;</span><span class="s2">, </span><span class="s5">&quot;&quot;</span><span class="s1">+t.getStr_time() + </span><span class="s5">&quot;-&quot;</span><span class="s1">+ t.getInt_bpm() + </span><span class="s5">&quot;-&quot; </span><span class="s1">+ t.getInt_rpm())</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s4">//modification of the min and sec</span><span class="s1"> 
+            t.setInt_min(min_work)</span><span class="s2">;</span><span class="s1"> 
+            t.setInt_sec(sec_work)</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//modification of str_time for the display</span><span class="s1"> 
+            t.setStr_time(setTimeWithInt(min_work</span><span class="s2">,</span><span class="s1">sec_work))</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s4">//set BPM and RPM</span><span class="s1"> 
+            t.setInt_rpm(tour)</span><span class="s2">;</span><span class="s1"> 
+            t.setInt_bpm(bpm)</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s4">//set spinners value</span><span class="s1"> 
+            t.setStr_work(str_work)</span><span class="s2">;</span><span class="s1"> 
+            t.setStr_rythm(str_rythm)</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s4">//set notes</span><span class="s1"> 
+            t.setStr_note(str_note)</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s4">//set gear</span><span class="s1"> 
+            t.setStr_gear(str_gear)</span><span class="s2">;</span><span class="s1"> 
+ 
+            Log.w(</span><span class="s5">&quot;t after&quot;</span><span class="s2">, </span><span class="s5">&quot;&quot;</span><span class="s1">+t.getStr_time() + </span><span class="s5">&quot;-&quot;</span><span class="s1">+ t.getInt_bpm() + </span><span class="s5">&quot;-&quot; </span><span class="s1">+ t.getInt_rpm())</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s4">//commit the transaction</span><span class="s1"> 
+            realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
+ 
+        }</span><span class="s2">catch </span><span class="s1">(Exception e){ </span><span class="s4">//catch Exceptions</span><span class="s1"> 
+            </span><span class="s4">//print error message</span><span class="s1"> 
+            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//if and Exceptions is catched we need to cancel the transaction</span><span class="s1"> 
+            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
+        } 
+    } 
+ 
+    </span><span class="s0">/***************************************************************************** 
+     * 
+     * addAtrainingRowToTraining 
+     * </span><span class="s3">@param </span><span class="s0">realm_training_ID 
+     * </span><span class="s3">@param </span><span class="s0">row 
+     * Goal: Method that add a row to a training session 
+     * 
+     * *****************************************************************************/</span><span class="s1"> 
+    </span><span class="s2">public void </span><span class="s1">addAtrainingRowToTraining(</span><span class="s2">int </span><span class="s1">realm_training_ID</span><span class="s2">, </span><span class="s1">TrainingRow row){ 
+        </span><span class="s2">int </span><span class="s1">_id = </span><span class="s6">0</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//get a realm Instance</span><span class="s1"> 
+        realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">// no transaction because it has started in createRow Method</span><span class="s1"> 
+        </span><span class="s4">//Try to add a row</span><span class="s1"> 
+        </span><span class="s2">try</span><span class="s1">{ 
+            </span><span class="s4">//get the training with realm_training_ID</span><span class="s1"> 
+            Training training = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">,</span><span class="s1">realm_training_ID).findAll().first()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//From this training get the List of TrainingRow.</span><span class="s1"> 
+            RealmList&lt;TrainingRow&gt; trainingRows = training.getRlst_row()</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s4">//get list and add row to it.</span><span class="s1"> 
+            training.getRlst_row().add(row)</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//commit the transaction</span><span class="s1"> 
+            realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//catch Exceptions</span><span class="s1"> 
+        }</span><span class="s2">catch </span><span class="s1">(Exception e){ 
+            </span><span class="s4">//get error message</span><span class="s1"> 
+            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//clear transaction - we don't want to add an empty or partial row</span><span class="s1"> 
+            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//get status</span><span class="s1"> 
+            Toast.makeText(context</span><span class="s2">,</span><span class="s5">&quot;Row not added to training &quot;</span><span class="s2">,</span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
+        }</span><span class="s4">//catch</span><span class="s1"> 
+    }</span><span class="s4">//createRow</span><span class="s1"> 
+ 
+ 
+    </span><span class="s0">/************************************************************* 
+     * 
+     * Name: getAllTrainingRows 
+     * </span><span class="s3">@param </span><span class="s0">realm_training_id 
+     * </span><span class="s3">@return </span><span class="s0">a list of training Row 
+     * Goal: By id we get a training a we get all the row within this training 
+     * 
+     * ***********************************************************/</span><span class="s1"> 
+    </span><span class="s2">public </span><span class="s1">List&lt;TrainingRow&gt; getAllTrainingRows(</span><span class="s2">int </span><span class="s1">realm_training_id){ 
+        Log.w(</span><span class="s5">&quot;ID TRAINING&quot;</span><span class="s2">, </span><span class="s1">realm_training_id+</span><span class="s5">&quot;&quot;</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+        List&lt;TrainingRow&gt; list_of_row</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//get a realm Instance</span><span class="s1"> 
+        realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//start transaction</span><span class="s1"> 
+        realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s2">try</span><span class="s1">{ 
+            </span><span class="s4">//get the training with the id</span><span class="s1"> 
+            Training t = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">, </span><span class="s1">realm_training_id).findFirst()</span><span class="s2">;;</span><span class="s1"> 
+            </span><span class="s4">//then get the list of row contained in the training</span><span class="s1"> 
+            list_of_row = t.getRlst_row()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//commit the transcation</span><span class="s1"> 
+            realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
+        }</span><span class="s2">catch </span><span class="s1">(Exception e){ </span><span class="s4">//catch Exceptions</span><span class="s1"> 
+            </span><span class="s4">//print error message in logcat</span><span class="s1"> 
+            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//if Exception is catched cancel the transaction</span><span class="s1"> 
+            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//and set the list to null</span><span class="s1"> 
+            list_of_row = </span><span class="s2">null;</span><span class="s1"> 
+        } 
+ 
+        </span><span class="s4">//return the list of all rows</span><span class="s1"> 
+        </span><span class="s2">return </span><span class="s1">list_of_row</span><span class="s2">;</span><span class="s1"> 
     } 
  
     </span><span class="s0">/*************************************************** 
      * 
      * Name: getArowWithID 
      * </span><span class="s3">@param </span><span class="s0">id 
-     * </span><span class="s3">@return</span><span class="s0"> 
+     * </span><span class="s3">@return </span><span class="s0">trainingRow 
+     * Goal: get a training row with his id 
      * 
      **************************************************/</span><span class="s1"> 
     </span><span class="s2">public </span><span class="s1">TrainingRow getArowWithID(</span><span class="s2">int </span><span class="s1">id){ 
+        TrainingRow trainingRow</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s4">//get a realm Instance</span><span class="s1"> 
         realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
         realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
-        TrainingRow trainingRow = </span><span class="s2">null;</span><span class="s1"> 
-        RealmResults&lt;TrainingRow&gt; realmResults = realm.where(TrainingRow.</span><span class="s2">class</span><span class="s1">).findAll()</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s2">try</span><span class="s1">{ 
-            </span><span class="s2">if </span><span class="s1">(realmResults.size() &gt; </span><span class="s6">0</span><span class="s1">){ 
-                trainingRow = realmResults.get(id)</span><span class="s2">;</span><span class="s1"> 
-                realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
-            }</span><span class="s2">else</span><span class="s1">{ 
- 
-                Toast.makeText(context</span><span class="s2">,</span><span class="s5">&quot;Erreur d'affichage&quot;</span><span class="s2">,</span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s2">;</span><span class="s1"> 
-                realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
-            } 
-        }</span><span class="s2">catch </span><span class="s1">(Exception e){ 
+            trainingRow = realm.where(TrainingRow.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;id&quot;</span><span class="s2">, </span><span class="s1">id).findFirst()</span><span class="s2">;;</span><span class="s1"> 
             realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
- 
+        }</span><span class="s2">catch </span><span class="s1">(Exception e){ 
+            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
+            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
+            trainingRow = </span><span class="s2">null;</span><span class="s1"> 
         } 
  
         </span><span class="s2">return </span><span class="s1">trainingRow</span><span class="s2">;</span><span class="s1"> 
     } 
  
+    </span><span class="s4">//####################################### PART FOR THE HEARTRATE CLASS ###################################################</span><span class="s1"> 
+ 
+    </span><span class="s0">/*************************************************** 
+     * Name: saveHeartRate 
+     * </span><span class="s3">@param </span><span class="s0">fc_max 
+     * </span><span class="s3">@param </span><span class="s0">fc_min 
+     * Goal: save min and max heartBeat 
+     ***************************************************/</span><span class="s1"> 
+    </span><span class="s2">public void </span><span class="s1">saveHeartRate(</span><span class="s2">int </span><span class="s1">fc_max</span><span class="s2">,int </span><span class="s1">fc_min){ 
+ 
+        HeartRate fc_return</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//get a realm Instance</span><span class="s1"> 
+        realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s4">//begin a transaction</span><span class="s1"> 
+        realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s4">//try to create a Realm Object HeartRate</span><span class="s1"> 
+        </span><span class="s2">try </span><span class="s1">{ 
+            RealmResults&lt;HeartRate&gt; results = realm.where(HeartRate.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">, </span><span class="s6">0</span><span class="s1">).findAll()</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s4">//if results.size &lt; 1 that means that there is not HeartRate Backuped</span><span class="s1"> 
+            </span><span class="s2">if </span><span class="s1">(results.size() &lt; </span><span class="s6">1</span><span class="s1">){ 
+                </span><span class="s4">//Create a new HeartRate object to backup Data</span><span class="s1"> 
+                HeartRate fc = realm.createObject(HeartRate.</span><span class="s2">class</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+                </span><span class="s4">//set id = 0</span><span class="s1"> 
+                fc.setInt_id(</span><span class="s6">0</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+                </span><span class="s4">//set fc_max and fC_min</span><span class="s1"> 
+                fc.setInt_fc_max(fc_max)</span><span class="s2">;</span><span class="s1"> 
+                fc.setInt_fc_min(fc_min)</span><span class="s2">;</span><span class="s1"> 
+                fc.setBln_isHeartRate(</span><span class="s2">true</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+                </span><span class="s4">//don't need to get the fc back because it's the first time we</span><span class="s1"> 
+                fc_return = </span><span class="s2">null;</span><span class="s1"> 
+            }</span><span class="s2">else</span><span class="s1">{ </span><span class="s4">/* Here update the current row */</span><span class="s1"> 
+                </span><span class="s4">//get the id 0 for modification;</span><span class="s1"> 
+                fc_return = realm.where(HeartRate.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">, </span><span class="s6">0</span><span class="s1">).findFirst()</span><span class="s2">;</span><span class="s1"> 
+                fc_return.setInt_fc_min(fc_min)</span><span class="s2">;</span><span class="s1"> 
+                fc_return.setInt_fc_max(fc_max)</span><span class="s2">;</span><span class="s1"> 
+                fc_return.setInt_id(</span><span class="s6">0</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
+            } 
+ 
+            </span><span class="s4">//commit one of the both transaction</span><span class="s1"> 
+            realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
+        }</span><span class="s2">catch </span><span class="s1">(Exception e){ 
+            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//cancel transaction if try not succeded</span><span class="s1"> 
+            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//fc_return is empty because an Exception is raised</span><span class="s1"> 
+        } 
+    }</span><span class="s4">//saveHeartRate</span><span class="s1"> 
+ 
+ 
+    </span><span class="s0">/*************************************************** 
+     * Name: getHeartRate 
+     * return: HeartRate Object 
+     * Goal: get min and max heartBeat 
+     ***************************************************/</span><span class="s1"> 
+    </span><span class="s2">public </span><span class="s1">HeartRate getHeartRate(){ 
+        HeartRate fc_return</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//get a realm Instance</span><span class="s1"> 
+        realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//begin a transaction</span><span class="s1"> 
+        realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s2">try</span><span class="s1">{ 
+            </span><span class="s4">//get the id 0;</span><span class="s1"> 
+            fc_return = realm.where(HeartRate.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">, </span><span class="s6">0</span><span class="s1">).findFirst()</span><span class="s2">;;</span><span class="s1"> 
+            </span><span class="s4">//commit transaction</span><span class="s1"> 
+            realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
+        }</span><span class="s2">catch </span><span class="s1">(Exception e){ 
+            </span><span class="s4">//raise Exception and print message</span><span class="s1"> 
+            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//cancel realm transaction</span><span class="s1"> 
+            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//fc_return is empty</span><span class="s1"> 
+            fc_return = </span><span class="s2">null;</span><span class="s1"> 
+        } 
+        </span><span class="s2">return </span><span class="s1">fc_return</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+ 
+    </span><span class="s0">/*************************************************** 
+     * Name: saveHeartRate 
+     * return : boolean 
+     * Goal: check if HeartRate max and min are setted 
+     ***************************************************/</span><span class="s1"> 
+    </span><span class="s2">public boolean </span><span class="s1">getisHeartRate(){ 
+        HeartRate fc_return</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s2">boolean </span><span class="s1">isHeartRate</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//get a realm Instance</span><span class="s1"> 
+        realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//begin a transaction</span><span class="s1"> 
+        realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s2">try</span><span class="s1">{ 
+            </span><span class="s4">//get the id 0;</span><span class="s1"> 
+            fc_return = realm.where(HeartRate.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">, </span><span class="s6">0</span><span class="s1">).findFirst()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//get the value of isHeartRate to see if value are filled or not</span><span class="s1"> 
+            isHeartRate = fc_return.isBln_isHeartRate()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//commit transaction</span><span class="s1"> 
+            realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
+        }</span><span class="s2">catch </span><span class="s1">(Exception e){ 
+            </span><span class="s4">//raise Exception and print message</span><span class="s1"> 
+            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//cancel realm transaction</span><span class="s1"> 
+            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//fc_return is empty</span><span class="s1"> 
+            isHeartRate = </span><span class="s2">false;</span><span class="s1"> 
+        } 
+        </span><span class="s2">return </span><span class="s1">isHeartRate</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">/*************************************************** 
+     * Name: getAverageBpmOfTraining 
+     * </span><span class="s3">@param </span><span class="s0">_id 
+     * Goal: Method to calcultate average BPM for training 
+     ***************************************************/</span><span class="s1"> 
+    </span><span class="s2">public int </span><span class="s1">getAverageBpmOfTraining(</span><span class="s2">int </span><span class="s1">_id){ 
+        Training t</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s2">int </span><span class="s1">bln_avrg_bpm</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//get a realm Instance</span><span class="s1"> 
+        realm = Realm.getInstance(context)</span><span class="s2">;</span><span class="s1"> 
+        </span><span class="s4">//begin a transaction</span><span class="s1"> 
+        realm.beginTransaction()</span><span class="s2">;</span><span class="s1"> 
+ 
+        </span><span class="s2">try</span><span class="s1">{ 
+            </span><span class="s4">//get the id 0;</span><span class="s1"> 
+            t = realm.where(Training.</span><span class="s2">class</span><span class="s1">).equalTo(</span><span class="s5">&quot;int_id&quot;</span><span class="s2">, </span><span class="s1">_id).findFirst()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//get the size of all training row</span><span class="s1"> 
+            </span><span class="s2">int </span><span class="s1">size = t.getRlst_row().size()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//get the list of Training row</span><span class="s1"> 
+            RealmList&lt;TrainingRow&gt; lst_tRow = t.getRlst_row()</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s2">int </span><span class="s1">total_bpm = </span><span class="s6">0</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s2">for</span><span class="s1">(</span><span class="s2">int </span><span class="s1">i = </span><span class="s6">0</span><span class="s2">; </span><span class="s1">i &lt; size</span><span class="s2">; </span><span class="s1">i++){ 
+                </span><span class="s4">//add all training row bpm to total_bpm</span><span class="s1"> 
+                total_bpm += lst_tRow.get(i).getInt_bpm()</span><span class="s2">;</span><span class="s1"> 
+            }</span><span class="s4">//for</span><span class="s1"> 
+ 
+            bln_avrg_bpm = total_bpm/size</span><span class="s2">;</span><span class="s1"> 
+ 
+            </span><span class="s4">//commit transaction</span><span class="s1"> 
+            realm.commitTransaction()</span><span class="s2">;</span><span class="s1"> 
+        }</span><span class="s2">catch </span><span class="s1">(Exception e){ 
+            </span><span class="s4">//raise Exception and print message</span><span class="s1"> 
+            e.printStackTrace()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//cancel realm transaction</span><span class="s1"> 
+            realm.cancelTransaction()</span><span class="s2">;</span><span class="s1"> 
+            </span><span class="s4">//fc_return is empty</span><span class="s1"> 
+            bln_avrg_bpm = </span><span class="s6">0</span><span class="s2">;</span><span class="s1"> 
+        } 
+        </span><span class="s2">return </span><span class="s1">bln_avrg_bpm</span><span class="s2">;</span><span class="s1"> 
+    } 
+ 
+</span><span class="s4">//############################################# PART FOR THE TIME METHODS ########################################</span><span class="s1"> 
+ 
  
     </span><span class="s0">/***************************************************** 
      * 
+     * Name: setTimeWithInt 
      * </span><span class="s3">@param </span><span class="s0">min 
      * </span><span class="s3">@param </span><span class="s0">sec 
      * </span><span class="s3">@return </span><span class="s0">String time 
@@ -509,7 +700,6 @@ RealmDB.java</FONT>
      *******************************************************/</span><span class="s1"> 
     </span><span class="s2">private </span><span class="s1">String setTimeWithInt(</span><span class="s2">int </span><span class="s1">min</span><span class="s2">, int </span><span class="s1">sec) { 
         String time = </span><span class="s5">&quot;&quot;</span><span class="s2">;</span><span class="s1"> 
-        Log.w(</span><span class="s5">&quot;TAG SEC &quot;</span><span class="s2">, </span><span class="s1">sec+</span><span class="s5">&quot;&quot;</span><span class="s1">)</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s2">if</span><span class="s1">(min &lt; </span><span class="s6">10</span><span class="s1">){ 
             time = </span><span class="s5">&quot;0&quot;</span><span class="s1">+min</span><span class="s2">;</span><span class="s1"> 
         }</span><span class="s2">else</span><span class="s1">{ 
@@ -526,6 +716,13 @@ RealmDB.java</FONT>
     }</span><span class="s4">//setTimeWithInt</span><span class="s1"> 
  
  
+    </span><span class="s0">/***************************************************** 
+     * 
+     * Name: calculateTotalTime 
+     * </span><span class="s3">@param </span><span class="s0">id 
+     * </span><span class="s3">@return </span><span class="s0">String time 
+     * Goal: return the total time of the training 
+     *******************************************************/</span><span class="s1"> 
    </span><span class="s2">public </span><span class="s1">String calculateTotalTime(</span><span class="s2">int </span><span class="s1">id){ 
        String time = </span><span class="s5">&quot;00:00&quot;</span><span class="s2">;</span><span class="s1"> 
        </span><span class="s4">//get a realm Instance</span><span class="s1"> 
@@ -544,22 +741,26 @@ RealmDB.java</FONT>
            totalMin += min</span><span class="s2">;</span><span class="s1"> 
        } 
  
+       </span><span class="s4">//total min/ 60 and we get hours</span><span class="s1"> 
        </span><span class="s2">int </span><span class="s1">hour = totalMin / </span><span class="s6">60</span><span class="s2">;</span><span class="s1"> 
+       </span><span class="s4">//totalMin % 60 and we get minutes</span><span class="s1"> 
        </span><span class="s2">int </span><span class="s1">min = totalMin % </span><span class="s6">60</span><span class="s2">;</span><span class="s1"> 
+       </span><span class="s4">//totalSec / 60 and we get the minutes</span><span class="s1"> 
        min += totalSec / </span><span class="s6">60</span><span class="s2">;</span><span class="s1"> 
+       </span><span class="s4">//totalSec % 50 and we get the seconds</span><span class="s1"> 
        </span><span class="s2">int </span><span class="s1">sec = totalSec%</span><span class="s6">60</span><span class="s2">;</span><span class="s1"> 
  
-       time = </span><span class="s5">&quot;&quot;</span><span class="s1">+hour+</span><span class="s5">&quot;:&quot;</span><span class="s1">+min +</span><span class="s5">&quot;:&quot;</span><span class="s1">+sec</span><span class="s2">;</span><span class="s1"> 
+       time = </span><span class="s5">&quot;&quot;</span><span class="s1">+hour+</span><span class="s5">&quot;h &quot;</span><span class="s1">+min +</span><span class="s5">&quot;m &quot;</span><span class="s1">+sec+</span><span class="s5">&quot;s&quot;</span><span class="s2">;</span><span class="s1"> 
  
        </span><span class="s2">return </span><span class="s1">time</span><span class="s2">;</span><span class="s1"> 
    } 
  
-    </span><span class="s0">/*** 
-     * 
+    </span><span class="s0">/********************************************** 
+     * Name calculateTotalMinAndSec 
      * </span><span class="s3">@param </span><span class="s0">id 
-     * </span><span class="s3">@return</span><span class="s0"> 
-     * 
-     */</span><span class="s1"> 
+     * </span><span class="s3">@return </span><span class="s0">List</span><span class="s1">&lt;</span><span class="s0">Integer</span><span class="s1">&gt;</span><span class="s0"> 
+     * Goal: return min and sec as integer from all rows 
+     *******************************************************/</span><span class="s1"> 
     </span><span class="s2">public </span><span class="s1">List&lt;Integer&gt; calculateTotalMinAndSec(</span><span class="s2">int </span><span class="s1">id){ 
         List&lt;Integer&gt; lst_time = </span><span class="s2">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s2">;</span><span class="s1"> 
         </span><span class="s4">//get a realm Instance</span><span class="s1"> 
@@ -584,6 +785,6 @@ RealmDB.java</FONT>
         </span><span class="s4">//return the arrayList</span><span class="s1"> 
         </span><span class="s2">return </span><span class="s1">lst_time</span><span class="s2">;</span><span class="s1"> 
     } 
-}</span></pre>
+}</span><span class="s4">//class RealmDB</span></pre>
 </body>
 </html>

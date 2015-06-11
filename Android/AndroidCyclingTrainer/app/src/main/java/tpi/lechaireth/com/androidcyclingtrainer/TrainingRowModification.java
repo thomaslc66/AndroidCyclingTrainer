@@ -1,7 +1,7 @@
 /***************************************************************
  * Programm  : Android Cycling Trainer
  * Society   : ETML
- * Author    : Thomas Léchaire
+ * Author    : Thomas Lechaire
  * Date      : 26.05.2015
  * Goal      : Class used to make modification on a row
  ******************************************************************** //
@@ -479,6 +479,12 @@ public class TrainingRowModification extends ActionBarActivity {
         return bln_error;
     }
 
+
+    /*************************************************************************
+     * onCreateOptionsMenu Method
+     * @param menu
+     * Goal: get the layout for the actionBar menu
+     ***********************************************************************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -486,6 +492,12 @@ public class TrainingRowModification extends ActionBarActivity {
         return true;
     }
 
+
+    /********************************************************************
+     * Name: onOptionsItemSelected
+     * @param item
+     * Goal: Method to tell what to do on menu item click
+     ***********************************************************************/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -521,7 +533,6 @@ public class TrainingRowModification extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         freeMemory();
     }
 
@@ -535,19 +546,23 @@ public class TrainingRowModification extends ActionBarActivity {
         System.gc();
     }
 
-    /**
-     * Return Method
-     */
+    /********************************************************************
+     * Name: onBackPressed
+     * Goal: Method called when the user press on the back Button of the phone
+     ***********************************************************************/
     @Override
     public void onBackPressed() {
         super.onBackPressed();
 
-        //get Back to TrainingRow Activit
+        //get Back to TrainingRow Activity
         Intent back_to_trainingRow = new Intent(TrainingRowModification.this, TrainingRowActivity.class);
         //put id of training as extra, needed to charge the training Row
         back_to_trainingRow.putExtra("_id",int_training_id);
+        //add a flag to clear all previous activity
         back_to_trainingRow.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //start new activity
         startActivity(back_to_trainingRow);
+        //stop
         finish();
     }
 

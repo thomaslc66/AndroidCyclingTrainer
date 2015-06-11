@@ -1,6 +1,17 @@
+/***************************************************************
+ * Programm  : Android Cycling Trainer
+ * Society   : ETML
+ * Author    : Thomas Léchaire
+ * Date      : 26.05.2015
+ * Goal      : Class used to display ListView of rows
+ ******************************************************************** //
+ * Modifications:
+ * Date       : XX.XX.XXXX
+ * Author     :
+ * Purpose     :
+ *********************************************************************/
 package tpi.lechaireth.com.androidcyclingtrainer;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -20,9 +31,6 @@ import tpi.lechaireth.com.androidcyclingtrainer.DB.RealmDB;
 import tpi.lechaireth.com.androidcyclingtrainer.DB.TrainingRow;
 
 
-/**
- * Created by Thomas on 22.05.2015.
- */
 public class TrainingRowActivity extends ActionBarActivity {
 
     /* UI Elements */
@@ -100,10 +108,11 @@ public class TrainingRowActivity extends ActionBarActivity {
     }//onCreate
 
 
-    /**
+    /********************************************
+     *
      * Thread to get all the data of the training
      *
-     */
+     *****************************************************/
     Thread getCombinedData = new Thread(new Runnable() {
         @Override
         public void run() {
@@ -123,6 +132,12 @@ public class TrainingRowActivity extends ActionBarActivity {
         }
     });
 
+
+    /*************************************************************************
+     * onCreateOptionsMenu Method
+     * @param menu
+     * Goal: get the layout for the actionBar menu
+     ***********************************************************************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -130,6 +145,12 @@ public class TrainingRowActivity extends ActionBarActivity {
         return true;
     }
 
+
+    /********************************************************************
+     * Name: onOptionsItemSelected
+     * @param item
+     * Goal: Method to tell what to do on menu item click
+     ***********************************************************************/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -140,7 +161,7 @@ public class TrainingRowActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
             /* Launching the intent to add a row and the details */
-            Intent addRowIntent = new Intent(TrainingRowActivity.this, TrainingRowDeatilsActivity.class);
+            Intent addRowIntent = new Intent(TrainingRowActivity.this, TrainingRowDetailsActivity.class);
             //add id of the training
             addRowIntent.putExtra("_id", _id);
             /* add a flag to update to reorder the activity to front if it already exists */
@@ -162,6 +183,10 @@ public class TrainingRowActivity extends ActionBarActivity {
         super.onStop();
         //close Realm. Close Acces to data
         realmDB.close();
+        //free object
+        trainingRowList = null;
+        trainingRowAdapter = null;
+        getCombinedData.interrupt();
     }
 
     /********************************************************************
@@ -172,9 +197,6 @@ public class TrainingRowActivity extends ActionBarActivity {
     protected void onDestroy() {
         super.onDestroy();
         freeMemory();
-        trainingRowList = null;
-        trainingRowAdapter = null;
-        getCombinedData.interrupt();
 
     }
 
@@ -188,10 +210,10 @@ public class TrainingRowActivity extends ActionBarActivity {
         System.gc();
     }
 
-
-    /**
-     * Return Method
-     */
+    /********************************************************************
+     * Name: onBackPressed
+     * Goal: Method called when the user press on the back Button of the phone
+     ***********************************************************************/
     @Override
     public void onBackPressed() {
         super.onBackPressed();

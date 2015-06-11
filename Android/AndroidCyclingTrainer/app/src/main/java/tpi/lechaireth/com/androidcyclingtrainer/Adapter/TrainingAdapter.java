@@ -1,3 +1,18 @@
+/***************************************************************
+ * Programm  : Android Cycling Trainer
+ * Society   : ETML
+ * Author    : Thomas Léchaire
+ * Date      : 26.05.2015
+ * Goal      : Class used to link ListView with data from database
+ *              for training
+ ******************************************************************** //
+ * Modifications:
+ * Date       : XX.XX.XXXX
+ * Author     :
+ * Purpose    :
+ *********************************************************************/
+
+
 package tpi.lechaireth.com.androidcyclingtrainer.Adapter;
 
 import android.content.Context;
@@ -23,9 +38,6 @@ import tpi.lechaireth.com.androidcyclingtrainer.R;
 import tpi.lechaireth.com.androidcyclingtrainer.TrainingRowActivity;
 
 
-/**
- * Created by Thomas on 04.05.2015.
- */
 public class TrainingAdapter extends BaseSwipeAdapter {
 
     /* List of all Training object */

@@ -83,6 +83,7 @@ public class RealmDB {
      *
      * Name: createTrainig
      * @param name
+     * @param isVtt
      * Goal: Method used to create a new training
      *
      ********************************************************/
@@ -233,6 +234,7 @@ public class RealmDB {
      *
      * Name: setRestIndice
      * @param id
+     * @param fc_after_1min30
      * Goal: calcul and save of and rest indice (fc_max - fc after 1min30)
      *
      ********************************************/
@@ -357,7 +359,6 @@ public class RealmDB {
 
     }
 
-
     /**********************************************************
      *
      * Name: updateTrainingRow
@@ -398,7 +399,6 @@ public class RealmDB {
 
             //set gear
             t.setStr_gear(str_gear);
-
 
             Log.w("t after", ""+t.getStr_time() + "-"+ t.getInt_bpm() + "-" + t.getInt_rpm());
 
@@ -488,7 +488,8 @@ public class RealmDB {
      *
      * Name: getArowWithID
      * @param id
-     * @return
+     * @return trainingRow
+     * Goal: get a training row with his id
      *
      **************************************************/
     public TrainingRow getArowWithID(int id){
@@ -510,6 +511,12 @@ public class RealmDB {
 
     //####################################### PART FOR THE HEARTRATE CLASS ###################################################
 
+    /***************************************************
+     * Name: saveHeartRate
+     * @param fc_max
+     * @param fc_min
+     * Goal: save min and max heartBeat
+     ***************************************************/
     public void saveHeartRate(int fc_max,int fc_min){
 
         HeartRate fc_return;
@@ -553,6 +560,12 @@ public class RealmDB {
         }
     }//saveHeartRate
 
+
+    /***************************************************
+     * Name: getHeartRate
+     * return: HeartRate Object
+     * Goal: get min and max heartBeat
+     ***************************************************/
     public HeartRate getHeartRate(){
         HeartRate fc_return;
         //get a realm Instance
@@ -576,6 +589,12 @@ public class RealmDB {
         return fc_return;
     }
 
+
+    /***************************************************
+     * Name: saveHeartRate
+     * return : boolean
+     * Goal: check if HeartRate max and min are setted
+     ***************************************************/
     public boolean getisHeartRate(){
         HeartRate fc_return;
         boolean isHeartRate;
@@ -602,6 +621,11 @@ public class RealmDB {
         return isHeartRate;
     }
 
+    /***************************************************
+     * Name: getAverageBpmOfTraining
+     * @param _id
+     * Goal: Method to calcultate average BPM for training
+     ***************************************************/
     public int getAverageBpmOfTraining(int _id){
         Training t;
         int bln_avrg_bpm;
@@ -644,6 +668,7 @@ public class RealmDB {
 
     /*****************************************************
      *
+     * Name: setTimeWithInt
      * @param min
      * @param sec
      * @return String time
@@ -668,6 +693,13 @@ public class RealmDB {
     }//setTimeWithInt
 
 
+    /*****************************************************
+     *
+     * Name: calculateTotalTime
+     * @param id
+     * @return String time
+     * Goal: return the total time of the training
+     *******************************************************/
    public String calculateTotalTime(int id){
        String time = "00:00";
        //get a realm Instance
@@ -700,12 +732,12 @@ public class RealmDB {
        return time;
    }
 
-    /***
-     *
+    /**********************************************
+     * Name calculateTotalMinAndSec
      * @param id
-     * @return
-     *
-     */
+     * @return List<Integer>
+     * Goal: return min and sec as integer from all rows
+     *******************************************************/
     public List<Integer> calculateTotalMinAndSec(int id){
         List<Integer> lst_time = new ArrayList<>();
         //get a realm Instance
