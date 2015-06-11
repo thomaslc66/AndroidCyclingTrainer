@@ -536,6 +536,8 @@ public class Timer extends Activity {
                         intent_trainingRow.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         //get context to startActivity
                         mContext.startActivity(intent_trainingRow);
+                        //finish Activity
+                        finish();
                     }
                 })
                 .setNegativeButton("NON", new DialogInterface.OnClickListener() {
